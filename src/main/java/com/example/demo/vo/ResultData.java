@@ -35,4 +35,5 @@ public class ResultData<DT> {
 	public static <DT> ResultData<DT> newData(ResultData rd, DT newData) {
 		return from(rd.getResultCode(), rd.getMsg(), newData);
 	}
+	
 }

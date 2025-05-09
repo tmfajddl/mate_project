@@ -10,6 +10,8 @@ import com.example.demo.util.Ut;
 import com.example.demo.vo.Member;
 import com.example.demo.vo.ResultData;
 
+import jakarta.servlet.http.HttpSession;
+
 @Controller
 public class UsrMemberController {
 
@@ -18,8 +20,18 @@ public class UsrMemberController {
 
 	@RequestMapping("/usr/member/doJoin")
 	@ResponseBody
-	public ResultData<Member> doJoin(String loginId, String loginPw, String name, String nickname, String cellphoneNum,
+	public ResultData<Member> doJoin(HttpSession session, String loginId, String loginPw, String name, String nickname, String cellphoneNum,
 			String email) {
+		
+		boolean isLogined = false;
+
+		if (session.getAttribute("loginedMemberId") != null) {
+			isLogined = true;
+		}
+
+		if (isLogined) {
+			return ResultData.from("F-A", "이미 로그인 함");
+		}
 
 		if (Ut.isEmptyOrNull(loginId)) {
 			return ResultData.from("F-1", "아이디를 입력해");
@@ -55,5 +67,63 @@ public class UsrMemberController {
 
 		return ResultData.newData(doJoinRd, member);
 	}
+
+
+@RequestMapping("/usr/member/doLogin")
+@ResponseBody
+public ResultData<Member> doLogin(HttpSession session, String loginId, String loginPw) {
+
+	boolean isLogined = false;
+
+	if (session.getAttribute("loginedMemberId") != null) {
+		isLogined = true;
+	}
+
+	if (isLogined) {
+		return ResultData.from("F-A", "이미 로그인 함");
+	}
+
+	if (Ut.isEmptyOrNull(loginId)) {
+		return ResultData.from("F-1", "아이디를 입력해");
+	}
+	if (Ut.isEmptyOrNull(loginPw)) {
+		return ResultData.from("F-2", "비밀번호를 입력해");
+	}
+
+	Member member = memberService.getMemberByLoginId(loginId);
+
+	if (member == null) {
+		return ResultData.from("F-3", Ut.f("%s는(은) 없는 아이디야", loginId));
+	}
+
+	if (member.getLoginPw().equals(loginPw) == false) {
+		return ResultData.from("F-4", "비밀번호가 일치하지 않습니다");
+	}
+
+	session.setAttribute("loginedMemberId", member.getNickname());
+
+	return ResultData.from("S-1", Ut.f("%s님 환영합니다", member.getNickname()));
+}
+
+
+@RequestMapping("/usr/member/doLogout")
+@ResponseBody
+public ResultData doLogout(HttpSession session){
+
+	boolean isLogined = false;
+
+	if (session.getAttribute("loginedMemberId") != null) {
+		isLogined = true;
+	}
+
+	if (!isLogined) {
+		return ResultData.from("F-A", "로그인 되어있지 않습니다");
+	}
+	
+	session.setAttribute("loginedMemberId", null);
+
+	return ResultData.from("S-1", "로그아웃 되었습니다.");
+
+}
 
 }
