@@ -65,7 +65,7 @@ public class UsrMemberController {
 
 		Member member = memberService.getMemberById((int) doJoinRd.getData1());
 
-		return ResultData.newData(doJoinRd, member);
+		return ResultData.newData(doJoinRd,"회언가입한 멤버", member);
 	}
 
 

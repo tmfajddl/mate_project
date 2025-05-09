@@ -29,7 +29,7 @@ public class ArticleService {
 
 		int id = articleRepository.getLastInsertId();
 
-		return ResultData.from("S-1", Ut.f("%d번 글이 등록되었습니다", id), id);
+		return ResultData.from("S-1", Ut.f("%d번 글이 등록되었습니다", id),"게시글 고유 번호", id);
 	}
 
 	public void deleteArticle(int id) {
