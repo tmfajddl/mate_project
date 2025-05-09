@@ -11,7 +11,8 @@
 		regDate = NOW(),
 		updateDate = NOW(),
 		title = #{title},
-		`body` = #{body}
+		`body` = #{body},
+		writer = #{writer}
 	</insert>
 
 	<delete id="deleteArticle" parameterType="int">

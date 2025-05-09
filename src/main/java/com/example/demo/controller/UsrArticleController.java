@@ -117,7 +117,7 @@ public class UsrArticleController {
 			return ResultData.from("F-2", "내용을 입력하세요");
 		}
 
-		ResultData writeArticleRd = articleService.writeArticle(title, body);
+		ResultData writeArticleRd = articleService.writeArticle(session, title, body);
 
 		int id = (int) writeArticleRd.getData1();
 

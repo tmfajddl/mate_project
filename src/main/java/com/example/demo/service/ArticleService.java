@@ -10,6 +10,8 @@ import com.example.demo.util.Ut;
 import com.example.demo.vo.Article;
 import com.example.demo.vo.ResultData;
 
+import jakarta.servlet.http.HttpSession;
+
 @Service
 public class ArticleService {
 
@@ -20,8 +22,10 @@ public class ArticleService {
 		this.articleRepository = articleRepository;
 	}
 
-	public ResultData writeArticle(String title, String body) {
-		articleRepository.writeArticle(title, body);
+	public ResultData writeArticle(HttpSession session, String title, String body) {
+		
+		String writer = (String) session.getAttribute("loginedMemberId");
+		articleRepository.writeArticle(title, body, writer);
 
 		int id = articleRepository.getLastInsertId();
 
@@ -43,5 +47,6 @@ public class ArticleService {
 	public List<Article> getArticles() {
 		return articleRepository.getArticles();
 	}
+
 
 }
