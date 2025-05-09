@@ -12,6 +12,7 @@ import com.example.demo.util.Ut;
 import com.example.demo.vo.Article;
 import com.example.demo.vo.ResultData;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
@@ -127,9 +128,26 @@ public class UsrArticleController {
 	}
 
 	@RequestMapping("/usr/article/getArticles")
-	@ResponseBody
-	public ResultData getArticles() {
-		List<Article> articles = articleService.getArticles();
-		return ResultData.from("S-1", "Article List","전체게시글", articles);
+
+	public ResultData<List<Article>> getArticles() {
+	    List<Article> articles = articleService.getArticles();
+	    return ResultData.from("S-1", "Article List", "전체게시글", articles);
 	}
+	
+	@RequestMapping("/usr/article/list")
+	public String showList(HttpServletRequest request) {
+	    ResultData<List<Article>> rd = getArticles();
+	    List<Article> articles = rd.getData1();
+	    request.setAttribute("articles", articles);
+	    return "/usr/article/list";
+	}
+	
+	@RequestMapping("/usr/article/detail")
+	public String showDetail(HttpServletRequest request, int id) {
+	    ResultData<Article> rd = getArticle(id);
+	    Article article = rd.getData1();
+	    request.setAttribute("article", article);
+	    return "/usr/article/detail";
+	}
+	
 }
