@@ -30,7 +30,9 @@
 				</c:forEach>
 			</tbody>
 		</table>
-		<a href="../article/write">글쓰기</a>
+<c:if test="${rq.logined}">
+    <a href="/usr/article/write">글쓰기</a>
+</c:if>
 	</div>
 	
 </section>

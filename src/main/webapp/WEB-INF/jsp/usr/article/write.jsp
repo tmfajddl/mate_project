@@ -1,19 +1,16 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
-<c:set var="pageTitle" value="${article.id}번 ARTICLE MODIFY"></c:set>
+<c:set var="pageTitle" value="ARTICLE WRITE"></c:set>
 <%@ include file="../common/head.jspf"%>
 
 
 <section class="mt-8 text-xl px-4">
 	<div class="mx-auto">
-<form action="../article/doModify" method="post">
-<div>번호: <input type="text" name = "id" value="${article.id}" readonly/></div>
-<div>기존 제목: ${article.title}</div>
-<div>기존 내용: ${article.body}</div>
-<div>바꿀 제목:
+<form action="../article/doWrite" method="post">
+<div>제목:
 <input type="text" name="title" required/></div>
-<div>바꿀 내용: 
+<div>내용: 
 <input type="text" name="body" required/></div>
 <br>
 <div><button type="submit">확인</button></div>
