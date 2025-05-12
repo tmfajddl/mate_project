@@ -24,7 +24,7 @@ public class MemberService {
 		Member existsMember = getMemberByLoginId(loginId);
 
 		if (existsMember != null) {
-			return ResultData.from("F-7", Ut.f("이미 사용중인 아이디(%s)입니다",loginId));
+			return ResultData.from("F-7", Ut.f("이미 사용중인 아이디(%s)입니다", loginId));
 		}
 
 		existsMember = getMemberByNameAndEmail(name, email);
@@ -37,7 +37,7 @@ public class MemberService {
 
 		int id = memberRepository.getLastInsertId();
 
-		return ResultData.from("S-1", "회원가입 성공","회원고유번호", id);
+		return ResultData.from("S-1", "회원가입 성공", "가입 성공 id", id);
 	}
 
 	private Member getMemberByNameAndEmail(String name, String email) {
