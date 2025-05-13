@@ -57,11 +57,6 @@ public class UsrArticleController {
 	
 	@RequestMapping("/usr/article/modify")
 	public String modify(Model model, int id) {
-
-	    if (!rq.isLogined()) {
-	        return Ut.jsReplace("F-A", "로그인 후 이용하세요", "../member/login");
-	    }
-
 	    Article article = articleService.getForPrintArticle(rq.getLoginedMemberId(), id);
 
 	    if (article == null) {

@@ -19,7 +19,7 @@
 			</thead>
 			<tbody>
 				<c:forEach var="article" items="${articles }">
-					<tr>
+					<tr class="hover:bg-base-300">
 						<td style="text-align: center;">${article.id}</td>
 						<td style="text-align: center;">${article.regDate.substring(0,10)}</td>
 						<td style="text-align: center;">
@@ -32,7 +32,7 @@
 		</table>
 
 <c:if test="${rq.logined}">
-    <a href="/usr/article/write">글쓰기</a>
+    <a class="btn btn-outline" href="/usr/article/write">글쓰기</a>
 </c:if>
 	</div>
 	

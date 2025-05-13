@@ -9,15 +9,15 @@
 	<div class="mx-auto">
 <form action="../article/doWrite" method="post">
 <div>제목:
-<input type="text" name="title" required/></div>
+<input type="text" placeholder="제목" class="input input-neutral" name="title" required/></div>
 <div>내용: 
-<input type="text" name="body" required/></div>
+<input type="text" placeholder="내용" class="input input-neutral" name="body" required/></div>
 <br>
-<div><button type="submit">확인</button></div>
+<div><button class="btn btn-outline" type="submit">확인</button></div>
 
 </form>
 		<div class="btns">
-			<button type="button" onclick="history.back();">뒤로가기</button>
+			<button class="btn btn-outline" type="button" onclick="history.back();">뒤로가기</button>
 		</div>
 
 	</div>

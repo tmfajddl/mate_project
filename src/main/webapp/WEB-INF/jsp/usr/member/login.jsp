@@ -9,15 +9,15 @@
 	<div class="mx-auto">
 <form action="../member/doLogin" method="post">
 <div>ID:
-<input type="text" name="loginId" required/></div>
+<input type="text" placeholder="ID" class="input input-neutral" name="loginId" required/></div>
 <div>PassWord: 
-<input type="text" name="loginPw" required/></div>
+<input type="text" placeholder="PassWord" class="input input-neutral" name="loginPw" required/></div>
 <br>
-<div><button type="submit">로그인</button></div>
+<div><button class="btn btn-outline" type="submit">로그인</button></div>
 
 </form>
 		<div class="btns">
-			<button type="button" onclick="history.back();">뒤로가기</button>
+			<button class="btn btn-outline" type="button" onclick="history.back();">뒤로가기</button>
 		</div>
 
 	</div>
