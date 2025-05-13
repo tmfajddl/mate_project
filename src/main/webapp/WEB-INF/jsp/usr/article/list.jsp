@@ -30,6 +30,7 @@
 				</c:forEach>
 			</tbody>
 		</table>
+
 <c:if test="${rq.logined}">
     <a href="/usr/article/write">글쓰기</a>
 </c:if>

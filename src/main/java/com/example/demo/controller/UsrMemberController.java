@@ -17,6 +17,8 @@ import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class UsrMemberController {
+	@Autowired
+	private Rq rq;
 
 	@Autowired
 	private MemberService memberService;
@@ -53,21 +55,21 @@ public class UsrMemberController {
 		}
 
 		if (Ut.isEmptyOrNull(loginId)) {
-			return Ut.jsReplace("F-1", "아이디를 입력하세요", "../member/login");
+			return Ut.jsHistoryBack("F-1", "아이디를 입력하세요");
 		}
 
 		if (Ut.isEmptyOrNull(loginPw)) {
-			return Ut.jsReplace("F-2", "비밀번호를 입력하세요", "../member/login");
+			return Ut.jsHistoryBack("F-2", "비밀번호를 입력하세요");
 		}
 
 		Member member = memberService.getMemberByLoginId(loginId);
 
 		if (member == null) {
-			return Ut.jsReplace("F-3", "아이디가 존재하지 않습니다.", "member/login");
+			return Ut.jsHistoryBack("F-3", "아이디가 존재하지 않습니다.");
 		}
 
 		if (member.getLoginPw().equals(loginPw) == false) {
-			return Ut.jsReplace("F-4", "비밀번호가 틀립니다", "../member/login");
+			return Ut.jsHistoryBack("F-4", "비밀번호가 틀립니다");
 		}
 		
 		session.setAttribute("loginedMemberId", member.getId());
@@ -89,39 +91,39 @@ public class UsrMemberController {
 		Rq rq = (Rq) req.getAttribute("rq");
 
 		if (rq.isLogined()) {
-			return Ut.jsReplace("F-A", "로그인 되어있습니다", "../home/main");
+			return Ut.jsHistoryBack("F-A", "로그인 되어있습니다");
 		}
 
 		if (Ut.isEmptyOrNull(loginId)) {
-			return Ut.jsReplace("F-1", "아이디를 입력하세요", "../member/join");
+			return Ut.jsHistoryBack("F-1", "아이디를 입력하세요");
 		}
 
 		if (Ut.isEmptyOrNull(loginPw)) {
-			return Ut.jsReplace("F-2", "비밀번호를 입력하세요", "../member/join");
+			return Ut.jsHistoryBack("F-2", "비밀번호를 입력하세요");
 		}
 		
 		if (Ut.isEmptyOrNull(loginPw2)) {
-			return Ut.jsReplace("F-7", "비밀번호 확인란을 입력하세요", "../member/join");
+			return Ut.jsHistoryBack("F-7", "비밀번호 확인란을 입력하세요");
 		}
 		
 		if (!loginPw.equals(loginPw2)) {
-			return Ut.jsReplace("F-8", "비밀번호가 일치하지 않습니다.", "../member/join");
+			return Ut.jsHistoryBack("F-8", "비밀번호가 일치하지 않습니다.");
 		}
 		
 		if (Ut.isEmptyOrNull(name)) {
-			return Ut.jsReplace("F-3", "이름을 입력하세요", "../member/join");
+			return Ut.jsHistoryBack("F-3", "이름을 입력하세요");
 
 		}
 		if (Ut.isEmptyOrNull(nickname)) {
-			return Ut.jsReplace("F-4", "닉네임을 입력하세요", "../member/join");
+			return Ut.jsHistoryBack("F-4", "닉네임을 입력하세요");
 
 		}
 		if (Ut.isEmptyOrNull(cellphoneNum)) {
-			return Ut.jsReplace("F-5", "전화번호를 입력하세요", "../member/join");
+			return Ut.jsHistoryBack("F-5", "전화번호를 입력하세요");
 
 		}
 		if (Ut.isEmptyOrNull(email)) {
-			return Ut.jsReplace("F-6", "E-mail을 입력하세요", "../member/join");
+			return Ut.jsHistoryBack("F-6", "E-mail을 입력하세요");
 
 		}
 

@@ -18,6 +18,8 @@ import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
 public class UsrArticleController {
+	@Autowired
+	private Rq rq;
 
 	@Autowired
 	private ArticleService articleService;
@@ -54,15 +56,20 @@ public class UsrArticleController {
 	}
 	
 	@RequestMapping("/usr/article/modify")
-	public String Modify(Model model, HttpServletRequest req, int id) {
-		
-		Rq rq = (Rq) req.getAttribute("rq");
+	public String modify(Model model, int id) {
 
-		Article article = articleService.getForPrintArticle(rq.getLoginedMemberId(), id);
+	    if (!rq.isLogined()) {
+	        return Ut.jsReplace("F-A", "로그인 후 이용하세요", "../member/login");
+	    }
 
-		model.addAttribute("article", article);
-		
-		return "usr/article/modify";	
+	    Article article = articleService.getForPrintArticle(rq.getLoginedMemberId(), id);
+
+	    if (article == null) {
+	        return Ut.jsHistoryBack("F-1", Ut.f("%d번 게시글은 없습니다", id));
+	    }
+
+	    model.addAttribute("article", article);
+	    return "usr/article/modify";
 	}
 
 	@RequestMapping("/usr/article/doDelete")

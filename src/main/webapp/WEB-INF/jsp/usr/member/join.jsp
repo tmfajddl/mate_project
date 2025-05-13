@@ -19,9 +19,9 @@
 <div>닉네임: 
 <input type="text" name="nickname" required/></div>
 <div>전화번호: 
-<input type="text" name="cellphoneNum" required/></div>
+<input type="tel" name="cellphoneNum" required/></div>
 <div>E-mail: 
-<input type="text" name="email" required/></div>
+<input type="email" name="email" required/></div>
 <br>
 <div><button type="submit">회원가입</button></div>
 
