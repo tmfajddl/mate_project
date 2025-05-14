@@ -5,6 +5,12 @@
 <c:set var="pageTitle" value="${board.code } LIST"></c:set>
 <%@ include file="../common/head.jspf"%>
 
+<%
+int pageLimit = (int) request.getAttribute("pageLimit");
+int cpage = (int) request.getAttribute("cpage");
+int totalPageNumber = (int) request.getAttribute("totalPageNumber");
+%>
+
 
 <section class="mt-24 text-xl px-4">
 	<div class="mx-auto">
@@ -38,6 +44,36 @@
 				</c:if>
 			</tbody>
 		</table>
+<div style="text-align: center;">
+		<% if(totalPageNumber <= pageLimit){
+			for(int i = 1; i <= totalPageNumber; i++){%>
+				<a class="hover:underline" href="../article/list?boardId=${board.id}&page=<%=i%>"><%=i%></a>
+			<% }
+		}
+		else{
+			if(cpage<6){
+			for(int i = 1; i <= pageLimit; i++){%>
+			<a class="hover:underline" href="../article/list?boardId=${board.id}&page=<%=i%>"><%=i%></a>	
+			<%}%>
+			<a class="hover:underline" href="../article/list?boardId=${board.id}&page=<%=totalPageNumber%>">마지막</a>
+			<%}
+			else{%>
+			<a class="hover:underline" href="../article/list?boardId=${board.id}&page=1">처음</a>
+			<%if(cpage<totalPageNumber-4){
+				for(int i = cpage-4; i <= cpage+4; i++){%>
+				<a class="hover:underline" href="../article/list?boardId=${board.id}&page=<%=i%>"><%=i%></a>	
+				<%}%>
+			<a class="hover:underline" href="../article/list?boardId=${board.id}&page=<%=totalPageNumber%>">마지막</a>
+			<% }
+			else{
+				for(int i = totalPageNumber-7; i <= totalPageNumber; i++){%>
+				<a class="hover:underline" href="../article/list?boardId=${board.id}&page=<%=i%>"><%=i%></a>	
+				<%}
+			}
+				
+			}
+		}%>
+		</div>
 	</div>
 </section>
 

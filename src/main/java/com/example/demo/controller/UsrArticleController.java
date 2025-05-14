@@ -18,6 +18,7 @@ import com.example.demo.vo.Board;
 import com.example.demo.vo.ResultData;
 import com.example.demo.vo.Rq;
 
+import jakarta.servlet.ServletRequest;
 import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
@@ -154,7 +155,7 @@ public class UsrArticleController {
 
 	@RequestMapping("/usr/article/list")
 	public String showList(HttpServletRequest req, Model model, @RequestParam(defaultValue = "1") int boardId,
-			@RequestParam(defaultValue = "1") int page) throws IOException {
+			@RequestParam(defaultValue = "1") int page, ServletRequest request) throws IOException {
 
 		Rq rq = (Rq) req.getAttribute("rq");
 
@@ -163,13 +164,19 @@ public class UsrArticleController {
 		if (board == null) {
 			return rq.historyBackOnView("존재하지 않는 게시판");
 		}
-
-		int articlesCount = articleService.getArticleCount(boardId);
-
 		int itemsInAPage = 10;
+		int articlesCount = articleService.getArticleCount(boardId);
+		int totalPageNumber = articlesCount / itemsInAPage + 1;
+
+		int pageLimit = 9;
+		int cpage = page;
 
 		List<Article> articles = articleService.getForPrintArticles(boardId, itemsInAPage, page);
 
+		request.setAttribute("pageLimit", pageLimit);
+		request.setAttribute("cpage", cpage);
+		request.setAttribute("totalPageNumber", totalPageNumber);
+		
 		model.addAttribute("articlesCount", articlesCount);
 		model.addAttribute("articles", articles);
 		model.addAttribute("board", board);
