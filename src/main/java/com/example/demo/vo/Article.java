@@ -15,10 +15,12 @@ public class Article {
 	private String regDate;
 	private String updateDate;
 	private int memberId;
+	private int board__id;
 	private String title;
 	private String body;
 
 	private String extra__writer;
+	private String board__code;
 	private boolean userCanModify;
 	private boolean userCanDelete;
 	

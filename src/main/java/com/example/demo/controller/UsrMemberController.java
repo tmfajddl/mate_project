@@ -39,7 +39,7 @@ public class UsrMemberController {
 	}
 	
 	@RequestMapping("/usr/member/login")
-	public String login(Model model) {
+	public String login(HttpServletRequest req) {
 		
 		return "usr/member/login";	
 	}
@@ -75,7 +75,7 @@ public class UsrMemberController {
 		session.setAttribute("loginedMemberId", member.getId());
 
 
-		return Ut.jsReplace("S-1", member.getNickname()+"님 환영합니다.", "../article/list");
+		return Ut.jsReplace("S-1", member.getNickname()+"님 환영합니다.", "../home/main");
 	}
 	
 	@RequestMapping("/usr/member/join")

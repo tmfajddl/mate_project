@@ -8,6 +8,12 @@
 <section class="mt-8 text-xl px-4">
 	<div class="mx-auto">
 <form action="../article/doWrite" method="post">
+<label for="code">게시판 선택</label>
+            <select id="code" name="code">
+                <option value="notice">notice</option>
+                <option value="free">free</option>
+                <option value="QnA">QnA</option>
+            </select>
 <div>제목:
 <input type="text" placeholder="제목" class="input input-neutral" name="title" required/></div>
 <div>내용: 

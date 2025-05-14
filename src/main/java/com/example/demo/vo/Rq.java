@@ -26,6 +26,7 @@ public class Rq {
 
 	private boolean isLogined = false;
 	private int loginedMemberId = 0;
+	int totalArticleNumber = 0;
 
 	public Rq(HttpServletRequest req, HttpServletResponse resp) {
 		this.req = req;

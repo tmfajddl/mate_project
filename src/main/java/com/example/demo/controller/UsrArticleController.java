@@ -1,6 +1,8 @@
 package com.example.demo.controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -8,9 +10,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.example.demo.interceptor.BeforeActionInterceptor;
 import com.example.demo.service.ArticleService;
+import com.example.demo.service.BoardService;
 import com.example.demo.util.Ut;
 import com.example.demo.vo.Article;
+import com.example.demo.vo.Board;
 import com.example.demo.vo.ResultData;
 import com.example.demo.vo.Rq;
 
@@ -23,6 +28,15 @@ public class UsrArticleController {
 
 	@Autowired
 	private ArticleService articleService;
+	
+	private final BeforeActionInterceptor beforeActionInterceptor;
+	
+	@Autowired
+	private BoardService boardService;
+
+    UsrArticleController(BeforeActionInterceptor beforeActionInterceptor) {
+        this.beforeActionInterceptor = beforeActionInterceptor;
+    }
 
 	// 로그인 체크 -> 유무 체크 -> 권한체크
 	@RequestMapping("/usr/article/doModify")
@@ -51,7 +65,7 @@ public class UsrArticleController {
 			articleService. modifyArticle(id,title,body);
 		}
 
-		return Ut.jsReplace(userCanModifyRd.getResultCode(), userCanModifyRd.getMsg(), "../article/list");
+		return Ut.jsReplace(userCanModifyRd.getResultCode(), userCanModifyRd.getMsg(),"../home/main");
 
 	}
 	
@@ -93,7 +107,7 @@ public class UsrArticleController {
 			articleService.deleteArticle(id);
 		}
 
-		return Ut.jsReplace(userCanDeleteRd.getResultCode(), userCanDeleteRd.getMsg(), "../article/list");
+		return Ut.jsHistoryBack(userCanDeleteRd.getResultCode(), userCanDeleteRd.getMsg());
 	}
 
 	@RequestMapping("/usr/article/detail")
@@ -118,7 +132,7 @@ public class UsrArticleController {
 
 	@RequestMapping("/usr/article/doWrite")
 	@ResponseBody
-	public String doWrite(HttpServletRequest req, Model model, String title, String body) {
+	public String doWrite(HttpServletRequest req, Model model,String code, String title, String body) {
 
 		Rq rq = (Rq) req.getAttribute("rq");
 
@@ -133,26 +147,63 @@ public class UsrArticleController {
 		if (Ut.isEmptyOrNull(body)) {
 			return Ut.jsReplace("F-2", "내용을 입력하세요", "../article/write");
 		}
+		
+		Board board = boardService.getBoardByCode(code);
 
-		ResultData doWriteRd = articleService.writeArticle(rq.getLoginedMemberId(), title, body);
+		ResultData doWriteRd = articleService.writeArticle(rq.getLoginedMemberId(), board.getId(), title, body);
 
 		int id = (int) doWriteRd.getData1();
 
 		Article article = articleService.getArticleById(id);
 
 
-		return Ut.jsReplace("S-1", "글쓰기 성공", "../article/list");
+		return Ut.jsReplace("S-1", "글쓰기 성공", "../home/main");
 	}
 
 	@RequestMapping("/usr/article/list")
-	public String showList(Model model, HttpServletRequest req) {
-		
-		Rq rq = (Rq) req.getAttribute("rq");
+	public String showList(Model model, int boardId, int page) {
 
-		List<Article> articles = articleService.getArticles();
+		Board board = boardService.getBoardById(boardId);
+
+		List<Article> articles = boardService.getArticles();
+		
+		int limit = 10;
+		int totalArticleNumber= rq.getTotalArticleNumber();
+		
+		for(Article article : articles) {
+			if(article.getBoard__id()==board.getId()) {
+				totalArticleNumber++;
+			}
+		}
+		
+		rq.setTotalArticleNumber(totalArticleNumber);
+		
+		int totalPageNumber = totalArticleNumber / limit + 1;
+		int pageStartArticleNumber = (page-1)*limit +1;
+		int pageEndArticleNumber = pageStartArticleNumber + limit;
+		
+		
+		List<Integer> totalPageNumbers = IntStream.rangeClosed(1, totalPageNumber)
+		                                     .boxed()
+		                                     .collect(Collectors.toList());
+		model.addAttribute("totalPageNumber", totalPageNumbers);
+		
+		List<Integer> pageStartArticleNumbers = IntStream.rangeClosed(1, pageStartArticleNumber)
+                									.boxed()
+                									.collect(Collectors.toList());
+		model.addAttribute("pageStartArticleNumber", pageStartArticleNumbers);
+
+		List<Integer> pageEndArticleNumbers = IntStream.rangeClosed(1, pageEndArticleNumber)
+													.boxed()
+													.collect(Collectors.toList());
+		model.addAttribute("pageEndArticleNumber", pageEndArticleNumbers);
+		
 
 		model.addAttribute("articles", articles);
-		model.addAttribute("rq", rq);
+		model.addAttribute("board", board);
+		model.addAttribute("limit", limit);
+		model.addAttribute("page", page);
+		
 
 		return "usr/article/list";
 	}
