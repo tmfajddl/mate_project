@@ -7,35 +7,63 @@
 
 <section class="mt-8 text-xl px-4">
 	<div class="mx-auto">
-<form action="../member/doJoin" method="post">
-<div>아이디:
-<input type="text" placeholder="아이디" class="input input-neutral" name="loginId" required/></div>
-<div>비밀번호: 
-<input type="text" placeholder="비밀번호" class="input input-neutral" name="loginPw" required/></div>
-<div>비밀번호 확인: 
-<input type="text" placeholder="비밀번호 확인" class="input input-neutral" name="loginPw2" required/></div>
-<div>이름: 
-<input type="text" placeholder="이름" class="input input-neutral" name="name" required/></div>
-<div>닉네임: 
-<input type="text" placeholder="닉네임" class="input input-neutral" name="nickname" required/></div>
-<div>전화번호: 
-<input type="tel" placeholder="전화번호" class="input input-neutral" name="cellphoneNum" required/></div>
-<div>E-mail: 
-<input type="email" placeholder="E-mail" class="input input-neutral" name="email" required/></div>
-<br>
-<div><button class="btn btn-outline" type="submit">회원가입</button></div>
+		<form action="../member/doJoin" method="POST">
+			<table class="table"  border="1" cellspacing="0" cellpadding="5" style="width: 100%; border-collapse: collapse;">
+				<tbody>
+					<tr>
+						<th>아이디</th>
+						<td style="text-align: center;">
+							<input class="input input-primary" name="loginId" autocomplete="off" type="text" placeholder="아이디 입력" />
+						</td>
+					</tr>
+					<tr>
+						<th>비밀번호</th>
+						<td style="text-align: center;">
+							<input class="input input-primary" name="loginPw" autocomplete="off" type="text" placeholder="비밀번호 입력" />
+						</td>
+					</tr>
+					<tr>
+						<th>이름</th>
+						<td style="text-align: center;">
+							<input class="input input-primary" name="name" autocomplete="off" type="text" placeholder="이름 입력" />
+						</td>
+					</tr>
+					<tr>
+						<th>닉네임</th>
+						<td style="text-align: center;">
+							<input class="input input-primary" name="nickname" autocomplete="off" type="text" placeholder="닉네임 입력" />
+						</td>
+					</tr>
+					<tr>
+						<th>전화번호</th>
+						<td style="text-align: center;">
+							<input class="input input-primary" name=cellphoneNum autocomplete="off" type="text" placeholder="전화번호 입력" />
+						</td>
+					</tr>
+					<tr>
+						<th>이메일</th>
+						<td style="text-align: center;">
+							<input class="input input-primary" name="email" autocomplete="off" type="text" placeholder="이메일 입력" />
+						</td>
+					</tr>
 
-</form>
+
+					<tr>
+						<th></th>
+						<td style="text-align: center;">
+							<button class="btn btn-ghost">가입</button>
+						</td>
+					</tr>
+
+				</tbody>
+			</table>
+		</form>
 		<div class="btns">
-			<button class="btn btn-outline" type="button" onclick="history.back();">뒤로가기</button>
-		</div>
+			<button class="btn btn-ghost" type="button" onclick="history.back();">뒤로가기</button>
 
+		</div>
 	</div>
 </section>
-
-
-
-<%@ include file="../common/foot.jspf"%>
 
 
 

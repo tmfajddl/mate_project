@@ -7,25 +7,38 @@
 
 <section class="mt-8 text-xl px-4">
 	<div class="mx-auto">
-<form action="../member/doLogin" method="post">
-<div>ID:
-<input type="text" placeholder="ID" class="input input-neutral" name="loginId" required/></div>
-<div>PassWord: 
-<input type="text" placeholder="PassWord" class="input input-neutral" name="loginPw" required/></div>
-<br>
-<div><button class="btn btn-outline" type="submit">로그인</button></div>
+		<form action="../member/doLogin" method="POST">
+			<table class="table"  border="1" cellspacing="0" cellpadding="5" style="width: 100%; border-collapse: collapse;">
+				<tbody>
+					<tr>
+						<th>아이디</th>
+						<td style="text-align: center;">
+							<input class="input input-primary" name="loginId" autocomplete="off" type="text" placeholder="아이디 입력" />
+						</td>
+					</tr>
+					<tr>
+						<th>비밀번호</th>
+						<td style="text-align: center;">
+							<input class="input input-primary" name="loginPw" autocomplete="off" type="text" placeholder="비밀번호 입력" />
+						</td>
+					</tr>
 
-</form>
+					<tr>
+						<th></th>
+						<td style="text-align: center;">
+							<button class="btn btn-ghost">로그인</button>
+						</td>
+					</tr>
+
+				</tbody>
+			</table>
+		</form>
 		<div class="btns">
-			<button class="btn btn-outline" type="button" onclick="history.back();">뒤로가기</button>
-		</div>
+			<button class="btn btn-ghost" type="button" onclick="history.back();">뒤로가기</button>
 
+		</div>
 	</div>
 </section>
-
-
-
-<%@ include file="../common/foot.jspf"%>
 
 
 

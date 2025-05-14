@@ -4,9 +4,10 @@
 <c:set var="pageTitle" value="ARTICLE DETAIL"></c:set>
 <%@ include file="../common/head.jspf"%>
 
+
 <section class="mt-8 text-xl px-4">
 	<div class="mx-auto">
-		<table border="1" cellspacing="0" cellpadding="5" style="width: 100%; border-collapse: collapse;">
+		<table class="table" border="1" cellspacing="0" cellpadding="5" style="width: 100%; border-collapse: collapse;">
 			<tbody>
 				<tr>
 					<th style="text-align: center;">ID</th>
@@ -25,6 +26,10 @@
 					<td style="text-align: center;">${article.extra__writer }</td>
 				</tr>
 				<tr>
+					<th style="text-align: center;">BoardId</th>
+					<td style="text-align: center;">${article.boardId }</td>
+				</tr>
+				<tr>
 					<th style="text-align: center;">Title</th>
 					<td style="text-align: center;">${article.title }</td>
 				</tr>
@@ -35,21 +40,17 @@
 			</tbody>
 		</table>
 		<div class="btns">
-			<button class="btn btn-outline" type="button" onclick="history.back();">뒤로가기</button>
+			<button class="btn btn-ghost" type="button" onclick="history.back();">뒤로가기</button>
 			<c:if test="${article.userCanModify }">
-				<a class="btn btn-outline" href="../article/modify?id=${article.id}">수정</a>
+				<a class="btn btn-ghost" href="../article/modify?id=${article.id}">수정</a>
 			</c:if>
 			<c:if test="${article.userCanDelete }">
-				<a class="btn btn-outline" href="../article/doDelete?id=${article.id}">삭제</a>
+				<a class="btn btn-ghost" href="../article/doDelete?id=${article.id}">삭제</a>
 			</c:if>
 		</div>
 
 	</div>
 </section>
-
-
-
-<%@ include file="../common/foot.jspf"%>
 
 
 

@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
-<c:set var="pageTitle" value="${keyword } LIST"></c:set>
+<c:set var="pageTitle" value="${board.code } LIST"></c:set>
 <%@ include file="../common/head.jspf"%>
 
 <%
@@ -28,6 +28,7 @@ int pageEndArticleNumber = (int) request.getAttribute("pageEndArticleNumber");
 			</thead>
 			<tbody>
 <c:forEach var="article" items="${articles}">
+	<c:if test="${article.board__code == board.code}">
 		<tr class="hover:bg-base-300">
 			<td style="text-align: center;">${article.id}</td>
 			<td style="text-align: center;">${article.regDate.substring(0,10)}</td>
@@ -37,43 +38,42 @@ int pageEndArticleNumber = (int) request.getAttribute("pageEndArticleNumber");
 			<td style="text-align: center;">${article.extra__writer}</td>
 			<td style="text-align: center;">${article.board__code}</td>
 		</tr>
+	</c:if>
 </c:forEach>
 			</tbody>
 		</table>
 		
 		<div style="text-align: center;">
-		<% if(totalPageNumber < limit){
-			for(int i = 1; i < totalPageNumber; i++){%>
-				<a class="hover:underline" href="../article/search?page=<%=i %>&&search=${search}keyword=${keyword}"><%=i%></a>
+		<% if(totalPageNumber <= 9){
+			for(int i = 1; i <= totalPageNumber; i++){%>
+				<a class="hover:underline" href="../article/list?boardId=${board.id}&page=<%=i%>"><%=i%></a>
 			<% }
 		}
 		else{
 			if(cpage<5){
-			for(int i = 1; i < limit; i++){%>
-			<a class="hover:underline" href="../article/search?page=<%=i %>&search=${search}&keyword=${keyword}"><%=i%></a>	
+			for(int i = 1; i <= 9; i++){%>
+			<a class="hover:underline" href="../article/list?boardId=${board.id}&page=<%=i%>"><%=i%></a>	
 			<%}
 			}
 			else{
-				for(int i = cpage-4; i < cpage+4; i++){%>
-				<a class="hover:underline" href="../article/search?page=<%=i %>&search=${search}&keyword=${keyword}"><%=i%></a>	
+				for(int i = cpage-4; i <= cpage+4; i++){%>
+				<a class="hover:underline" href="../article/list?boardId=${board.id}&page=<%=i%>"><%=i%></a>	
 				<%}
 			}
 		}%>
 		</div>
 		
 		<div style="text-align: center;">
-			<form class = "search_bar" action="../article/search" name="keyword">검색
-			<select name="search" id="search">
+		</div>
+		<div style="text-align: center;">
+			<form class = "search_bar" action="../article/search" name="search_bar">검색
+            <select id="type" name="type">
                 <option value="title">제목</option>
                 <option value="body">내용</option>
                 <option value="nickname">닉네임</option>
-			</select>
-			<input type="text" name="search"/>
-			</form>
+            </select>
+	<input type="text" name="keyword"/>
+	</form> 
 		</div>
 	</div>
 </section>
-
-
-
-<%@ include file="../common/foot.jspf"%>

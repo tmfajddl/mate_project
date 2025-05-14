@@ -20,8 +20,8 @@ public class ArticleService {
 		this.articleRepository = articleRepository;
 	}
 
-	public ResultData writeArticle(int boardId, int memberId, String title, String body) {
-		articleRepository.writeArticle(boardId, memberId, title, body);
+	public ResultData writeArticle(int memberId, String title, String body, String boardId) {
+		articleRepository.writeArticle(memberId, title, body, boardId);
 
 		int id = articleRepository.getLastInsertId();
 
@@ -69,7 +69,7 @@ public class ArticleService {
 
 		ResultData userCanModifyRd = userCanModify(loginedMemberId, article);
 		article.setUserCanModify(userCanModifyRd.isSuccess());
-		
+
 		ResultData userDeleteRd = userCanDelete(loginedMemberId, article);
 		article.setUserCanDelete(userDeleteRd.isSuccess());
 	}
@@ -80,6 +80,22 @@ public class ArticleService {
 
 	public List<Article> getArticles() {
 		return articleRepository.getArticles();
+	}
+
+	public List<Article> getForPrintArticles(int boardId, int itemsInAPage, int page) {
+		// SELECT * FROM article WHERE boardId = 1 ORDER BY id DESC LIMIT 0, 10;
+		// --> 1page
+		// SELECT * FROM article WHERE boardId = 1 ORDER BY id DESC LIMIT 10, 10;
+		// --> 2page
+
+		int limitFrom = (page - 1) * itemsInAPage;
+		int limitTake = itemsInAPage;
+
+		return articleRepository.getForPrintArticles(boardId, limitFrom, limitTake);
+	}
+
+	public int getArticleCount(int boardId) {
+		return articleRepository.getArticleCount(boardId);
 	}
 
 }

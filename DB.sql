@@ -43,13 +43,13 @@ CREATE TABLE board (
 INSERT INTO board
 SET regDate = NOW(),
 updateDate = NOW(),
-`code` = 'notice',
+`code` = 'NOTICE',
 `name` = '공지사항';
 
 INSERT INTO board
 SET regDate = NOW(),
 updateDate = NOW(),
-`code` = 'free',
+`code` = 'FREE',
 `name` = '자유';
 
 INSERT INTO board
@@ -166,6 +166,34 @@ FROM board;
 
 
 ######################################################################
+
+# 게시글 데이터 대량 생성
+INSERT INTO article
+	( 
+		regDate, updateDate, memberId, boardId, title, `body`
+	)
+select now(), now(), floor(RAND() * 2) + 2, floor(RAND() * 3) + 1, concat('제목__',rand()), concat('내용__',rand())
+from article;
+
+select floor(RAND() * 2) + 2;
+
+select floor(RAND() * 3) + 1;
+
+SELECT *
+		FROM board
+		WHERE id = 4 AND delStatus = 0
+
+SELECT A.*, M.nickname AS extra__writer
+		FROM article AS A
+		INNER JOIN `member` AS M
+		ON A.memberId = M.id
+		WHERE boardId = 3
+		ORDER BY A.id
+		DESC
+
+SELECT *
+		FROM board
+		WHERE id =2
 
 SELECT LAST_INSERT_ID();
 

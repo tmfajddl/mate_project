@@ -10,15 +10,14 @@ public class ResultData<DT> {
 	private String msg;
 	@Getter
 	private DT data1;
-	
 	@Getter
 	private String data1Name;
 
 	public static <DT> ResultData<DT> from(String ResultCode, String msg) {
-		return from(ResultCode, msg,null, null);
+		return from(ResultCode, msg, null, null);
 	}
 
-	public static <DT> ResultData<DT> from(String ResultCode, String msg,String data1Name, DT data) {
+	public static <DT> ResultData<DT> from(String ResultCode, String msg, String data1Name, DT data) {
 		ResultData<DT> rd = new ResultData<DT>();
 		rd.ResultCode = ResultCode;
 		rd.msg = msg;
@@ -36,8 +35,7 @@ public class ResultData<DT> {
 		return isSuccess() == false;
 	}
 
-	public static <DT> ResultData<DT> newData(ResultData rd,String data1Name, DT newData) {
-		return from(rd.getResultCode(), rd.getMsg(), data1Name, newData);
+	public static <DT> ResultData<DT> newData(ResultData rd, String dataName, DT newData) {
+		return from(rd.getResultCode(), rd.getMsg(), dataName, newData);
 	}
-	
 }
