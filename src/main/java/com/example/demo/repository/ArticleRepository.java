@@ -22,4 +22,5 @@ public interface ArticleRepository {
 	public List<Article> getArticles();
 
 	public Article getForPrintArticle(int loginedMemberId);
+
 }

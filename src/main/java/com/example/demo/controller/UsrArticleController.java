@@ -19,6 +19,7 @@ import com.example.demo.vo.Board;
 import com.example.demo.vo.ResultData;
 import com.example.demo.vo.Rq;
 
+import jakarta.servlet.ServletRequest;
 import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
@@ -161,14 +162,19 @@ public class UsrArticleController {
 	}
 
 	@RequestMapping("/usr/article/list")
-	public String showList(Model model, int boardId, int page) {
+	public String showList(Model model, int boardId, int page, ServletRequest request) {
 
 		Board board = boardService.getBoardById(boardId);
-
-		List<Article> articles = boardService.getArticles();
 		
-		int limit = 10;
-		int totalArticleNumber= rq.getTotalArticleNumber();
+		int cpage = page;
+		int limit = 8;
+		int pageStartArticleNumber = (page-1)*limit +1;
+		int pageEndArticleNumber = pageStartArticleNumber + limit;
+
+		List<Article> articles = boardService.getArticles(boardId, pageStartArticleNumber, pageEndArticleNumber);
+		
+		int totalArticleNumber= boardService.getTotalArticles(boardId).size();
+		int totalPageNumber = totalArticleNumber / limit + 1;
 		
 		for(Article article : articles) {
 			if(article.getBoard__id()==board.getId()) {
@@ -176,35 +182,18 @@ public class UsrArticleController {
 			}
 		}
 		
-		rq.setTotalArticleNumber(totalArticleNumber);
-		
-		int totalPageNumber = totalArticleNumber / limit + 1;
-		int pageStartArticleNumber = (page-1)*limit +1;
-		int pageEndArticleNumber = pageStartArticleNumber + limit;
-		
-		
-		List<Integer> totalPageNumbers = IntStream.rangeClosed(1, totalPageNumber)
-		                                     .boxed()
-		                                     .collect(Collectors.toList());
-		model.addAttribute("totalPageNumber", totalPageNumbers);
-		
-		List<Integer> pageStartArticleNumbers = IntStream.rangeClosed(1, pageStartArticleNumber)
-                									.boxed()
-                									.collect(Collectors.toList());
-		model.addAttribute("pageStartArticleNumber", pageStartArticleNumbers);
-
-		List<Integer> pageEndArticleNumbers = IntStream.rangeClosed(1, pageEndArticleNumber)
-													.boxed()
-													.collect(Collectors.toList());
-		model.addAttribute("pageEndArticleNumber", pageEndArticleNumbers);
-		
-
 		model.addAttribute("articles", articles);
 		model.addAttribute("board", board);
-		model.addAttribute("limit", limit);
-		model.addAttribute("page", page);
+		request.setAttribute("limit", limit);
+		request.setAttribute("cpage", cpage);
+		request.setAttribute("totalPageNumber", totalPageNumber);
+		request.setAttribute("pageStartArticleNumber", pageStartArticleNumber);
+		request.setAttribute("pageEndArticleNumber", pageEndArticleNumber);
+		
 		
 
 		return "usr/article/list";
 	}
+	
+
 }

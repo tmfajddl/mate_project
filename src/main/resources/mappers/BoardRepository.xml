@@ -18,6 +18,18 @@
 		FROM article AS A
 		INNER JOIN `member` AS M ON A.memberId = M.id
 		INNER JOIN `board` AS B ON A.boardId = B.id
+		WHERE B.id = #{boardId}
+		ORDER BY A.id DESC
+		LIMIT #{start}, #{end}
+	</select>
+	
+		<select id="getTotalArticles"
+		resultType="com.example.demo.vo.Article">
+		SELECT A.*, M.nickname AS extra__writer, B.code AS board__code
+		FROM article AS A
+		INNER JOIN `member` AS M ON A.memberId = M.id
+		INNER JOIN `board` AS B ON A.boardId = B.id
+		WHERE B.id = #{boardId}
 		ORDER BY A.id DESC
 	</select>
 	
@@ -27,6 +39,8 @@
 		FROM board
 		WHERE code =#{code}
 	</select>
+	
+	
 
 
 

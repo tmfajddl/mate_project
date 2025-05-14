@@ -12,8 +12,10 @@ public interface BoardRepository {
 
 	public Board getBoardById(int id);
 	
-	public List<Article> getArticles();
+	public List<Article> getArticles(int boardId, int start, int end);
 	
 	public Board getBoardByCode(String code);
+
+	public List<Article> getTotalArticles(int boardId);
 
 }

@@ -24,12 +24,18 @@ public class BoardService {
 		return boardRepository.getBoardById(boardId);
 	}
 	
-	public List<Article> getArticles() {
-		return boardRepository.getArticles();
+	public List<Article> getArticles(int boardId, int start, int end) {
+		return boardRepository.getArticles(boardId, start, end);
 	}
 	
 	public Board getBoardByCode(String code) {
 		return boardRepository.getBoardByCode(code);
 	}
+	
+	public List<Article> getTotalArticles(int boardId) {
+
+		return boardRepository.getTotalArticles(boardId);
+	}
+
 
 }
