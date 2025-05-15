@@ -113,5 +113,10 @@ public class ArticleService {
 		
 		articleRepository.updateView(id);
 	}
+	
+	public void updateLike(int id) {
+		
+		articleRepository.updateLike(id);
+	}
 
 }

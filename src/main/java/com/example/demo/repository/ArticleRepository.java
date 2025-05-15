@@ -32,4 +32,7 @@ public interface ArticleRepository {
 	public List<Article> getForKeywordPrintArticles(int search, String keyword, int limitFrom, int limitTake);
 
 	public void updateView(int id);
+	
+	public void updateLike(int id);
+	
 }

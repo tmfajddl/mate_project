@@ -122,7 +122,6 @@ public class UsrArticleController {
 
 		model.addAttribute("article", article);
 		
-
 		return "usr/article/detail";
 	}
 

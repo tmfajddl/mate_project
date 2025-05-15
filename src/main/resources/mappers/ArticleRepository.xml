@@ -15,7 +15,9 @@
 		#{boardId},
 		title =
 		#{title},
-		`body` = #{body}
+		`body` = #{body},
+		`like` = 0,
+		`view` = 0
 	</insert>
 
 	<delete id="deleteArticle" parameterType="int">
@@ -136,6 +138,12 @@
 <update id="updateView" parameterType="int">
     UPDATE article
     SET `view` = IFNULL(`view`, 0) + 1
+    WHERE id = #{id}
+</update>
+
+<update id="updateLike" parameterType="int">
+    UPDATE article
+    SET `like` = IFNULL(`view`, 0) + 1
     WHERE id = #{id}
 </update>
 
