@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.example.demo.vo.Article;
+import com.example.demo.vo.ResultData;
 
 @Mapper
 public interface ArticleRepository {
@@ -32,7 +33,9 @@ public interface ArticleRepository {
 	public List<Article> getForKeywordPrintArticles(int search, String keyword, int limitFrom, int limitTake);
 
 	public void updateView(int id);
-	
-	public void updateLike(int id);
+
+	public ResultData updateLike(int id);
+
+	public int getArticleLikeCount(int id);
 	
 }

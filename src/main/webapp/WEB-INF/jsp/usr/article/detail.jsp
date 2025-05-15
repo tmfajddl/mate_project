@@ -4,6 +4,22 @@
 <c:set var="pageTitle" value="ARTICLE DETAIL"></c:set>
 <%@ include file="../common/head.jspf"%>
 
+<script>
+	function ArticleDetail__doIncreaseHitCount() {
+		$.get('../article/doUpdateLike', {
+			id : params.id,
+			ajaxMode : 'Y'
+		}, function(data) {
+			$('.article-detail__hit-count').html(data.data1);
+		}, 'json');
+	}
+
+	$(function() {
+		ArticleDetail__doIncreaseHitCount();
+
+	})
+</script>
+
 
 
 <section class="mt-8 text-xl px-4">
@@ -44,6 +60,7 @@
 				</tr>
 			</tbody>
 		</table>
+		<form action="../article/doWrite" method="POST">
 		<div style="text-align: center;">
 <button id="heartBtn" class="btn btn-square">
   <!-- 비어 있는 하트 (기본 상태) -->
@@ -61,6 +78,9 @@
   </svg>
 </button>
 		</div>
+		<div class="article-detail__hit-count" style="text-align: center;">${article.like}
+		</div>
+		</form>
 		<div class="btns">
 			<button class="btn btn-ghost" type="button" onclick="history.back();">뒤로가기</button>
 			<c:if test="${article.userCanModify }">

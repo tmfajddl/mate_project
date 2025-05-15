@@ -124,6 +124,25 @@ public class UsrArticleController {
 		
 		return "usr/article/detail";
 	}
+	
+	@RequestMapping("/usr/article/doUpdateLike")
+	@ResponseBody
+	public ResultData doUpdateLike(HttpServletRequest req, Model model, int id) {
+		
+		
+		Rq rq = (Rq) req.getAttribute("rq");
+		
+		Article article = articleService.getForPrintArticle(rq.getLoginedMemberId(), id);
+		
+		ResultData increaseLikeCountRd = articleService.updateLike(article, rq.getLoginedMemberId(),id);
+		
+		if (increaseLikeCountRd.isFail()) {
+			return increaseLikeCountRd;
+		}
+		
+		return ResultData.newData(increaseLikeCountRd, "like", articleService.getArticleLikeCount(id));
+	}
+	
 
 	@RequestMapping("/usr/article/write")
 	public String showWrite(HttpServletRequest req) {

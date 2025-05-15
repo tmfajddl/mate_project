@@ -35,7 +35,6 @@ int totalPageNumber = (int) request.getAttribute("totalPageNumber");
 					<th style="text-align: center;">Title</th>
 					<th style="text-align: center;">Writer</th>
 					<th style="text-align: center;">view</th>
-					<th style="text-align: center;">like</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -48,7 +47,6 @@ int totalPageNumber = (int) request.getAttribute("totalPageNumber");
 						</td>
 						<td style="text-align: center;">${article.extra__writer }</td>
 						<td style="text-align: center;">${article.view}</td>
-						<td style="text-align: center;">${article.like}</td>
 					</tr>
 				</c:forEach>
 

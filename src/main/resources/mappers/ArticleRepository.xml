@@ -147,4 +147,10 @@
     WHERE id = #{id}
 </update>
 
+	<select id="getArticleLikeCount" parameterType="int">
+		SELECT `like`
+		FROM article
+		WHERE id = #{id}
+	</select>
+
 </mapper>
