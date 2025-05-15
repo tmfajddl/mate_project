@@ -5,6 +5,7 @@
 <%@ include file="../common/head.jspf"%>
 
 
+
 <section class="mt-8 text-xl px-4">
 	<div class="mx-auto">
 		<table class="table" border="1" cellspacing="0" cellpadding="5" style="width: 100%; border-collapse: collapse;">
@@ -36,6 +37,10 @@
 				<tr>
 					<th style="text-align: center;">Body</th>
 					<td style="text-align: center;">${article.body }</td>
+				</tr>
+				<tr>
+					<th style="text-align: center;">view</th>
+					<td style="text-align: center;">${article.view}</td>
 				</tr>
 			</tbody>
 		</table>

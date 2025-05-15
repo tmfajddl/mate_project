@@ -11,8 +11,19 @@ int cpage = (int) request.getAttribute("cpage");
 int totalPageNumber = (int) request.getAttribute("totalPageNumber");
 %>
 
-
-<section class="mt-24 text-xl px-4">
+		<div>
+			<form class = "search_bar" action="../article/search" name="search_bar">검색
+	<select name="search" id="search">
+								<option selected value="1">제목</option>
+								<option value="2">내용</option>
+								<option value="3">닉네임</option>
+	</select>
+	<input type="text" name="keyword"/>
+	</form>
+		</div>
+	</div>
+	
+<section class="mt-8 text-xl px-4">
 	<div class="mx-auto">
 		<div>${articlesCount }개</div>
 		<table class="table" border="1" cellspacing="0" cellpadding="5" style="width: 100%; border-collapse: collapse;">
@@ -23,6 +34,7 @@ int totalPageNumber = (int) request.getAttribute("totalPageNumber");
 					<th style="text-align: center;">Registration Date</th>
 					<th style="text-align: center;">Title</th>
 					<th style="text-align: center;">Writer</th>
+					<th style="text-align: center;">view</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -34,6 +46,7 @@ int totalPageNumber = (int) request.getAttribute("totalPageNumber");
 							<a class="hover:underline" href="detail?id=${article.id }">${article.title }</a>
 						</td>
 						<td style="text-align: center;">${article.extra__writer }</td>
+						<td style="text-align: center;">${article.view}</td>
 					</tr>
 				</c:forEach>
 
@@ -74,7 +87,6 @@ int totalPageNumber = (int) request.getAttribute("totalPageNumber");
 			}
 		}%>
 		</div>
-	</div>
 </section>
 
 

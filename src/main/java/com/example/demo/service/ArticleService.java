@@ -97,5 +97,21 @@ public class ArticleService {
 	public int getArticleCount(int boardId) {
 		return articleRepository.getArticleCount(boardId);
 	}
+	
+	public int getKeywordArticleCount(int search, String keyword) {
+		return articleRepository.getKeywordArticleCount(search, keyword);
+	}
+
+	public List<Article> getForKeywordPrintArticles(int search, String keyword, int itemsInAPage, int page) {
+		int limitFrom = (page - 1) * itemsInAPage;
+		int limitTake = itemsInAPage;
+
+		return articleRepository.getForKeywordPrintArticles(search, keyword, limitFrom, limitTake);
+	}
+
+	public void updateView(int id) {
+		
+		articleRepository.updateView(id);
+	}
 
 }

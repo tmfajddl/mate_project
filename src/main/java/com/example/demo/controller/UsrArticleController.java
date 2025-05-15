@@ -110,12 +110,18 @@ public class UsrArticleController {
 
 	@RequestMapping("/usr/article/detail")
 	public String showDetail(HttpServletRequest req, Model model, int id) {
-
+		
+		
 		Rq rq = (Rq) req.getAttribute("rq");
+		
+		articleService.updateView(id);
 
 		Article article = articleService.getForPrintArticle(rq.getLoginedMemberId(), id);
+		
+		
 
 		model.addAttribute("article", article);
+		
 
 		return "usr/article/detail";
 	}
@@ -173,6 +179,7 @@ public class UsrArticleController {
 
 		List<Article> articles = articleService.getForPrintArticles(boardId, itemsInAPage, page);
 
+		
 		request.setAttribute("pageLimit", pageLimit);
 		request.setAttribute("cpage", cpage);
 		request.setAttribute("totalPageNumber", totalPageNumber);
@@ -182,5 +189,37 @@ public class UsrArticleController {
 		model.addAttribute("board", board);
 
 		return "usr/article/list";
+	}
+	
+	@RequestMapping("/usr/article/search")
+	public String showSearchList(HttpServletRequest req, Model model, int search, String keyword,
+			@RequestParam(defaultValue = "1") int page, ServletRequest request) throws IOException {
+
+		Rq rq = (Rq) req.getAttribute("rq");
+	
+		
+		if (keyword == null) {
+			return rq.historyBackOnView("검색어를 입력하세요.");
+		}
+		int itemsInAPage = 10;
+		int articlesCount = articleService.getKeywordArticleCount(search, keyword);
+		int totalPageNumber = articlesCount / itemsInAPage + 1;
+
+		int pageLimit = 9;
+		int cpage = page;
+		String keywords = keyword;
+
+		List<Article> articles = articleService.getForKeywordPrintArticles(search, keyword, itemsInAPage, page);
+
+		request.setAttribute("keywords", keywords);
+		request.setAttribute("pageLimit", pageLimit);
+		request.setAttribute("cpage", cpage);
+		request.setAttribute("totalPageNumber", totalPageNumber);
+		
+		
+		model.addAttribute("articlesCount", articlesCount);
+		model.addAttribute("articles", articles);
+
+		return "usr/article/search";
 	}
 }

@@ -16,10 +16,12 @@ public class Article {
 	private String updateDate;
 	private int memberId;
 	private int boardId;
+	private int view;
 	private String title;
 	private String body;
 
 	private String extra__writer;
 	private boolean userCanModify;
 	private boolean userCanDelete;
+	
 }

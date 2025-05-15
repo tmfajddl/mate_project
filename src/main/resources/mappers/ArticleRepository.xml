@@ -81,6 +81,30 @@
 			LIMIT #{limitFrom}, #{limitTake}
 		</if>
 	</select>
+	
+		<select id="getForKeywordPrintArticles"
+		resultType="com.example.demo.vo.Article">
+		SELECT A.*, M.nickname AS extra__writer
+		FROM article AS A
+		INNER JOIN
+		`member` AS M
+		ON A.memberId = M.id
+		WHERE 1
+	<if test="search == 1">
+		AND A.title LIKE CONCAT('%', #{keyword}, '%')
+	</if>
+	<if test="search == 2">
+		AND A.`body` LIKE CONCAT('%', #{keyword}, '%')
+	</if>
+	<if test="search == 3">
+		AND M.nickname LIKE CONCAT('%', #{keyword}, '%')
+	</if>
+		ORDER BY A.id
+		DESC
+		<if test="limitFrom >= 0">
+			LIMIT #{limitFrom}, #{limitTake}
+		</if>
+	</select>
 
 	<select id="getArticles"
 		resultType="com.example.demo.vo.Article">
@@ -91,5 +115,28 @@
 		ORDER BY A.id
 		DESC
 	</select>
+	
+<select id="getKeywordArticleCount" parameterType="map">
+	SELECT COUNT(*) as cnt
+	FROM article AS A
+	INNER JOIN `member` AS M
+		ON A.memberId = M.id
+	WHERE 1
+	<if test="search == 1">
+		AND A.title LIKE CONCAT('%', #{keyword}, '%')
+	</if>
+	<if test="search == 2">
+		AND A.`body` LIKE CONCAT('%', #{keyword}, '%')
+	</if>
+	<if test="search == 3">
+		AND M.nickname LIKE CONCAT('%', #{keyword}, '%')
+	</if>
+</select>
+
+<update id="updateView" parameterType="int">
+    UPDATE article
+    SET `view` = IFNULL(`view`, 0) + 1
+    WHERE id = #{id}
+</update>
 
 </mapper>
