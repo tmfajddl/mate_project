@@ -4,6 +4,9 @@
 <c:set var="pageTitle" value="ARTICLE DETAIL"></c:set>
 <%@ include file="../common/head.jspf"%>
 
+<!-- 폰트어썸 -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
 
 
 <section class="mt-8 text-xl px-4">
@@ -30,14 +33,7 @@
 					<th style="text-align: center;">BoardId</th>
 					<td style="text-align: center;">${article.boardId }</td>
 				</tr>
-								<tr>
-					<th style="text-align: center;">LIKE</th>
-					<td style="text-align: center;">${article.extra__goodReactionPoint }</td>
-				</tr>
-				<tr>
-					<th style="text-align: center;">DISLIKE</th>
-					<td style="text-align: center;">${article.extra__badReactionPoint }</td>
-				</tr>
+
 				<tr>
 					<th style="text-align: center;">SUM</th>
 					<td style="text-align: center;">${article.extra__sumReactionPoint }</td>
@@ -58,24 +54,15 @@
 		</table>
 		<form action="../article/doWrite" method="POST">
 		<div style="text-align: center;">
-<button id="heartBtn" class="btn btn-square">
-  <!-- 비어 있는 하트 (기본 상태) -->
-  <svg id="heartEmpty" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="size-[1.5em]">
-    <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
-  </svg>
-
-  <!-- 채워진 하트 (숨겨져 있음) -->
-  <svg id="heartFilled" xmlns="http://www.w3.org/2000/svg" class="hidden size-[1.5em] text-red-500" fill="currentColor" viewBox="0 0 24 24">
-    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 
-             4.42 3 7.5 3c1.74 0 3.41 0.81 4.5 2.09C13.09 3.81 
-             14.76 3 16.5 3 19.58 3 22 5.42 
-             22 8.5c0 3.78-3.4 6.86-8.55 
-             11.54L12 21.35z"/>
-  </svg>
-</button>
-		</div>
-		<div class="article-detail__Like-count" style="text-align: center;">${article.like}
-		</div>
+		<span class= "inline-block">
+		<div><i class="btn text-4xl fa-solid fa-thumbs-up"></i></div>
+		<div class = "text-sm">${article.extra__goodReactionPoint }</div>
+		</span>
+		<span class= "inline-block">
+		<div><i class="btn text-4xl fa-solid fa-thumbs-down"></i></div>
+		<div class = "text-sm">${article.extra__badReactionPoint}</div>
+		</span>
+		
 		</form>
 		<div class="btns">
 			<button class="btn btn-ghost" type="button" onclick="history.back();">뒤로가기</button>
@@ -135,29 +122,6 @@
     </c:if>
   </tbody>
 </table>
-
-<script>
-	const params = {};
-	params.id = parseInt('${param.id}'.trim());
-</script>
-
-<script>
-  const btn = document.getElementById("heartBtn");
-  const empty = document.getElementById("heartEmpty");
-  const filled = document.getElementById("heartFilled");
-
-  btn.addEventListener("click", () => {
-    empty.classList.toggle("hidden");
-    filled.classList.toggle("hidden");
-    $.get('../article/doIncreaseLikeCountRd', {
-		id : params.id,
-		ajaxMode : 'Y'
-	}, function(data) {
-		$('.article-detail__Like-count').html(data.data1);
-	}, 'json');
-  });
-  
-</script>
 
 
 
