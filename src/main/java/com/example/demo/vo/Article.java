@@ -22,13 +22,14 @@ public class Article {
 	private String body;
 
 	
-	private String extra__goodReactionPoint;
-	private String extra__badReactionPoint;
-	private String extra__sumReactionPoint;
+	private int extra__goodReactionPoint;
+	private int extra__badReactionPoint;
+	private int extra__sumReactionPoint;
 	
 	
 	private String extra__writer;
 	private boolean userCanModify;
 	private boolean userCanDelete;
+	
 	
 }

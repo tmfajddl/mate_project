@@ -36,7 +36,7 @@
 
 				<tr>
 					<th style="text-align: center;">SUM</th>
-					<td style="text-align: center;">${article.extra__sumReactionPoint }</td>
+					<td style="text-align: center;">${updatedLikeCount-updatedDislikeCount}</td>
 				</tr>
 				<tr>
 					<th style="text-align: center;">Title</th>
@@ -52,18 +52,26 @@
 				</tr>
 			</tbody>
 		</table>
-		<form action="../article/doWrite" method="POST">
 		<div style="text-align: center;">
-		<span class= "inline-block">
-		<div><i class="btn text-4xl fa-solid fa-thumbs-up"></i></div>
-		<div class = "text-sm">${article.extra__goodReactionPoint }</div>
-		</span>
-		<span class= "inline-block">
-		<div><i class="btn text-4xl fa-solid fa-thumbs-down"></i></div>
-		<div class = "text-sm">${article.extra__badReactionPoint}</div>
-		</span>
+				<span class="inline-block">
+  <button onclick="doUpLike(${article.id})" >
+    <i class="text-4xl fa-solid fa-thumbs-up"></i>
+  </button>
+  <div class="text-sm" id="like-count-${article.id}">
+    ${updatedLikeCount}
+  </div>
+</span>
+
+		<span class="inline-block">
+  <button onclick="doDownLike(${article.id})">
+    <i class="text-4xl fa-solid fa-thumbs-down"></i></i>
+  </button>
+  <div class="text-sm" id="dislike-count-${article.id}">
+    ${updatedDislikeCount}
+  </div>
+</span>
+		</div>
 		
-		</form>
 		<div class="btns">
 			<button class="btn btn-ghost" type="button" onclick="history.back();">뒤로가기</button>
 			<c:if test="${article.userCanModify }">
@@ -72,13 +80,23 @@
 			<c:if test="${article.userCanDelete }">
 				<a class="btn btn-ghost" href="../article/doDelete?id=${article.id}">삭제</a>
 			</c:if>
-			 <c:if test="${LoginedMemberId != 0}">
-        <a class="btn btn-ghost" href="../comment/write?id=${article.id}">댓글작성</a>
-        </c:if>
 		</div>
-
 	</div>
 </section>
+
+
+			 <c:if test="${LoginedMemberId != 0}">
+			 <form style="text-align: center;" action="../comment/doWrite" method="POST">
+					<span style="text-align: center;">게시물번호<span>
+					<input class="input input-primary input-sm" required="required" name="articleId" type="text" autocomplete="off"
+							value="${param.id}" readonly/>
+					<span style="text-align: center;">내용</span>
+						<input class="input input-primary input-sm" required="required" name="body" type="text" autocomplete="off"
+								placeholder="내용" />
+						<button class="btn">댓글작성</button>
+		</form>
+        </c:if>
+
 
 
 <table class="table" border="1" cellspacing="0" cellpadding="5" style="width: 100%; border-collapse: collapse;">
@@ -122,6 +140,46 @@
     </c:if>
   </tbody>
 </table>
+
+<script>
+function doUpLike(articleId) {
+	  $.ajax({
+	    url: "/usr/article/upLike",
+	    method: "POST",
+	    data: { id: articleId },
+	    success: function(res) {
+	      if (res.resultCode.startsWith("S-")) {
+	        alert(res.msg);
+	        $("#like-count-" + articleId).text(res.data1);
+	      } else {
+	        alert(res.msg);
+	      }
+	    },
+	    error: function() {
+	      alert("서버 오류 발생");
+	    }
+	  });
+	}
+
+	function doDownLike(articleId) {
+	  $.ajax({
+	    url: "/usr/article/downLike",
+	    method: "POST",
+	    data: { id: articleId },
+	    success: function(res) {
+	      if (res.resultCode.startsWith("S-")) {
+	        alert(res.msg);
+	        $("#dislike-count-" + articleId).text(res.data1);
+	      } else {
+	        alert(res.msg);
+	      }
+	    },
+	    error: function() {
+	      alert("서버 통신 오류가 발생했습니다.");
+	    }
+	  });
+	}
+</script>
 
 
 

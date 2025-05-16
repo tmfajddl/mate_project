@@ -114,13 +114,27 @@ public class ArticleService {
 		articleRepository.updateView(id);
 	}
 
-	public ResultData increaseLikeCount(int id) {
-		return articleRepository.increaseLikeCount(id);
+	public void increaseLikeCount(int id) {
+		articleRepository.increaseLikeCount(id);
+	}
+	
+	public void increaseDislikeCount(int id) {
+		articleRepository.increaseDislikeCount(id);
 	}
 
-	public int getArticleLikeCount(int id) {
-		return articleRepository.getArticleLikeCount(id);
+	public int getLikeCount(int id) {
+		return articleRepository.getLikeCount(id);
 	}
+
+	public void decreaseLikeCount(int id) {
+		articleRepository.decreaseLikeCount(id);
+		
+	}
+
+	public int getDisikeCount(int id) {
+		return articleRepository.getDisikeCount(id);
+	}
+
 
 	
 }

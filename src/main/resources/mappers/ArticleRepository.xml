@@ -43,6 +43,18 @@
 			AND boardId = #{boardId}
 		</if>
 	</select>
+	
+		<select id="getLikeCount" parameterType="int">
+		SELECT goodReactionPoint
+		FROM article
+		WHERE id = #{id}
+	</select>
+	
+			<select id="getDisikeCount" parameterType="int">
+		SELECT badReactionPoint
+		FROM article
+		WHERE id = #{id}
+	</select>
 
 	<select id="getLastInsertId" parameterType="int">
 		SELECT
@@ -155,15 +167,16 @@
 	<update id="increaseLikeCount" parameterType="int">
 		UPDATE article
 		SET
-		`like` = `like` + 1
+		goodReactionPoint = goodReactionPoint + 1
 		WHERE id = #{id}
 	</update>
 
-	<select id="getArticleLikeCount" parameterType="int">
-		SELECT `like`
-		FROM article
+	<update id="decreaseLikeCount" parameterType="int">
+		UPDATE article
+		SET
+		badReactionPoint = badReactionPoint + 1
 		WHERE id = #{id}
-	</select>
+	</update>
 	
 
 </mapper>

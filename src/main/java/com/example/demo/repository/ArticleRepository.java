@@ -34,8 +34,14 @@ public interface ArticleRepository {
 
 	public void updateView(int id);
 
-	public ResultData increaseLikeCount(int id);
+	public void increaseLikeCount(int id);
 
-	public int getArticleLikeCount(int id);
+	public void increaseDislikeCount(int id);
+
+	public int getLikeCount(int id);
+
+	public void decreaseLikeCount(int id);
+
+	public int getDisikeCount(int id);
 	
 }

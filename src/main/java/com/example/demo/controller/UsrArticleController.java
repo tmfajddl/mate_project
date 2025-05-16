@@ -1,7 +1,9 @@
 package com.example.demo.controller;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -124,8 +126,14 @@ public class UsrArticleController {
 		Article article = articleService.getForPrintArticle(rq.getLoginedMemberId(), id);
 		
 		List<Comment> comments = commentService.getForPrintComments(id);
-
 		
+
+	    int updatedLikeCount = articleService.getLikeCount(id);
+
+	    int updatedDislikeCount = articleService.getDisikeCount(id);
+
+	    model.addAttribute("updatedLikeCount", updatedLikeCount);
+	    model.addAttribute("updatedDislikeCount", updatedDislikeCount);
 		model.addAttribute("comments", comments);
 		model.addAttribute("article", article);
 		
@@ -231,5 +239,50 @@ public class UsrArticleController {
 		model.addAttribute("articles", articles);
 
 		return "usr/article/search";
+	}
+	
+	
+	@RequestMapping("/usr/article/upLike")
+	@ResponseBody
+	public ResultData<Integer> upLike(HttpServletRequest req, int id) {
+	    Rq rq = (Rq) req.getAttribute("rq");
+
+	    Article article = articleService.getArticleById(id);
+
+	    if (article == null) {
+	        return ResultData.from("F-1", id + "번 게시물은 존재하지 않습니다.");
+	    }
+
+	    if (!rq.isLogined()) {
+	        return ResultData.from("F-2", "로그인 후 이용해주세요.");
+	    }
+
+	    articleService.increaseLikeCount(id);
+
+	    int updatedLikeCount = articleService.getLikeCount(id);
+
+	    return ResultData.from("S-1", "좋아요가 반영되었습니다.", "likeCount", updatedLikeCount);
+	}
+	
+	@RequestMapping("/usr/article/downLike")
+	@ResponseBody
+	public ResultData<Integer> downLike(HttpServletRequest req, int id) {
+	    Rq rq = (Rq) req.getAttribute("rq");
+
+	    Article article = articleService.getArticleById(id);
+
+	    if (article == null) {
+	        return ResultData.from("F-1", id + "번 게시물은 존재하지 않습니다.");
+	    }
+
+	    if (!rq.isLogined()) {
+	        return ResultData.from("F-2", "로그인 후 이용해주세요.");
+	    }
+
+	    articleService.decreaseLikeCount(id);
+
+	    int updatedDislikeCount = articleService.getDisikeCount(id);
+
+	    return ResultData.from("S-1", "싫어요가 반영되었습니다.", "likeCount", updatedDislikeCount);
 	}
 }
