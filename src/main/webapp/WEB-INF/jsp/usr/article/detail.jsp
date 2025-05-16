@@ -6,9 +6,14 @@
 
 <!-- 폰트어썸 -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<style>
+.btn-like.active i {
+  color: blue;
+}
 
-
-
+.btn-dislike.active i {
+  color: red; 
+}</style>
 <section class="mt-8 text-xl px-4">
 	<div class="mx-auto">
 		<table class="table" border="1" cellspacing="0" cellpadding="5" style="width: 100%; border-collapse: collapse;">
@@ -54,7 +59,7 @@
 		</table>
 		<div style="text-align: center;">
 				<span class="inline-block">
-  <button onclick="doUpLike(${article.id})" >
+  <button id="btn-like-${article.id}" class="btn-like" onclick="doUpLike(${article.id})">
     <i class="text-4xl fa-solid fa-thumbs-up"></i>
   </button>
   <div class="text-sm" id="like-count-${article.id}">
@@ -63,7 +68,7 @@
 </span>
 
 		<span class="inline-block">
-  <button onclick="doDownLike(${article.id})">
+  <button id="btn-dislike-${article.id}" class="btn-dislike" onclick="doDownLike(${article.id})">
     <i class="text-4xl fa-solid fa-thumbs-down"></i></i>
   </button>
   <div class="text-sm" id="dislike-count-${article.id}">
@@ -151,6 +156,8 @@ function doUpLike(articleId) {
 	      if (res.resultCode.startsWith("S-")) {
 	        alert(res.msg);
 	        $("#like-count-" + articleId).text(res.data1);
+	        $("#btn-like-" + articleId).addClass("active");
+	        $("#btn-dislike-" + articleId).removeClass("active");
 	      } else {
 	        alert(res.msg);
 	      }
@@ -170,6 +177,8 @@ function doUpLike(articleId) {
 	      if (res.resultCode.startsWith("S-")) {
 	        alert(res.msg);
 	        $("#dislike-count-" + articleId).text(res.data1);
+	        $("#btn-dislike-" + articleId).addClass("active");
+	        $("#btn-like-" + articleId).removeClass("active");
 	      } else {
 	        alert(res.msg);
 	      }
