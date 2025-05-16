@@ -114,16 +114,13 @@ public class ArticleService {
 		articleRepository.updateView(id);
 	}
 
-	public ResultData updateLike(Article article, int loginedMemberId, int id) {
-		if (article.getMemberId() != loginedMemberId) {
-			return ResultData.from("F-A", Ut.f("로그인 후 이용바랍니다.", article.getId()));
-		}
-		return articleRepository.updateLike(id);
+	public ResultData increaseLikeCount(int id) {
+		return articleRepository.increaseLikeCount(id);
 	}
 
 	public int getArticleLikeCount(int id) {
 		return articleRepository.getArticleLikeCount(id);
 	}
-	
 
+	
 }

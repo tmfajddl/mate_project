@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.repository.CommentRepository">
+
+	<insert id="writeComment" parameterType="map">
+		INSERT INTO `comment`
+		SET
+		regDate = NOW(),
+		updateDate = NOW(),
+		memberId = #{memberId},
+		articleId =
+		#{articleId},
+		`body` = #{body},
+		`like` = 0
+	</insert>
+
+	<delete id="deleteComment" parameterType="int">
+		DELETE FROM `comment`
+		WHERE id = #{id}
+	</delete>
+
+	<update id="modifyComment" parameterType="map">
+		UPDATE `comment`
+		<set>
+			<if test="body != null and body != ''">`body` = #{body},</if>
+			updateDate = NOW()
+		</set>
+		WHERE id = #{id}
+	</update>
+
+	<select id="getCommentCount" parameterType="int">
+		SELECT COUNT(*) as cnt
+		FROM `comment`
+		WHERE 1
+		<if test="articleId != 0">
+			AND articleId = #{articleId}
+		</if>
+	</select>
+
+	<select id="getLastInsertId" parameterType="int">
+		SELECT
+		LAST_INSERT_ID()
+	</select>
+
+	<select id="getForPrintComment" parameterType="int"
+		resultType="com.example.demo.vo.Comment">
+		SELECT C.*, M.nickname AS extra__writer
+		FROM `comment` AS C
+		INNER JOIN `member` AS M
+		ON C.memberId = M.id
+		WHERE C.id =
+		#{id}
+	</select>
+
+	<select id="getCommentById" parameterType="int"
+		resultType="com.example.demo.vo.Comment">
+		SELECT *
+		FROM `comment`
+		WHERE id =#{id}
+	</select>
+
+	<select id="getForPrintComments"
+		resultType="com.example.demo.vo.Comment">
+		SELECT C.*, M.nickname AS extra__writer
+		FROM `comment` AS C
+		INNER JOIN
+		`member` AS M
+		ON C.memberId = M.id
+		WHERE 1
+		<if test="articleId != 0">
+			AND C.articleId = #{articleId}
+		</if>
+		ORDER BY C.id
+		DESC
+	</select>
+	
+
+	<select id="getComments"
+		resultType="com.example.demo.vo.Comment">
+		SELECT C.*, M.nickname AS extra__writer
+		FROM `comment` AS C
+		INNER JOIN `member` AS M
+		ON C.memberId = M.id
+		ORDER BY C.id
+		DESC
+	</select>
+	
+	
+	<update id="increaseLikeCount" parameterType="int">
+		UPDATE `comment`
+		SET
+		`like` = `like` + 1
+		WHERE id = #{id}
+	</update>
+
+	<select id="getCommentLikeCount" parameterType="int">
+		SELECT `like`
+		FROM `comment`
+		WHERE id = #{id}
+	</select>
+	
+
+</mapper>

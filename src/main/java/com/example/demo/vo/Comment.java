@@ -9,26 +9,17 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Article {
+public class Comment {
 
 	private int id;
 	private String regDate;
 	private String updateDate;
 	private int memberId;
-	private int boardId;
-	private int view;
+	private int articleId;
 	private int like;
-	private String title;
 	private String body;
 
-	
-	private String extra__goodReactionPoint;
-	private String extra__badReactionPoint;
-	private String extra__sumReactionPoint;
-	
-	
 	private String extra__writer;
 	private boolean userCanModify;
 	private boolean userCanDelete;
-	
 }

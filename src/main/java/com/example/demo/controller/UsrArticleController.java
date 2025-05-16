@@ -12,9 +12,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.example.demo.interceptor.BeforeActionInterceptor;
 import com.example.demo.service.ArticleService;
 import com.example.demo.service.BoardService;
+import com.example.demo.service.CommentService;
 import com.example.demo.util.Ut;
 import com.example.demo.vo.Article;
 import com.example.demo.vo.Board;
+import com.example.demo.vo.Comment;
 import com.example.demo.vo.ResultData;
 import com.example.demo.vo.Rq;
 
@@ -28,6 +30,9 @@ public class UsrArticleController {
 
 	@Autowired
 	private Rq rq;
+	
+	@Autowired
+	private CommentService commentService;
 
 	@Autowired
 	private ArticleService articleService;
@@ -118,30 +123,17 @@ public class UsrArticleController {
 
 		Article article = articleService.getForPrintArticle(rq.getLoginedMemberId(), id);
 		
-		
+		List<Comment> comments = commentService.getForPrintComments(id);
 
+		
+		model.addAttribute("comments", comments);
 		model.addAttribute("article", article);
+		
+		model.addAttribute("LoginedMemberId", rq.getLoginedMemberId());
 		
 		return "usr/article/detail";
 	}
 	
-	@RequestMapping("/usr/article/doUpdateLike")
-	@ResponseBody
-	public ResultData doUpdateLike(HttpServletRequest req, Model model, int id) {
-		
-		
-		Rq rq = (Rq) req.getAttribute("rq");
-		
-		Article article = articleService.getForPrintArticle(rq.getLoginedMemberId(), id);
-		
-		ResultData increaseLikeCountRd = articleService.updateLike(article, rq.getLoginedMemberId(),id);
-		
-		if (increaseLikeCountRd.isFail()) {
-			return increaseLikeCountRd;
-		}
-		
-		return ResultData.newData(increaseLikeCountRd, "like", articleService.getArticleLikeCount(id));
-	}
 	
 
 	@RequestMapping("/usr/article/write")

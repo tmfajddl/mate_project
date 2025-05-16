@@ -4,22 +4,6 @@
 <c:set var="pageTitle" value="ARTICLE DETAIL"></c:set>
 <%@ include file="../common/head.jspf"%>
 
-<script>
-	function ArticleDetail__doIncreaseHitCount() {
-		$.get('../article/doUpdateLike', {
-			id : params.id,
-			ajaxMode : 'Y'
-		}, function(data) {
-			$('.article-detail__hit-count').html(data.data1);
-		}, 'json');
-	}
-
-	$(function() {
-		ArticleDetail__doIncreaseHitCount();
-
-	})
-</script>
-
 
 
 <section class="mt-8 text-xl px-4">
@@ -45,6 +29,18 @@
 				<tr>
 					<th style="text-align: center;">BoardId</th>
 					<td style="text-align: center;">${article.boardId }</td>
+				</tr>
+								<tr>
+					<th style="text-align: center;">LIKE</th>
+					<td style="text-align: center;">${article.extra__goodReactionPoint }</td>
+				</tr>
+				<tr>
+					<th style="text-align: center;">DISLIKE</th>
+					<td style="text-align: center;">${article.extra__badReactionPoint }</td>
+				</tr>
+				<tr>
+					<th style="text-align: center;">SUM</th>
+					<td style="text-align: center;">${article.extra__sumReactionPoint }</td>
 				</tr>
 				<tr>
 					<th style="text-align: center;">Title</th>
@@ -78,7 +74,7 @@
   </svg>
 </button>
 		</div>
-		<div class="article-detail__hit-count" style="text-align: center;">${article.like}
+		<div class="article-detail__Like-count" style="text-align: center;">${article.like}
 		</div>
 		</form>
 		<div class="btns">
@@ -89,10 +85,61 @@
 			<c:if test="${article.userCanDelete }">
 				<a class="btn btn-ghost" href="../article/doDelete?id=${article.id}">삭제</a>
 			</c:if>
+			 <c:if test="${LoginedMemberId != 0}">
+        <a class="btn btn-ghost" href="../comment/write?id=${article.id}">댓글작성</a>
+        </c:if>
 		</div>
 
 	</div>
 </section>
+
+
+<table class="table" border="1" cellspacing="0" cellpadding="5" style="width: 100%; border-collapse: collapse;">
+  <thead>
+    <tr>
+      <th colspan="4" style="text-align: center; font-weight: bold; padding: 10px;">
+        댓글목록
+      </th>
+    </tr>
+    <tr>
+      <th style="text-align: center;">작성자</th>
+      <th style="text-align: center;">작성일</th>
+      <th style="text-align: center;">내용</th>
+      <c:if test="${comment.memberId==LoginedMemberId}">
+      <th>삭제</th>
+      <th>수정</th>
+      </c:if>
+    </tr>
+  </thead>
+  <tbody>
+    <c:forEach var="comment" items="${comments}">
+      <tr style="cursor: default;">
+        <td style="text-align: center;">${comment.extra__writer}</td>
+        <td style="text-align: center;">${comment.regDate}</td>
+        <td style="text-align: center;">${comment.body}</td>
+        <c:if test="${comment.memberId==LoginedMemberId}">
+        <td><a class="btn btn-ghost" href="../comment/doDelete?id=${comment.id}">삭제</a></td>
+        </c:if>
+        <c:if test="${comment.memberId==LoginedMemberId}">
+        <td><a class="btn btn-ghost" href="../comment/modify?articleId=${article.id}&id=${comment.id}">수정</a></td>
+        </c:if>
+      </tr>
+    </c:forEach>
+
+    <c:if test="${empty comments}">
+      <tr>
+        <td colspan="4" style="text-align: center; padding: 15px; font-style: italic; color: #999;">
+          댓글이 없습니다
+        </td>
+      </tr>
+    </c:if>
+  </tbody>
+</table>
+
+<script>
+	const params = {};
+	params.id = parseInt('${param.id}'.trim());
+</script>
 
 <script>
   const btn = document.getElementById("heartBtn");
@@ -102,7 +149,14 @@
   btn.addEventListener("click", () => {
     empty.classList.toggle("hidden");
     filled.classList.toggle("hidden");
+    $.get('../article/doIncreaseLikeCountRd', {
+		id : params.id,
+		ajaxMode : 'Y'
+	}, function(data) {
+		$('.article-detail__Like-count').html(data.data1);
+	}, 'json');
   });
+  
 </script>
 
 

@@ -34,7 +34,7 @@ public interface ArticleRepository {
 
 	public void updateView(int id);
 
-	public ResultData updateLike(int id);
+	public ResultData increaseLikeCount(int id);
 
 	public int getArticleLikeCount(int id);
 	
