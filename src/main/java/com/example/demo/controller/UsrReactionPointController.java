@@ -36,10 +36,15 @@ public class UsrReactionPointController {
 	public String doGoodReaction(HttpServletRequest req, String relTypeCode, int relId, String replaceUri) {
 
 		int usersReaction = reactionPointService.getSumlikeReactionPoint(rq.getLoginedMemberId(), relTypeCode, relId);
+		int usersOtherReaction = reactionPointService.getSumDislikeReactionPoint(rq.getLoginedMemberId(), relTypeCode, relId);
 		
 		if (usersReaction == 1) {
 			ResultData reactionRd = reactionPointService.deleteLikeReactionPoint(rq.getLoginedMemberId(), relTypeCode, relId);
 			return Ut.jsReplace("S-1", "좋아요 취소", replaceUri);
+		}
+		
+		if (usersOtherReaction == -1) {
+			return Ut.jsReplace("F-1", "이미 싫어요 클릭", replaceUri);
 		}
 
 		ResultData reactionRd = reactionPointService.increaseReactionPoint(rq.getLoginedMemberId(), relTypeCode, relId);
@@ -52,12 +57,16 @@ public class UsrReactionPointController {
 	public String doBadReaction(HttpServletRequest req, String relTypeCode, int relId, String replaceUri) {
 
 		int usersReaction = reactionPointService.getSumDislikeReactionPoint(rq.getLoginedMemberId(), relTypeCode, relId);
-		
+		int usersOtherReaction = reactionPointService.getSumlikeReactionPoint(rq.getLoginedMemberId(), relTypeCode, relId);
 		
 		
 		if (usersReaction == -1) {
 			ResultData reactionRd = reactionPointService.deleteDislikeReactionPoint(rq.getLoginedMemberId(), relTypeCode, relId);
 			return Ut.jsReplace("S-1", "싫어요 취소", replaceUri);
+		}
+		
+		if (usersOtherReaction == 1) {
+			return Ut.jsReplace("F-1", "이미 좋아요 클릭", replaceUri);
 		}
 
 		ResultData reactionRd = reactionPointService.decreaseReactionPoint(rq.getLoginedMemberId(), relTypeCode, relId);

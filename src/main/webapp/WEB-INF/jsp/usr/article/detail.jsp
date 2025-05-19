@@ -57,13 +57,18 @@
 				</tr>
 			</tbody>
 		</table>
-		<div style="text-align: center;">
-<a href="/usr/reactionPoint/doGoodReaction?relTypeCode=article&relId=${param.id }&replaceUri=${rq.currentUri}"
-							class="btn btn-outline btn-success">👍 LIKE ${article.extra__goodReactionPoint }</a>
-						<a href="/usr/reactionPoint/doBadReaction?relTypeCode=article&relId=${param.id }&replaceUri=${rq.currentUri}" class="btn btn-outline btn-error">👎 DISLIKE
-							${article.extra__badReactionPoint }</a>
-  </div>
-		</div>
+<div style="text-align: center;">
+	<a href="/usr/reactionPoint/doGoodReaction?relTypeCode=article&relId=${param.id}&replaceUri=${rq.currentUri}"
+	   class="btn ${userCanReaction == 1 ? 'btn-success' : 'btn-outline btn-success'}">
+		👍 LIKE ${article.extra__goodReactionPoint}
+	</a>
+
+	<a href="/usr/reactionPoint/doBadReaction?relTypeCode=article&relId=${param.id}&replaceUri=${rq.currentUri}"
+	   class="btn ${userCanReaction == -1 ? 'btn-error' : 'btn-outline btn-error'}">
+		👎 DISLIKE ${article.extra__badReactionPoint}
+	</a>
+</div>
+</div>
 		
 		<div class="btns">
 			<button class="btn btn-ghost" type="button" onclick="history.back();">뒤로가기</button>
@@ -145,50 +150,6 @@
     </c:if>
   </tbody>
 </table>
-
-<script>
-function doUpLike(articleId) {
-	  $.ajax({
-	    url: "/usr/article/upLike",
-	    method: "POST",
-	    data: { id: articleId },
-	    success: function(res) {
-	      if (res.resultCode.startsWith("S-")) {
-	        alert(res.msg);
-	        $("#like-count-" + articleId).text(res.data1);
-	        $("#btn-like-" + articleId).addClass("active");
-	        $("#btn-dislike-" + articleId).removeClass("active");
-	      } else {
-	        alert(res.msg);
-	      }
-	    },
-	    error: function() {
-	      alert("서버 오류 발생");
-	    }
-	  });
-	}
-
-	function doDownLike(articleId) {
-	  $.ajax({
-	    url: "/usr/article/downLike",
-	    method: "POST",
-	    data: { id: articleId },
-	    success: function(res) {
-	      if (res.resultCode.startsWith("S-")) {
-	        alert(res.msg);
-	        $("#dislike-count-" + articleId).text(res.data1);
-	        $("#btn-dislike-" + articleId).addClass("active");
-	        $("#btn-like-" + articleId).removeClass("active");
-	      } else {
-	        alert(res.msg);
-	      }
-	    },
-	    error: function() {
-	      alert("서버 통신 오류가 발생했습니다.");
-	    }
-	  });
-	}
-</script>
 
 
 <script>

@@ -133,6 +133,7 @@ public class UsrArticleController {
 		
 		int userCanReaction = reactionPointService.userCanReaction(rq.getLoginedMemberId(), "article", id);
 
+		System.out.println(userCanReaction);
 		model.addAttribute("userCanReaction", userCanReaction);
 		
 	    int updatedLikeCount = articleService.getLikeCount(id);
