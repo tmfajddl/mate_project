@@ -24,6 +24,7 @@
 		DELETE FROM article
 		WHERE id = #{id}
 	</delete>
+	
 
 	<update id="modifyArticle" parameterType="map">
 		UPDATE article
@@ -177,6 +178,7 @@
 		badReactionPoint = badReactionPoint + 1
 		WHERE id = #{id}
 	</update>
+	
 	
 
 </mapper>

@@ -85,7 +85,7 @@ public class UsrCommentController {
 
 		if (userCanModifyRd.isSuccess()) {
 			commentService.modifyComment(id, body);
-		}
+		} 
 
 		comment = commentService.getCommentById(id);
 

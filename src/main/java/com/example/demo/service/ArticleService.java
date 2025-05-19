@@ -134,7 +134,4 @@ public class ArticleService {
 	public int getDisikeCount(int id) {
 		return articleRepository.getDisikeCount(id);
 	}
-
-
-	
 }

@@ -8,11 +8,11 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 <style>
 .btn-like.active i {
-  color: blue;
+  color: #6a71f7;
 }
 
 .btn-dislike.active i {
-  color: red; 
+  color: #fa5f81; 
 }</style>
 <section class="mt-8 text-xl px-4">
 	<div class="mx-auto">
@@ -58,23 +58,11 @@
 			</tbody>
 		</table>
 		<div style="text-align: center;">
-				<span class="inline-block">
-  <button id="btn-like-${article.id}" class="btn-like" onclick="doUpLike(${article.id})">
-    <i class="text-4xl fa-solid fa-thumbs-up"></i>
-  </button>
-  <div class="text-sm" id="like-count-${article.id}">
-    ${updatedLikeCount}
+<a href="/usr/reactionPoint/doGoodReaction?relTypeCode=article&relId=${param.id }&replaceUri=${rq.currentUri}"
+							class="btn btn-outline btn-success">👍 LIKE ${article.extra__goodReactionPoint }</a>
+						<a href="/usr/reactionPoint/doBadReaction" class="btn btn-outline btn-error">👎 DISLIKE
+							${article.extra__badReactionPoint }</a>
   </div>
-</span>
-
-		<span class="inline-block">
-  <button id="btn-dislike-${article.id}" class="btn-dislike" onclick="doDownLike(${article.id})">
-    <i class="text-4xl fa-solid fa-thumbs-down"></i></i>
-  </button>
-  <div class="text-sm" id="dislike-count-${article.id}">
-    ${updatedDislikeCount}
-  </div>
-</span>
 		</div>
 		
 		<div class="btns">
@@ -131,7 +119,19 @@
         <td><a class="btn btn-ghost" href="../comment/doDelete?id=${comment.id}">삭제</a></td>
         </c:if>
         <c:if test="${comment.memberId==LoginedMemberId}">
-        <td><a class="btn btn-ghost" href="../comment/modify?articleId=${article.id}&id=${comment.id}">수정</a></td>
+<td>
+  <a id="editBtn" class="btn btn-ghost" href="javascript:void(0);">수정</a>
+
+  <form id="editForm" style="text-align: center; display: none;" action="../comment/doModify" method="POST">
+    <span style="text-align: center;">댓글번호</span>
+    <input class="input input-primary input-sm" required="required" name="id" type="text" autocomplete="off"
+           value="${comment.id}" readonly/>
+    <span style="text-align: center;">내용</span>
+    <input class="input input-primary input-sm" required="required" name="body" type="text" autocomplete="off"
+           value="${comment.body}" />
+    <button class="btn">댓글수정</button>
+  </form>
+</td>
         </c:if>
       </tr>
     </c:forEach>
@@ -188,6 +188,17 @@ function doUpLike(articleId) {
 	    }
 	  });
 	}
+</script>
+
+
+<script>
+  const editBtn = document.getElementById('editBtn');
+  const editForm = document.getElementById('editForm');
+
+  editBtn.addEventListener('click', () => {
+    editBtn.style.display = 'none';  // 수정 버튼 숨기기
+    editForm.style.display = 'block'; // 폼 보이기
+  });
 </script>
 
 

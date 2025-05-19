@@ -15,6 +15,7 @@ import com.example.demo.interceptor.BeforeActionInterceptor;
 import com.example.demo.service.ArticleService;
 import com.example.demo.service.BoardService;
 import com.example.demo.service.CommentService;
+import com.example.demo.service.ReactionPointService;
 import com.example.demo.util.Ut;
 import com.example.demo.vo.Article;
 import com.example.demo.vo.Board;
@@ -32,6 +33,9 @@ public class UsrArticleController {
 
 	@Autowired
 	private Rq rq;
+	
+	@Autowired
+	private ReactionPointService reactionPointService;
 	
 	@Autowired
 	private CommentService commentService;
@@ -127,7 +131,10 @@ public class UsrArticleController {
 		
 		List<Comment> comments = commentService.getForPrintComments(id);
 		
+		int userCanReaction = reactionPointService.userCanReaction(rq.getLoginedMemberId(), "article", id);
 
+		model.addAttribute("userCanReaction", userCanReaction);
+		
 	    int updatedLikeCount = articleService.getLikeCount(id);
 
 	    int updatedDislikeCount = articleService.getDisikeCount(id);
@@ -248,6 +255,7 @@ public class UsrArticleController {
 	    Rq rq = (Rq) req.getAttribute("rq");
 
 	    Article article = articleService.getArticleById(id);
+	    int loginId = rq.getLoginedMemberId();
 
 	    if (article == null) {
 	        return ResultData.from("F-1", id + "번 게시물은 존재하지 않습니다.");
@@ -256,7 +264,7 @@ public class UsrArticleController {
 	    if (!rq.isLogined()) {
 	        return ResultData.from("F-2", "로그인 후 이용해주세요.");
 	    }
-
+	    
 	    articleService.increaseLikeCount(id);
 
 	    int updatedLikeCount = articleService.getLikeCount(id);
@@ -278,6 +286,7 @@ public class UsrArticleController {
 	    if (!rq.isLogined()) {
 	        return ResultData.from("F-2", "로그인 후 이용해주세요.");
 	    }
+	    
 
 	    articleService.decreaseLikeCount(id);
 
