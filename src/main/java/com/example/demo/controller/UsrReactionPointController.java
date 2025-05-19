@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.demo.service.ArticleService;
 import com.example.demo.service.BoardService;
@@ -31,12 +32,14 @@ public class UsrReactionPointController {
 	}
 
 	@RequestMapping("/usr/reactionPoint/doGoodReaction")
+	@ResponseBody
 	public String doGoodReaction(HttpServletRequest req, String relTypeCode, int relId, String replaceUri) {
 
-		int usersReaction = reactionPointService.userCanReaction(rq.getLoginedMemberId(), relTypeCode, relId);
-
+		int usersReaction = reactionPointService.getSumlikeReactionPoint(rq.getLoginedMemberId(), relTypeCode, relId);
+		
 		if (usersReaction == 1) {
-			return Ut.jsHistoryBack("F-1", "이미 함");
+			ResultData reactionRd = reactionPointService.deleteLikeReactionPoint(rq.getLoginedMemberId(), relTypeCode, relId);
+			return Ut.jsReplace("S-1", "좋아요 취소", replaceUri);
 		}
 
 		ResultData reactionRd = reactionPointService.increaseReactionPoint(rq.getLoginedMemberId(), relTypeCode, relId);
@@ -45,12 +48,16 @@ public class UsrReactionPointController {
 	}
 	
 	@RequestMapping("/usr/reactionPoint/doBadReaction")
+	@ResponseBody
 	public String doBadReaction(HttpServletRequest req, String relTypeCode, int relId, String replaceUri) {
 
-		int usersReaction = reactionPointService.userCanReaction(rq.getLoginedMemberId(), relTypeCode, relId);
-
-		if (usersReaction == 1) {
-			return Ut.jsHistoryBack("F-1", "이미 함");
+		int usersReaction = reactionPointService.getSumDislikeReactionPoint(rq.getLoginedMemberId(), relTypeCode, relId);
+		
+		
+		
+		if (usersReaction == -1) {
+			ResultData reactionRd = reactionPointService.deleteDislikeReactionPoint(rq.getLoginedMemberId(), relTypeCode, relId);
+			return Ut.jsReplace("S-1", "싫어요 취소", replaceUri);
 		}
 
 		ResultData reactionRd = reactionPointService.decreaseReactionPoint(rq.getLoginedMemberId(), relTypeCode, relId);

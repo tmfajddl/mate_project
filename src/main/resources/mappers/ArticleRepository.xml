@@ -25,6 +25,22 @@
 		WHERE id = #{id}
 	</delete>
 	
+	<update id="increaseGoodReactionPoint" parameterType="int">
+		UPDATE
+		article
+		SET
+		goodReactionPoint = goodReactionPoint + 1
+		WHERE id = #{relId}
+	</update>
+	
+	<update id="increaseBadReactionPoint" parameterType="int">
+		UPDATE
+		article
+		SET
+		badReactionPoint = badReactionPoint + 1
+		WHERE id = #{relId}
+	</update>
+	
 
 	<update id="modifyArticle" parameterType="map">
 		UPDATE article
@@ -177,6 +193,22 @@
 		SET
 		badReactionPoint = badReactionPoint + 1
 		WHERE id = #{id}
+	</update>
+	
+	<update id="decreaseGoodReactionPoint" parameterType="int">
+		UPDATE
+		article
+		SET
+		goodReactionPoint = goodReactionPoint - 1
+		WHERE id = #{relId}
+	</update>
+	
+	<update id="decreaseBadReactionPoint" parameterType="int">
+		UPDATE
+		article
+		SET
+		badReactionPoint = badReactionPoint - 1
+		WHERE id = #{relId}
 	</update>
 	
 	

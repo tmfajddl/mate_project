@@ -60,7 +60,7 @@
 		<div style="text-align: center;">
 <a href="/usr/reactionPoint/doGoodReaction?relTypeCode=article&relId=${param.id }&replaceUri=${rq.currentUri}"
 							class="btn btn-outline btn-success">👍 LIKE ${article.extra__goodReactionPoint }</a>
-						<a href="/usr/reactionPoint/doBadReaction" class="btn btn-outline btn-error">👎 DISLIKE
+						<a href="/usr/reactionPoint/doBadReaction?relTypeCode=article&relId=${param.id }&replaceUri=${rq.currentUri}" class="btn btn-outline btn-error">👎 DISLIKE
 							${article.extra__badReactionPoint }</a>
   </div>
 		</div>

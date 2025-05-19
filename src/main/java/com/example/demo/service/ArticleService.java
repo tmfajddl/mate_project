@@ -134,4 +134,24 @@ public class ArticleService {
 	public int getDisikeCount(int id) {
 		return articleRepository.getDisikeCount(id);
 	}
+
+	public void increaseGoodReactionPoint(int relId) {
+		articleRepository.increaseGoodReactionPoint(relId);
+		
+	}
+
+	public void increaseBadReactionPoint(int relId) {
+		articleRepository.increaseBadReactionPoint(relId);
+		
+	}
+
+	public void decreaseGoodReactionPoint(int relId) {
+		articleRepository.decreaseGoodReactionPoint(relId);
+		
+	}
+
+	public void decreaseBadReactionPoint(int relId) {
+		articleRepository.decreaseBadReactionPoint(relId);
+		
+	}
 }

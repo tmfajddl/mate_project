@@ -43,5 +43,14 @@ public interface ArticleRepository {
 	public void decreaseLikeCount(int id);
 
 	public int getDisikeCount(int id);
+
+	public void increaseGoodReactionPoint(int relId);
+
+	public void increaseBadReactionPoint(int relId);
+
+	public void decreaseGoodReactionPoint(int relId);
+	
+	public void decreaseBadReactionPoint(int relId);
+	
 	
 }
