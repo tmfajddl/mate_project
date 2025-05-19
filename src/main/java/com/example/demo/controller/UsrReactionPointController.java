@@ -54,6 +54,8 @@ public class UsrReactionPointController {
 	    }
 
 	    if(usersOtherReaction == -1) {
+	    	reactionPointService.deleteDislikeReactionPoint(userId, relTypeCode, relId);
+	    	ResultData reactionRd = reactionPointService.increaseReactionPoint(userId, relTypeCode, relId);
 	        result.put("resultCode", "F-1");
 	        result.put("msg", "이미 싫어요 클릭");
 	        result.put("replaceUri", replaceUri);
@@ -88,6 +90,8 @@ public class UsrReactionPointController {
 	    }
 
 	    if(usersOtherReaction == 1) {
+	    	reactionPointService.deleteLikeReactionPoint(userId, relTypeCode, relId);
+	    	ResultData reactionRd = reactionPointService.decreaseReactionPoint(userId, relTypeCode, relId);
 	        result.put("resultCode", "F-1");
 	        result.put("msg", "이미 좋아요 클릭");
 	        result.put("replaceUri", replaceUri);
