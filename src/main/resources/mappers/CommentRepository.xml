@@ -13,8 +13,7 @@
 		memberId = #{memberId},
 		articleId =
 		#{articleId},
-		`body` = #{body},
-		`like` = 0
+		`body` = #{body}
 	</insert>
 
 	<delete id="deleteComment" parameterType="int">

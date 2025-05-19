@@ -58,15 +58,17 @@
 			</tbody>
 		</table>
 <div style="text-align: center;">
-	<a href="/usr/reactionPoint/doGoodReaction?relTypeCode=article&relId=${param.id}&replaceUri=${rq.currentUri}"
-	   class="btn ${userCanReaction == 1 ? 'btn-success' : 'btn-outline btn-success'}">
-		👍 LIKE ${article.extra__goodReactionPoint}
-	</a>
+  <a href="javascript:void(0);"
+     onclick="doGoodReaction('article', ${param.id}, '${rq.currentUri}')"
+     class="btn ${userCanReaction == 1 ? 'btn-success' : 'btn-outline btn-success'}">
+    👍 LIKE ${article.extra__goodReactionPoint}
+  </a>
 
-	<a href="/usr/reactionPoint/doBadReaction?relTypeCode=article&relId=${param.id}&replaceUri=${rq.currentUri}"
-	   class="btn ${userCanReaction == -1 ? 'btn-error' : 'btn-outline btn-error'}">
-		👎 DISLIKE ${article.extra__badReactionPoint}
-	</a>
+  <a href="javascript:void(0);"
+     onclick="doBadReaction('article', ${param.id}, '${rq.currentUri}')"
+     class="btn ${userCanReaction == -1 ? 'btn-error' : 'btn-outline btn-error'}">
+    👎 DISLIKE ${-article.extra__badReactionPoint}
+  </a>
 </div>
 </div>
 		
@@ -161,6 +163,43 @@
     editForm.style.display = 'block'; // 폼 보이기
   });
 </script>
+
+<script>
+function doGoodReaction(relTypeCode, relId, replaceUri) {
+	  $.ajax({
+	    url: '/usr/reactionPoint/doGoodReaction',
+	    type: 'POST',
+	    dataType: 'json',
+	    data: { relTypeCode, relId, replaceUri },
+	    success: function(response) {
+	      if(response.replaceUri) {
+	        window.location.href = response.replaceUri;
+	      }
+	    },
+	    error: function(xhr, status, error) {
+	    	alert('로그인 후 이용');
+	    	location.replace('/usr/member/login');
+	    }
+	  });
+	}
+
+	function doBadReaction(relTypeCode, relId, replaceUri) {  // 함수명 변경!!
+	  $.ajax({
+	    url: '/usr/reactionPoint/doBadReaction',
+	    type: 'POST',
+	    dataType: 'json',
+	    data: { relTypeCode, relId, replaceUri },
+	    success: function(response) {
+	      if(response.replaceUri) {
+	        window.location.href = response.replaceUri;
+	      }
+	    },
+	    error: function(xhr, status, error) {
+	      alert('로그인 후 이용');
+	      location.replace('/usr/member/login');
+	    }
+	  });
+	}</script>
 
 
 

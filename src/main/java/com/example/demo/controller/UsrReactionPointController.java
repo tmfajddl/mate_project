@@ -1,9 +1,13 @@
 package com.example.demo.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.demo.service.ArticleService;
@@ -31,47 +35,72 @@ public class UsrReactionPointController {
 		this.usrArticleController = usrArticleController;
 	}
 
-	@RequestMapping("/usr/reactionPoint/doGoodReaction")
+	@RequestMapping(value="/usr/reactionPoint/doGoodReaction", method=RequestMethod.POST)
 	@ResponseBody
-	public String doGoodReaction(HttpServletRequest req, String relTypeCode, int relId, String replaceUri) {
+	public Map<String, Object> doGoodReaction(HttpServletRequest req, String relTypeCode, int relId, String replaceUri) {
+	    int userId = rq.getLoginedMemberId();
 
-		int usersReaction = reactionPointService.getSumlikeReactionPoint(rq.getLoginedMemberId(), relTypeCode, relId);
-		int usersOtherReaction = reactionPointService.getSumDislikeReactionPoint(rq.getLoginedMemberId(), relTypeCode, relId);
-		
-		if (usersReaction == 1) {
-			ResultData reactionRd = reactionPointService.deleteLikeReactionPoint(rq.getLoginedMemberId(), relTypeCode, relId);
-			return Ut.jsReplace("S-1", "좋아요 취소", replaceUri);
-		}
-		
-		if (usersOtherReaction == -1) {
-			return Ut.jsReplace("F-1", "이미 싫어요 클릭", replaceUri);
-		}
+	    int usersReaction = reactionPointService.getSumlikeReactionPoint(userId, relTypeCode, relId);
+	    int usersOtherReaction = reactionPointService.getSumDislikeReactionPoint(userId, relTypeCode, relId);
 
-		ResultData reactionRd = reactionPointService.increaseReactionPoint(rq.getLoginedMemberId(), relTypeCode, relId);
+	    Map<String, Object> result = new HashMap<>();
 
-		return Ut.jsReplace(reactionRd.getResultCode(), reactionRd.getMsg(), replaceUri);
+	    if(usersReaction == 1) {
+	        reactionPointService.deleteLikeReactionPoint(userId, relTypeCode, relId);
+	        result.put("resultCode", "S-1");
+	        result.put("msg", "좋아요 취소");
+	        result.put("replaceUri", replaceUri);
+	        return result;
+	    }
+
+	    if(usersOtherReaction == -1) {
+	        result.put("resultCode", "F-1");
+	        result.put("msg", "이미 싫어요 클릭");
+	        result.put("replaceUri", replaceUri);
+	        return result;
+	    }
+
+	    ResultData reactionRd = reactionPointService.increaseReactionPoint(userId, relTypeCode, relId);
+
+	    result.put("resultCode", reactionRd.getResultCode());
+	    result.put("msg", reactionRd.getMsg());
+	    result.put("replaceUri", replaceUri);
+
+	    return result;
 	}
 	
-	@RequestMapping("/usr/reactionPoint/doBadReaction")
+	@RequestMapping(value="/usr/reactionPoint/doBadReaction", method=RequestMethod.POST)
 	@ResponseBody
-	public String doBadReaction(HttpServletRequest req, String relTypeCode, int relId, String replaceUri) {
+	public Map<String, Object> doBadReaction(HttpServletRequest req, String relTypeCode, int relId, String replaceUri) {
+	    int userId = rq.getLoginedMemberId();
 
-		int usersReaction = reactionPointService.getSumDislikeReactionPoint(rq.getLoginedMemberId(), relTypeCode, relId);
-		int usersOtherReaction = reactionPointService.getSumlikeReactionPoint(rq.getLoginedMemberId(), relTypeCode, relId);
-		
-		
-		if (usersReaction == -1) {
-			ResultData reactionRd = reactionPointService.deleteDislikeReactionPoint(rq.getLoginedMemberId(), relTypeCode, relId);
-			return Ut.jsReplace("S-1", "싫어요 취소", replaceUri);
-		}
-		
-		if (usersOtherReaction == 1) {
-			return Ut.jsReplace("F-1", "이미 좋아요 클릭", replaceUri);
-		}
+	    int usersReaction = reactionPointService.getSumDislikeReactionPoint(userId, relTypeCode, relId);
+	    int usersOtherReaction = reactionPointService.getSumlikeReactionPoint(userId, relTypeCode, relId);
 
-		ResultData reactionRd = reactionPointService.decreaseReactionPoint(rq.getLoginedMemberId(), relTypeCode, relId);
+	    Map<String, Object> result = new HashMap<>();
 
-		return Ut.jsReplace(reactionRd.getResultCode(), reactionRd.getMsg(), replaceUri);
+	    if(usersReaction == -1) {
+	        reactionPointService.deleteDislikeReactionPoint(userId, relTypeCode, relId);
+	        result.put("resultCode", "S-1");
+	        result.put("msg", "싫어요 취소");
+	        result.put("replaceUri", replaceUri);
+	        return result;
+	    }
+
+	    if(usersOtherReaction == 1) {
+	        result.put("resultCode", "F-1");
+	        result.put("msg", "이미 좋아요 클릭");
+	        result.put("replaceUri", replaceUri);
+	        return result;
+	    }
+
+	    ResultData reactionRd = reactionPointService.decreaseReactionPoint(userId, relTypeCode, relId);
+
+	    result.put("resultCode", reactionRd.getResultCode());
+	    result.put("msg", reactionRd.getMsg());
+	    result.put("replaceUri", replaceUri);
+
+	    return result;
 	}
 
 }
