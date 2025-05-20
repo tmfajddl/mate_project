@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.demo.repository.MemberRepository;
 import com.example.demo.util.Ut;
+import com.example.demo.vo.Article;
 import com.example.demo.vo.Member;
 import com.example.demo.vo.ResultData;
 
@@ -51,6 +52,31 @@ public class MemberService {
 
 	public Member getMemberById(int id) {
 		return memberRepository.getMemberById(id);
+	}
+	
+	public ResultData userCanModify(int loginedMemberId, Member member) {
+
+		if (member.getId() != loginedMemberId) {
+			return ResultData.from("F-A", Ut.f("%d번 회원에 대한 수정 권한 없음", member.getId()));
+		}
+
+		return ResultData.from("S-1", Ut.f("%d번 회원 수정 가능", member.getId()));
+	}
+
+	public ResultData userCanDelete(int loginedMemberId, Member member) {
+		if (member.getId() != loginedMemberId) {
+			return ResultData.from("F-A", Ut.f("%d번 회원에 대한 삭제 권한 없음", member.getId()));
+		}
+
+		return ResultData.from("S-1", Ut.f("%d번 회원 삭제 가능", member.getId()));
+	}
+
+	public void modifyMember(int loginedId, String loginPw,String nickname, String cellphoneNum, String email) {
+		memberRepository.modifyMember(loginedId, loginPw, nickname, cellphoneNum, email);
+	}
+
+	public void deleteMember(int id) {
+		memberRepository.deleteMember(id);
 	}
 
 }

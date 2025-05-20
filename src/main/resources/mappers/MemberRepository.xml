@@ -39,5 +39,22 @@
 		SELECT * FROM `member`
 		WHERE id = #{id}
 	</select>
+	
+	<delete id="deleteMember" parameterType="int">
+		DELETE FROM `member`
+		WHERE id = #{id}
+	</delete>
+	
+		<update id="modifyMember" parameterType="map">
+		UPDATE `member`
+		<set>
+			<if test="loginPw != null and loginPw != ''">loginPw = #{loginPw},</if>
+			<if test="nickname != null and nickname != ''">nickname = #{nickname},</if>
+			<if test="cellphoneNum != null and cellphoneNum != ''">cellphoneNum = #{cellphoneNum},</if>
+			<if test="email != null and email != ''">email = #{email},</if>
+			updateDate = NOW()
+		</set>
+		WHERE id = #{loginedId}
+	</update>
 
 </mapper>

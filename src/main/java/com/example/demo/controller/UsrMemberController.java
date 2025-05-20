@@ -2,11 +2,13 @@ package com.example.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.demo.service.MemberService;
 import com.example.demo.util.Ut;
+import com.example.demo.vo.Article;
 import com.example.demo.vo.Member;
 import com.example.demo.vo.ResultData;
 import com.example.demo.vo.Rq;
@@ -109,6 +111,85 @@ public class UsrMemberController {
 		Member member = memberService.getMemberById((int) joinRd.getData1());
 
 		return Ut.jsReplace(joinRd.getResultCode(), joinRd.getMsg(), "../member/login");
+	}
+	
+	@RequestMapping("/usr/member/modify")
+	public String showModify(HttpServletRequest req, Model model) {
+
+		Rq rq = (Rq) req.getAttribute("rq");
+		
+		if (rq.getLoginedMemberId() == 0) {
+			return Ut.jsHistoryBack("F-1", Ut.f("로그인 후 이용바랍니다"));
+		}
+
+		Member member = memberService.getMemberById(rq.getLoginedMemberId());
+
+		if (member == null) {
+			return Ut.jsHistoryBack("F-1", Ut.f("%d번 회원은 없습니다", rq.getLoginedMemberId()));
+		}
+
+		model.addAttribute("member", member);
+
+		return "/usr/member/modify";
+	}
+
+	// 로그인 체크 -> 유무 체크 -> 권한체크
+	@RequestMapping("/usr/member/doModify")
+	@ResponseBody
+	public String doModify(HttpServletRequest req, String loginPw, String loginPw2, String nickname, String cellphoneNum, String email) {
+
+		Rq rq = (Rq) req.getAttribute("rq");
+		
+		int loginedId = rq.getLoginedMemberId();
+
+		Member member = memberService.getMemberById(loginedId);
+
+		if (member == null) {
+			return Ut.jsHistoryBack("F-1", Ut.f("%d번 회원은 없습니다", loginedId));
+		}
+		
+		if (!loginPw.equals(loginPw2)) {
+			return Ut.jsHistoryBack("F-1", Ut.f("비밀번호 불일치"));
+		}
+
+		ResultData userCanModifyRd = memberService.userCanModify(rq.getLoginedMemberId(), member);
+
+		if (userCanModifyRd.isFail()) {
+			return Ut.jsHistoryBack(userCanModifyRd.getResultCode(), userCanModifyRd.getMsg());
+		}
+
+		if (userCanModifyRd.isSuccess()) {
+			memberService.modifyMember(loginedId, loginPw, nickname, cellphoneNum, email);
+		}
+
+		member = memberService.getMemberById(loginedId);
+
+		return Ut.jsReplace(userCanModifyRd.getResultCode(), userCanModifyRd.getMsg(), "../home/main");
+	}
+	
+	@RequestMapping("/usr/member/doDelete")
+	@ResponseBody
+	public String doDelete(HttpServletRequest req, int id) {
+
+		Rq rq = (Rq) req.getAttribute("rq");
+
+		Member member = memberService.getMemberById(id);
+
+		if (member == null) {
+			return Ut.jsHistoryBack("F-1", Ut.f("%d번 회원은 없습니다", id));
+		}
+
+		ResultData userCanDeleteRd = memberService.userCanDelete(rq.getLoginedMemberId(), member);
+
+		if (userCanDeleteRd.isFail()) {
+			return Ut.jsHistoryBack(userCanDeleteRd.getResultCode(), userCanDeleteRd.getMsg());
+		}
+
+		if (userCanDeleteRd.isSuccess()) {
+			memberService.deleteMember(id);
+		}
+
+		return Ut.jsReplace(userCanDeleteRd.getResultCode(), userCanDeleteRd.getMsg(), "../home/main");
 	}
 
 }

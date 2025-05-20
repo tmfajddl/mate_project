@@ -46,10 +46,16 @@
 
 	<select id="getForPrintComment" parameterType="int"
 		resultType="com.example.demo.vo.Comment">
-		SELECT C.*, M.nickname AS extra__writer
+		SELECT C.*, M.nickname AS extra__writer,
+		IFNULL(SUM(RP.point),0) AS extra__sumReactionPoint,
+		IFNULL(SUM(IF(RP.point &gt; 0, RP.point, 0)),0) AS
+		extra__goodReactionPoint,
+		IFNULL(SUM(IF(RP.point &lt; 0, RP.point, 0)),0) AS extra__badReactionPoint
 		FROM `comment` AS C
 		INNER JOIN `member` AS M
 		ON C.memberId = M.id
+		LEFT JOIN reactionPoint AS RP
+		ON C.id = RP.relId AND RP.relTypeCode = 'comment'
 		WHERE C.id =
 		#{id}
 	</select>
@@ -63,11 +69,16 @@
 
 	<select id="getForPrintComments"
 		resultType="com.example.demo.vo.Comment">
-		SELECT C.*, M.nickname AS extra__writer
+		SELECT C.*, M.nickname AS extra__writer,
+		IFNULL(SUM(RP.point),0) AS extra__sumReactionPoint,
+		IFNULL(SUM(IF(RP.point &gt; 0, RP.point, 0)),0) AS
+		extra__goodReactionPoint,
+		IFNULL(SUM(IF(RP.point &lt; 0, RP.point, 0)),0) AS extra__badReactionPoint
 		FROM `comment` AS C
-		INNER JOIN
-		`member` AS M
+		INNER JOIN `member` AS M
 		ON C.memberId = M.id
+		LEFT JOIN reactionPoint AS RP
+		ON C.id = RP.relId AND RP.relTypeCode = 'comment'
 		WHERE 1
 		<if test="articleId != 0">
 			AND C.articleId = #{articleId}
@@ -88,18 +99,49 @@
 	</select>
 	
 	
-	<update id="increaseLikeCount" parameterType="int">
-		UPDATE `comment`
-		SET
-		`like` = `like` + 1
-		WHERE id = #{id}
-	</update>
-
-	<select id="getCommentLikeCount" parameterType="int">
-		SELECT `like`
+		<select id="getLikeCount" parameterType="int">
+		SELECT goodReactionPoint AS extra__goodReactionPoint
 		FROM `comment`
 		WHERE id = #{id}
 	</select>
+	
+			<select id="getDisikeCount" parameterType="int">
+		SELECT badReactionPoint AS extra__badReactionPoint
+		FROM `comment`
+		WHERE id = #{id}
+	</select>
+	
+		<update id="increaseGoodReactionPoint" parameterType="int">
+		UPDATE
+		`comment`
+		SET
+		goodReactionPoint = goodReactionPoint + 1
+		WHERE id = #{relId}
+	</update>
+	
+	<update id="increaseBadReactionPoint" parameterType="int">
+		UPDATE
+		`comment`
+		SET
+		badReactionPoint = badReactionPoint + 1
+		WHERE id = #{relId}
+	</update>
+	
+		<update id="decreaseGoodReactionPoint" parameterType="int">
+		UPDATE
+		`comment`
+		SET
+		goodReactionPoint = goodReactionPoint - 1
+		WHERE id = #{relId}
+	</update>
+	
+	<update id="decreaseBadReactionPoint" parameterType="int">
+		UPDATE
+		`comment`
+		SET
+		badReactionPoint = badReactionPoint - 1
+		WHERE id = #{relId}
+	</update>
 	
 
 </mapper>

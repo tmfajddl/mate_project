@@ -1,4 +1,4 @@
-package com.example.demo.controller;
+ package com.example.demo.controller;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -45,6 +45,7 @@ public class UsrReactionPointController {
 
 	    Map<String, Object> result = new HashMap<>();
 
+	    if(relTypeCode.equals("article")){
 	    if(usersReaction == 1) {
 	        reactionPointService.deleteLikeReactionPoint(userId, relTypeCode, relId);
 	        result.put("resultCode", "S-1");
@@ -69,6 +70,35 @@ public class UsrReactionPointController {
 	    result.put("replaceUri", replaceUri);
 
 	    return result;
+	    }
+	    if(relTypeCode.equals("comment")){
+		    if(usersReaction == 1) {
+		        reactionPointService.deleteCommentLikeReactionPoint(userId, relTypeCode, relId);
+		        result.put("resultCode", "S-1");
+		        result.put("msg", "좋아요 취소");
+		        result.put("replaceUri", replaceUri);
+		        return result;
+		    }
+
+		    if(usersOtherReaction == -1) {
+		    	reactionPointService.deleteCommentDislikeReactionPoint(userId, relTypeCode, relId);
+		    	ResultData reactionRd = reactionPointService.increaseCommentReactionPoint(userId, relTypeCode, relId);
+		        result.put("resultCode", "F-1");
+		        result.put("msg", "이미 싫어요 클릭");
+		        result.put("replaceUri", replaceUri);
+		        return result;
+		    }
+
+		    ResultData reactionRd = reactionPointService.increaseCommentReactionPoint(userId, relTypeCode, relId);
+
+		    result.put("resultCode", reactionRd.getResultCode());
+		    result.put("msg", reactionRd.getMsg());
+		    result.put("replaceUri", replaceUri);
+
+		    return result;
+	    }
+	    return result;
+	    
 	}
 	
 	@RequestMapping(value="/usr/reactionPoint/doBadReaction", method=RequestMethod.POST)
@@ -80,31 +110,61 @@ public class UsrReactionPointController {
 	    int usersOtherReaction = reactionPointService.getSumlikeReactionPoint(userId, relTypeCode, relId);
 
 	    Map<String, Object> result = new HashMap<>();
+	    
+	    if(relTypeCode.equals("article")){
+	    	if(usersReaction == -1) {
+		        reactionPointService.deleteDislikeReactionPoint(userId, relTypeCode, relId);
+		        result.put("resultCode", "S-1");
+		        result.put("msg", "싫어요 취소");
+		        result.put("replaceUri", replaceUri);
+		        return result;
+		    }
 
-	    if(usersReaction == -1) {
-	        reactionPointService.deleteDislikeReactionPoint(userId, relTypeCode, relId);
-	        result.put("resultCode", "S-1");
-	        result.put("msg", "싫어요 취소");
-	        result.put("replaceUri", replaceUri);
-	        return result;
+		    if(usersOtherReaction == 1) {
+		    	reactionPointService.deleteLikeReactionPoint(userId, relTypeCode, relId);
+		    	ResultData reactionRd = reactionPointService.decreaseReactionPoint(userId, relTypeCode, relId);
+		        result.put("resultCode", "F-1");
+		        result.put("msg", "이미 좋아요 클릭");
+		        result.put("replaceUri", replaceUri);
+		        return result;
+		    }
+
+		    ResultData reactionRd = reactionPointService.decreaseReactionPoint(userId, relTypeCode, relId);
+
+		    result.put("resultCode", reactionRd.getResultCode());
+		    result.put("msg", reactionRd.getMsg());
+		    result.put("replaceUri", replaceUri);
+
+		    return result;
+	    	
 	    }
+	    
+	    if(relTypeCode.equals("comment")){
+		    if(usersReaction == -1) {
+		        reactionPointService.deleteCommentDislikeReactionPoint(userId, relTypeCode, relId);
+		        result.put("resultCode", "S-1");
+		        result.put("msg", "싫어요 취소");
+		        result.put("replaceUri", replaceUri);
+		        return result;
+		    }
 
-	    if(usersOtherReaction == 1) {
-	    	reactionPointService.deleteLikeReactionPoint(userId, relTypeCode, relId);
-	    	ResultData reactionRd = reactionPointService.decreaseReactionPoint(userId, relTypeCode, relId);
-	        result.put("resultCode", "F-1");
-	        result.put("msg", "이미 좋아요 클릭");
-	        result.put("replaceUri", replaceUri);
-	        return result;
+		    if(usersOtherReaction == 1) {
+		    	reactionPointService.deleteCommentLikeReactionPoint(userId, relTypeCode, relId);
+		    	ResultData reactionRd = reactionPointService.decreaseCommentReactionPoint(userId, relTypeCode, relId);
+		        result.put("resultCode", "F-1");
+		        result.put("msg", "이미 좋아요 클릭");
+		        result.put("replaceUri", replaceUri);
+		        return result;
+		    }
+
+		    ResultData reactionRd = reactionPointService.decreaseCommentReactionPoint(userId, relTypeCode, relId);
+
+		    result.put("resultCode", reactionRd.getResultCode());
+		    result.put("msg", reactionRd.getMsg());
+		    result.put("replaceUri", replaceUri);
+
+		    return result;
 	    }
-
-	    ResultData reactionRd = reactionPointService.decreaseReactionPoint(userId, relTypeCode, relId);
-
-	    result.put("resultCode", reactionRd.getResultCode());
-	    result.put("msg", reactionRd.getMsg());
-	    result.put("replaceUri", replaceUri);
-
 	    return result;
 	}
-
 }

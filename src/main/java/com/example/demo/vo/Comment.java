@@ -18,6 +18,11 @@ public class Comment {
 	private int articleId;
 	private int like;
 	private String body;
+	
+	private int extra__goodReactionPoint;
+	private int extra__badReactionPoint;
+	private int extra__sumReactionPoint;
+	private int usercommentCanReaction;
 
 	private String extra__writer;
 	private boolean userCanModify;

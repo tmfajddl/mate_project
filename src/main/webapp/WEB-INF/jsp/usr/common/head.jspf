@@ -74,7 +74,18 @@
 						<a class="hover:underline" href="../article/write">WRITE</a>
 					</li>
 					<li>
-						<a onclick="if(confirm('로그아웃 하시겠습니까?') == false) return false;" class="hover:underline" href="../member/doLogout">LOGOUT</a>
+					<div class="dropdown dropdown-hover">
+						<div tabindex="0" role="button">MEMBER</div>
+						<ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
+							<li>
+								<a class="hover:underline" href="../member/modify">MODIFY</a>
+							</li>
+							<li>
+								<a onclick="if(confirm('로그아웃 하시겠습니까?') == false) return false;" class="hover:underline" href="../member/doLogout">LOGOUT</a>
+							</li>
+						</ul>
+					</div>
+			
 					</li>
 				</c:if>
 			</ul>

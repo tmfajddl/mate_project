@@ -61,13 +61,13 @@
   <a href="javascript:void(0);"
      onclick="doGoodReaction('article', ${param.id}, '${rq.currentUri}')"
      class="btn ${userCanReaction == 1 ? 'btn-success' : 'btn-outline btn-success'}">
-    👍 LIKE ${article.extra__goodReactionPoint}
+    👍${article.extra__goodReactionPoint}
   </a>
 
   <a href="javascript:void(0);"
      onclick="doBadReaction('article', ${param.id}, '${rq.currentUri}')"
      class="btn ${userCanReaction == -1 ? 'btn-error' : 'btn-outline btn-error'}">
-    👎 DISLIKE ${-article.extra__badReactionPoint}
+    👎${-article.extra__badReactionPoint}
   </a>
 </div>
 </div>
@@ -110,6 +110,7 @@
       <th style="text-align: center;">작성자</th>
       <th style="text-align: center;">작성일</th>
       <th style="text-align: center;">내용</th>
+      <th style="text-align: center;">LIKE</th>
       <c:if test="${comment.memberId==LoginedMemberId}">
       <th>삭제</th>
       <th>수정</th>
@@ -122,6 +123,19 @@
         <td style="text-align: center;">${comment.extra__writer}</td>
         <td style="text-align: center;">${comment.regDate}</td>
         <td style="text-align: center;">${comment.body}</td>
+        <td style="text-align: center;">
+          <a href="javascript:void(0);"
+     onclick="doGoodReaction('comment', ${comment.id}, '${rq.currentUri}')"
+     class="btn ${comment.usercommentCanReaction == 1 ? 'btn-success' : 'btn-outline btn-success'}">
+    👍${comment.extra__goodReactionPoint}
+  </a>
+
+  <a href="javascript:void(0);"
+     onclick="doBadReaction('comment', ${comment.id}, '${rq.currentUri}')"
+     class="btn ${comment.usercommentCanReaction == 1 ? 'btn-error' : 'btn-outline btn-error'}">
+    👎${-comment.extra__badReactionPoint}
+  </a>
+        </td>
         <c:if test="${comment.memberId==LoginedMemberId}">
         <td><a class="btn btn-ghost" href="../comment/doDelete?id=${comment.id}">삭제</a></td>
         </c:if>
@@ -186,6 +200,43 @@ function doGoodReaction(relTypeCode, relId, replaceUri) {
 	function doBadReaction(relTypeCode, relId, replaceUri) {  // 함수명 변경!!
 	  $.ajax({
 	    url: '/usr/reactionPoint/doBadReaction',
+	    type: 'POST',
+	    dataType: 'json',
+	    data: { relTypeCode, relId, replaceUri },
+	    success: function(response) {
+	      if(response.replaceUri) {
+	        window.location.href = response.replaceUri;
+	      }
+	    },
+	    error: function(xhr, status, error) {
+	      alert('로그인 후 이용');
+	      location.replace('/usr/member/login');
+	    }
+	  });
+	}</script>
+	
+	<script>
+function doCommentGoodReaction(relTypeCode, relId, replaceUri) {
+	  $.ajax({
+	    url: '/usr/reactionPoint/doCommentGoodReaction',
+	    type: 'POST',
+	    dataType: 'json',
+	    data: { relTypeCode, relId, replaceUri },
+	    success: function(response) {
+	      if(response.replaceUri) {
+	        window.location.href = response.replaceUri;
+	      }
+	    },
+	    error: function(xhr, status, error) {
+	    	alert('로그인 후 이용');
+	    	location.replace('/usr/member/login');
+	    }
+	  });
+	}
+
+	function doCommentBadReaction(relTypeCode, relId, replaceUri) {  // 함수명 변경!!
+	  $.ajax({
+	    url: '/usr/reactionPoint/doCommentBadReaction',
 	    type: 'POST',
 	    dataType: 'json',
 	    data: { relTypeCode, relId, replaceUri },

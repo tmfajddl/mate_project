@@ -15,6 +15,9 @@ public class ReactionPointService {
 	
 	@Autowired
 	private ArticleService articleService;
+	
+	@Autowired
+	private CommentService commentService;
 
 	public ReactionPointService(ReactionPointRepository reactionPointRepository) {
 		this.reactionPointRepository = reactionPointRepository;
@@ -100,6 +103,7 @@ public class ReactionPointService {
 		case "article":
 			articleService.decreaseBadReactionPoint(relId);
 			break;
+			
 		}
 
 		return ResultData.from("S-1", "싫어요 취소");
@@ -112,5 +116,80 @@ public class ReactionPointService {
 				}
 
 				return reactionPointRepository.getSumReactionPoint(loginedMemberId, relTypeCode, relId);
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	public ResultData increaseCommentReactionPoint(int loginedMemberId, String relTypeCode, int relId) {
+
+		int affectedRow = reactionPointRepository.increaseReactionPoint(loginedMemberId, relTypeCode, relId);
+
+		if (affectedRow != 1) {
+			return ResultData.from("F-2", "좋아요 실패");
+		}
+		
+		switch (relTypeCode) {
+		case "comment":
+			commentService.increaseGoodReactionPoint(relId);
+			break;
+		}
+
+		return ResultData.from("S-1", "좋아요!");
+	}
+
+	public ResultData decreaseCommentReactionPoint(int loginedMemberId, String relTypeCode, int relId) {
+		int affectedRow = reactionPointRepository.decreaseReactionPoint(loginedMemberId, relTypeCode, relId);
+
+		if (affectedRow != 1) {
+			return ResultData.from("F-2", "싫어요 실패");
+		}
+		
+		switch (relTypeCode) {
+		case "comment":
+			commentService.increaseBadReactionPoint(relId);
+			break;
+		}
+
+		return ResultData.from("S-1", "싫어요!");
+	}
+
+	public ResultData deleteCommentLikeReactionPoint(int loginedMemberId, String relTypeCode, int relId) {
+		int affectedRow = reactionPointRepository.deleteLikeReactionPoint(loginedMemberId, relTypeCode, relId);
+
+		if (affectedRow != 1) {
+			return ResultData.from("F-2", "좋아요 취소 실패");
+		}
+		
+		switch (relTypeCode) {
+		case "comment":
+			commentService.decreaseGoodReactionPoint(relId);
+			break;
+		}
+
+		return ResultData.from("S-1", "좋아요 취소");
+	}
+
+	public ResultData deleteCommentDislikeReactionPoint(int loginedMemberId, String relTypeCode, int relId) {
+		int affectedRow = reactionPointRepository.deleteDislikeReactionPoint(loginedMemberId, relTypeCode, relId);
+
+		if (affectedRow != 1) {
+			return ResultData.from("F-2", "싫어요 취소 실패");
+		}
+		
+		switch (relTypeCode) {
+		case "comment":
+			commentService.decreaseBadReactionPoint(relId);
+			break;
+		}
+
+		return ResultData.from("S-1", "싫어요 취소");
 	}
 }

@@ -116,5 +116,21 @@ public class CommentService {
 	public int getCommentLikeCount(int id) {
 		return commentRepository.getArticleLikeCount(id);
 	}
+
+	public void increaseGoodReactionPoint(int relId) {
+		commentRepository.increaseGoodReactionPoint(relId);
+	}
+
+	public void increaseBadReactionPoint(int relId) {
+		commentRepository.increaseBadReactionPoint(relId);
+	}
+
+	public void decreaseGoodReactionPoint(int relId) {
+		commentRepository.decreaseGoodReactionPoint(relId);
+	}
+
+	public void decreaseBadReactionPoint(int relId) {
+		commentRepository.decreaseBadReactionPoint(relId);
+	}
 	
 }

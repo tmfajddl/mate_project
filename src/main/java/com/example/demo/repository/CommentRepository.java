@@ -36,5 +36,13 @@ public interface CommentRepository {
 	public ResultData increaseLikeCount(int id);
 
 	public int getArticleLikeCount(int id);
+
+	public void increaseGoodReactionPoint(int relId);
+
+	public void increaseBadReactionPoint(int relId);
+
+	public void decreaseGoodReactionPoint(int relId);
+
+	public void decreaseBadReactionPoint(int relId);
 	
 }

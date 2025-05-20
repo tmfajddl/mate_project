@@ -131,17 +131,24 @@ public class UsrArticleController {
 		
 		List<Comment> comments = commentService.getForPrintComments(id);
 		
-		int userCanReaction = reactionPointService.userCanReaction(rq.getLoginedMemberId(), "article", id);
+		for (Comment comment : comments) {
+		    int usersLikeReaction = reactionPointService.getSumlikeReactionPoint(rq.getLoginedMemberId(), "comment", comment.getId());
+		    int usersDislikeReaction = reactionPointService.getSumDislikeReactionPoint(rq.getLoginedMemberId(), "comment", comment.getId());
 
+		    if (usersLikeReaction == 1) {
+		        comment.setUsercommentCanReaction(1);
+		    } else if (usersDislikeReaction == -1) {
+		        comment.setUsercommentCanReaction(-1);
+		    } else {
+		        comment.setUsercommentCanReaction(0);
+		    }
+		}
+		
+		int userCanReaction = reactionPointService.userCanReaction(rq.getLoginedMemberId(), "article", id);
+		
 		System.out.println(userCanReaction);
 		model.addAttribute("userCanReaction", userCanReaction);
 		
-	    int updatedLikeCount = articleService.getLikeCount(id);
-
-	    int updatedDislikeCount = articleService.getDisikeCount(id);
-
-	    model.addAttribute("updatedLikeCount", updatedLikeCount);
-	    model.addAttribute("updatedDislikeCount", updatedDislikeCount);
 		model.addAttribute("comments", comments);
 		model.addAttribute("article", article);
 		
@@ -249,50 +256,4 @@ public class UsrArticleController {
 		return "usr/article/search";
 	}
 	
-	
-	@RequestMapping("/usr/article/upLike")
-	@ResponseBody
-	public ResultData<Integer> upLike(HttpServletRequest req, int id) {
-	    Rq rq = (Rq) req.getAttribute("rq");
-
-	    Article article = articleService.getArticleById(id);
-	    int loginId = rq.getLoginedMemberId();
-
-	    if (article == null) {
-	        return ResultData.from("F-1", id + "번 게시물은 존재하지 않습니다.");
-	    }
-
-	    if (!rq.isLogined()) {
-	        return ResultData.from("F-2", "로그인 후 이용해주세요.");
-	    }
-	    
-	    articleService.increaseLikeCount(id);
-
-	    int updatedLikeCount = articleService.getLikeCount(id);
-
-	    return ResultData.from("S-1", "좋아요가 반영되었습니다.", "likeCount", updatedLikeCount);
-	}
-	
-	@RequestMapping("/usr/article/downLike")
-	@ResponseBody
-	public ResultData<Integer> downLike(HttpServletRequest req, int id) {
-	    Rq rq = (Rq) req.getAttribute("rq");
-
-	    Article article = articleService.getArticleById(id);
-
-	    if (article == null) {
-	        return ResultData.from("F-1", id + "번 게시물은 존재하지 않습니다.");
-	    }
-
-	    if (!rq.isLogined()) {
-	        return ResultData.from("F-2", "로그인 후 이용해주세요.");
-	    }
-	    
-
-	    articleService.decreaseLikeCount(id);
-
-	    int updatedDislikeCount = articleService.getDisikeCount(id);
-
-	    return ResultData.from("S-1", "싫어요가 반영되었습니다.", "likeCount", updatedDislikeCount);
-	}
 }
