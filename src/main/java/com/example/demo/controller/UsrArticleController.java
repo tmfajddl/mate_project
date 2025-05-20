@@ -131,18 +131,11 @@ public class UsrArticleController {
 		
 		List<Comment> comments = commentService.getForPrintComments(id);
 		
-		for (Comment comment : comments) {
-		    int usersLikeReaction = reactionPointService.getSumlikeReactionPoint(rq.getLoginedMemberId(), "comment", comment.getId());
-		    int usersDislikeReaction = reactionPointService.getSumDislikeReactionPoint(rq.getLoginedMemberId(), "comment", comment.getId());
-
-		    if (usersLikeReaction == 1) {
-		        comment.setUsercommentCanReaction(1);
-		    } else if (usersDislikeReaction == -1) {
-		        comment.setUsercommentCanReaction(-1);
-		    } else {
-		        comment.setUsercommentCanReaction(0);
-		    }
+		System.out.println("댓글 개수: " + comments.size());
+		for(Comment c : comments) {
+		    System.out.println("댓글 id: " + c.getId() + ", 작성자: " + c.getExtra__writer());
 		}
+		
 		
 		int userCanReaction = reactionPointService.userCanReaction(rq.getLoginedMemberId(), "article", id);
 		

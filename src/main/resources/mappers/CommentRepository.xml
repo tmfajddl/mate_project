@@ -13,7 +13,8 @@
 		memberId = #{memberId},
 		articleId =
 		#{articleId},
-		`body` = #{body}
+		`body` = #{body},
+		relTypeCode = 'article'
 	</insert>
 
 	<delete id="deleteComment" parameterType="int">
@@ -68,24 +69,23 @@
 	</select>
 
 	<select id="getForPrintComments"
-		resultType="com.example.demo.vo.Comment">
-		SELECT C.*, M.nickname AS extra__writer,
-		IFNULL(SUM(RP.point),0) AS extra__sumReactionPoint,
-		IFNULL(SUM(IF(RP.point &gt; 0, RP.point, 0)),0) AS
-		extra__goodReactionPoint,
-		IFNULL(SUM(IF(RP.point &lt; 0, RP.point, 0)),0) AS extra__badReactionPoint
-		FROM `comment` AS C
-		INNER JOIN `member` AS M
-		ON C.memberId = M.id
-		LEFT JOIN reactionPoint AS RP
-		ON C.id = RP.relId AND RP.relTypeCode = 'comment'
-		WHERE 1
-		<if test="articleId != 0">
-			AND C.articleId = #{articleId}
-		</if>
-		ORDER BY C.id
-		DESC
-	</select>
+    resultType="com.example.demo.vo.Comment">
+    SELECT C.*, M.nickname AS extra__writer,
+    IFNULL(SUM(RP.point),0) AS extra__sumReactionPoint,
+    IFNULL(SUM(IF(RP.point &gt; 0, RP.point, 0)),0) AS extra__goodReactionPoint,
+    IFNULL(SUM(IF(RP.point &lt; 0, RP.point, 0)),0) AS extra__badReactionPoint
+    FROM `comment` AS C
+    INNER JOIN `member` AS M
+    ON C.memberId = M.id
+    LEFT JOIN reactionPoint AS RP
+    ON C.id = RP.relId AND RP.relTypeCode = 'comment'
+    WHERE 1
+    <if test="articleId != 0">
+        AND C.articleId = #{articleId}
+    </if>
+    GROUP BY C.id  <!-- 여기 추가 -->
+    ORDER BY C.id DESC
+</select>
 	
 
 	<select id="getComments"

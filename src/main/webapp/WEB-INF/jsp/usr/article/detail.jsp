@@ -122,7 +122,16 @@
       <tr style="cursor: default;">
         <td style="text-align: center;">${comment.extra__writer}</td>
         <td style="text-align: center;">${comment.regDate}</td>
-        <td style="text-align: center;">${comment.body}</td>
+        <td style="text-align: center;">${comment.body}
+        <form id="editForm" style="text-align: center; display: none;" action="../comment/doModify" method="POST">
+    <span style="text-align: center;">댓글번호</span>
+    <input class="input input-primary input-sm" required="required" name="id" type="text" autocomplete="off"
+           value="${comment.id}" readonly/>
+    <span style="text-align: center;">내용</span>
+    <input class="input input-primary input-sm" required="required" name="body" type="text" autocomplete="off"
+           value="${comment.body}" />
+    <button class="btn">댓글수정</button>
+  </form></td>
         <td style="text-align: center;">
           <a href="javascript:void(0);"
      onclick="doGoodReaction('comment', ${comment.id}, '${rq.currentUri}')"
@@ -142,16 +151,6 @@
         <c:if test="${comment.memberId==LoginedMemberId}">
 <td>
   <a id="editBtn" class="btn btn-ghost" href="javascript:void(0);">수정</a>
-
-  <form id="editForm" style="text-align: center; display: none;" action="../comment/doModify" method="POST">
-    <span style="text-align: center;">댓글번호</span>
-    <input class="input input-primary input-sm" required="required" name="id" type="text" autocomplete="off"
-           value="${comment.id}" readonly/>
-    <span style="text-align: center;">내용</span>
-    <input class="input input-primary input-sm" required="required" name="body" type="text" autocomplete="off"
-           value="${comment.body}" />
-    <button class="btn">댓글수정</button>
-  </form>
 </td>
         </c:if>
       </tr>
@@ -215,42 +214,7 @@ function doGoodReaction(relTypeCode, relId, replaceUri) {
 	  });
 	}</script>
 	
-	<script>
-function doCommentGoodReaction(relTypeCode, relId, replaceUri) {
-	  $.ajax({
-	    url: '/usr/reactionPoint/doCommentGoodReaction',
-	    type: 'POST',
-	    dataType: 'json',
-	    data: { relTypeCode, relId, replaceUri },
-	    success: function(response) {
-	      if(response.replaceUri) {
-	        window.location.href = response.replaceUri;
-	      }
-	    },
-	    error: function(xhr, status, error) {
-	    	alert('로그인 후 이용');
-	    	location.replace('/usr/member/login');
-	    }
-	  });
-	}
-
-	function doCommentBadReaction(relTypeCode, relId, replaceUri) {  // 함수명 변경!!
-	  $.ajax({
-	    url: '/usr/reactionPoint/doCommentBadReaction',
-	    type: 'POST',
-	    dataType: 'json',
-	    data: { relTypeCode, relId, replaceUri },
-	    success: function(response) {
-	      if(response.replaceUri) {
-	        window.location.href = response.replaceUri;
-	      }
-	    },
-	    error: function(xhr, status, error) {
-	      alert('로그인 후 이용');
-	      location.replace('/usr/member/login');
-	    }
-	  });
-	}</script>
+	
 
 
 
