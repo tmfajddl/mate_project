@@ -14,4 +14,9 @@ public class UsrHomeController {
 	public String showMain2() {
 		return "redirect:/usr/home/main";
 	}
+	
+	@RequestMapping("/usr/project/test")
+	public String showMain3() {
+		return "/usr/project/test";
+	}
 }
