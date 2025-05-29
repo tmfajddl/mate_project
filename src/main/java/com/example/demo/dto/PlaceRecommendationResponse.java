@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class RecommendationResponse {
+public class PlaceRecommendationResponse {
     private String name;
     private String menu;
     private String reason;

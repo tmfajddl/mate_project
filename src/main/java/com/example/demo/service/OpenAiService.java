@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
-import com.example.demo.dto.RecommendationResponse;
+import com.example.demo.dto.PlaceRecommendationResponse;
+import com.example.demo.dto.GoodsRecommendationResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -18,32 +19,48 @@ public class OpenAiService {
     private final NaverSearchService naverSearchService;
     private final RestTemplate restTemplate = new RestTemplate();
 
-    public List<RecommendationResponse> getRecommendations(String prompt) {
-        String content = callChatGPT(prompt);
+    public List<PlaceRecommendationResponse> getPlaceRecommendations(String prompt) {
+        String content = callChatGPT(prompt, "맛집");
 
-        // 빈 줄 기준으로 블록 분리
         String[] blocks = content.split("\\n\\n+");
-
-        List<RecommendationResponse> list = new ArrayList<>();
+        List<PlaceRecommendationResponse> list = new ArrayList<>();
 
         for (String block : blocks) {
             String[] lines = block.split("\n");
-            if (lines.length < 4) continue; // 주소까지 4줄 이상인지 체크
+            if (lines.length < 4) continue;
 
             String name = extractAfterColon(lines[0]);
             String menu = extractAfterColon(lines[1]);
             String reason = extractAfterColon(lines[2]);
             String address = extractAfterColon(lines[3]);
-            
 
-            // 주소 포함 검색어 생성
             String query = name + " " + menu;
-
             String imageUrl = naverSearchService.searchImage(query);
 
-            list.add(new RecommendationResponse(name, menu, reason, address, imageUrl));
+            list.add(new PlaceRecommendationResponse(name, menu, reason, address, imageUrl));
         }
+        return list;
+    }
 
+    public List<GoodsRecommendationResponse> getGoodsRecommendations(String prompt) {
+        String content = callChatGPT(prompt, "굿즈");
+
+        String[] blocks = content.split("\\n\\n+");
+        List<GoodsRecommendationResponse> list = new ArrayList<>();
+
+        for (String block : blocks) {
+            String[] lines = block.split("\n");
+            if (lines.length < 3) continue;
+
+            String name = extractAfterColon(lines[0]);
+            String goods = extractAfterColon(lines[1]);
+            String reason = extractAfterColon(lines[2]);
+
+            String query = name;
+            String imageUrl = naverSearchService.searchImage(query);
+
+            list.add(new GoodsRecommendationResponse(name, goods, reason, imageUrl));
+        }
         return list;
     }
 
@@ -51,15 +68,22 @@ public class OpenAiService {
         return line.contains(":") ? line.split(":", 2)[1].trim() : "";
     }
 
-    private String callChatGPT(String userPrompt) {
-        String systemPrompt = "다음 질문에 대해 총 5개의 맛집 이름, 대표 메뉴, 선정 이유, 주소를 각각 한 줄로 명확히 답변해줘. 선정이유는 야구선수 누가 방문했는지 알아야해. 포맷은 다음과 같아:\n" +
-                              "이름: XXX\n메뉴: XXX\n선정이유: XXX";
+    private String callChatGPT(String userPrompt, String mode) {
+        String systemPrompt = "";
+
+        if ("맛집".equals(mode)) {
+            systemPrompt = "다음 질문에 대해 총 5개의 맛집 이름, 대표 메뉴, 선정 이유, 주소를 각각 한 줄로 명확히 답변해줘. 선정이유는 야구선수 누가 방문했는지 알아야해. 포맷은 다음과 같아:\n" +
+                    "이름: XXX\n메뉴: XXX\n선정이유: XXX\n주소: XXX";
+        } else if ("굿즈".equals(mode)) {
+            systemPrompt = "다음 질문에 대해 그 팀에 해당하는 총 5개의 굿즈 이름, 대표 메뉴, 선정 이유를 각각 한 줄로 명확히 답변해줘. 선정이유는 해당 팀과 관련이 있어야해. 포맷은 다음과 같아:\n" +
+                    "이름: XXX\n메뉴: XXX\n선정이유: XXX";
+        }
 
         Map<String, Object> request = new HashMap<>();
         request.put("model", "gpt-3.5-turbo");
         request.put("messages", List.of(
-            Map.of("role", "system", "content", systemPrompt),
-            Map.of("role", "user", "content", userPrompt)
+                Map.of("role", "system", "content", systemPrompt),
+                Map.of("role", "user", "content", userPrompt)
         ));
 
         Map<String, Object> response = restTemplate.postForObject(
