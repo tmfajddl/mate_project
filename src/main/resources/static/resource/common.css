@@ -9,8 +9,13 @@
 	font-style: normal;
 }
 
-html>body {
-	font-family: 'GmarketSansMedium', sans;
+header, nav {
+  position: relative;
+  z-index: 50; /* 원하는 값으로. 일반적으로 50~999 */
+}
+
+html > body {
+    font-family: 'GmarketSansMedium', sans-serif;
 }
 
 a {
@@ -22,7 +27,7 @@ li {
 }
 
 header>div>ul>li {
-	margin-right: 30px;
+	margin-right: 140px;
 }
 
 /*네비게이션 2차메뉴 */
@@ -36,6 +41,7 @@ header>div>ul>li>ul {
 	position: absolute;
 }
 
+
 header>div>ul>li:hover>ul {
 	display: block;
-}}
+}

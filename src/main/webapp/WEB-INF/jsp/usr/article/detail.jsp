@@ -1,172 +1,153 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
-<c:set var="pageTitle" value="ARTICLE DETAIL"></c:set>
 <%@ include file="../common/head.jspf"%>
 
-<!-- 폰트어썸 -->
+<!-- FontAwesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+<!-- Reaction 아이콘 색상 -->
 <style>
-.btn-like.active i {
-  color: #6a71f7;
+  .like-icon.active { color: #6a71f7; }
+  .dislike-icon.active { color: #fa5f81; }
+  .comment-row {
+    border-bottom: 2px solid #bfdbfe; /* bg-blue-200와 같은 색 */
+    padding: 8px 0;
+  }
+  .btn-back {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: black;
+  padding: 4px 10px;
+  border-radius: 5px;
+  background-color: #82c3f5;
 }
 
-.btn-dislike.active i {
-  color: #fa5f81; 
-}</style>
-<section class="mt-8 text-xl px-4">
-	<div class="mx-auto">
-		<table class="table" border="1" cellspacing="0" cellpadding="5" style="width: 100%; border-collapse: collapse;">
-			<tbody>
-				<tr>
-					<th style="text-align: center;">ID</th>
-					<td style="text-align: center;">${article.id}</td>
-				</tr>
-				<tr>
-					<th style="text-align: center;">Registration Date</th>
-					<td style="text-align: center;">${article.regDate}</td>
-				</tr>
-				<tr>
-					<th style="text-align: center;">Update Date</th>
-					<td style="text-align: center;">${article.updateDate}</td>
-				</tr>
-				<tr>
-					<th style="text-align: center;">Writer</th>
-					<td style="text-align: center;">${article.extra__writer }</td>
-				</tr>
-				<tr>
-					<th style="text-align: center;">BoardId</th>
-					<td style="text-align: center;">${article.boardId }</td>
-				</tr>
+/* 뒤로가기 버튼에 마우스 올리면 테이블 행 호버 색과 같게 */
+.btn-back:hover {
+background-color: #4a90e2;
+}
 
-				<tr>
-					<th style="text-align: center;">SUM</th>
-					<td style="text-align: center;">${updatedLikeCount-updatedDislikeCount}</td>
-				</tr>
-				<tr>
-					<th style="text-align: center;">Title</th>
-					<td style="text-align: center;">${article.title }</td>
-				</tr>
-				<tr>
-					<th style="text-align: center;">Body</th>
-					<td style="text-align: center;">${article.body }</td>
-				</tr>
-				<tr>
-					<th style="text-align: center;">view</th>
-					<td style="text-align: center;">${article.view}</td>
-				</tr>
-			</tbody>
-		</table>
-<div style="text-align: center;">
-  <a href="javascript:void(0);"
-     onclick="doGoodReaction('article', ${param.id}, '${rq.currentUri}')"
-     class="btn ${userCanReaction == 1 ? 'btn-success' : 'btn-outline btn-success'}">
-    👍${article.extra__goodReactionPoint}
-  </a>
+ form input.input {
+    width: 90%;
+    box-sizing: border-box;
+  }
+</style>
 
-  <a href="javascript:void(0);"
-     onclick="doBadReaction('article', ${param.id}, '${rq.currentUri}')"
-     class="btn ${userCanReaction == -1 ? 'btn-error' : 'btn-outline btn-error'}">
-    👎${-article.extra__badReactionPoint}
-  </a>
-</div>
-</div>
-		
-		<div class="btns">
-			<button class="btn btn-ghost" type="button" onclick="history.back();">뒤로가기</button>
-			<c:if test="${article.userCanModify }">
-				<a class="btn btn-ghost" href="../article/modify?id=${article.id}">수정</a>
-			</c:if>
-			<c:if test="${article.userCanDelete }">
-				<a class="btn btn-ghost" href="../article/doDelete?id=${article.id}">삭제</a>
-			</c:if>
-		</div>
-	</div>
+<body class="m-0 h-full font-sans">
+
+<!-- Hero Section: 배경 이미지 + 연한 하늘색 오버레이 -->
+<section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed relative flex items-start justify-center p-8"
+         style="background-image: url('/images/bg.jpg');">
+
+  <!-- 연한 하늘색 오버레이 -->
+  <div class="absolute inset-0 bg-blue-100 bg-opacity-70"></div>
+
+  <!-- 2-Column 레이아웃 -->
+  <div class="relative flex w-full max-w-6xl">
+
+    <!-- 왼쪽: 게시글 정보 -->
+    <div class="w-1/2 p-4 flex flex-col">
+      <!-- 제목과 작성자만 위쪽에 -->
+      <div class="mb-4">
+        <div class="text-2xl font-bold mb-1">${article.title}</div>
+        <div class="text-sm text-gray-600">작성자: ${article.extra__writer}</div>
+      </div>
+
+      <!-- 본문 내용 (50% 높이, 스크롤) -->
+      <div class="flex-1 bg-white bg-opacity-50 rounded-lg shadow p-4 overflow-auto" style="max-height: 50vh;">
+        ${article.body}
+      </div>
+
+      <!-- 좋아요/싫어요 아이콘만 -->
+      <div class="text-center mt-4 space-x-4 text-2xl">
+        <a href="javascript:void(0);"
+           onclick="doGoodReaction('article', ${param.id}, '${rq.currentUri}')"
+           class="like-icon ${userCanReaction == 1 ? 'active' : 'text-gray-400'}">
+          <i class="fas fa-thumbs-up"></i>
+          ${article.extra__goodReactionPoint}
+        </a>
+        <a href="javascript:void(0);"
+           onclick="doBadReaction('article', ${param.id}, '${rq.currentUri}')"
+           class="dislike-icon ${userCanReaction == -1 ? 'active' : 'text-gray-400'}">
+          <i class="fas fa-thumbs-down"></i>
+          ${-article.extra__badReactionPoint}
+        </a>
+      </div>
+
+      <!-- 뒤로가기/수정/삭제 버튼 -->
+      <div class="btns mt-4">
+        <button class="btn-back btn btn-ghost" type="button" onclick="history.back();">뒤로가기</button>
+        <c:if test="${article.userCanModify}">
+          <a class="btn-back btn btn-ghost" href="../article/modify?id=${article.id}">수정</a>
+        </c:if>
+        <c:if test="${article.userCanDelete}">
+          <a class="btn-back btn btn-ghost" href="../article/doDelete?id=${article.id}">삭제</a>
+        </c:if>
+      </div>
+    </div>
+
+    <!-- 오른쪽: 댓글 영역 -->
+    <div class="w-1/2 p-4">
+    <div class="text-2xl font-bold mb-1">댓글 목록</div>
+      <!-- 댓글 작성 -->
+      <c:if test="${LoginedMemberId != 0}">
+        <form class="mb-4" action="../comment/doWrite" method="POST">
+          <input type="hidden" name="articleId" value="${param.id}" />
+          <input class="input input-info input-sm" required name="body" type="text" placeholder="댓글을 입력하세요" />
+          <button class="btn-back btn btn-ghost">등록</button>
+        </form>
+      </c:if>
+
+      <!-- 댓글 목록 -->
+      <div>
+        <c:forEach var="comment" items="${comments}">
+          <div class="comment-row flex justify-between items-center">
+            <div class="text-sm font-semibold">${comment.extra__writer}</div>
+            <div id="comment-body-${comment.id}" class="flex-1 px-4">${comment.body}</div>
+
+            <!-- 좋아요/싫어요 아이콘 -->
+            <div class="flex space-x-2">
+              <a href="javascript:void(0);"
+                 onclick="doGoodReaction('comment', ${comment.id}, '${rq.currentUri}')"
+                 class="like-icon ${comment.usercommentCanReaction == 1 ? 'active' : 'text-gray-400'}">
+                <i class="fas fa-thumbs-up"></i>
+              ${comment.extra__goodReactionPoint}</a>
+              <a href="javascript:void(0);"
+                 onclick="doBadReaction('comment', ${comment.id}, '${rq.currentUri}')"
+                 class="dislike-icon ${comment.usercommentCanReaction == -1 ? 'active' : 'text-gray-400'}">
+                <i class="fas fa-thumbs-down"></i>
+                ${-comment.extra__badReactionPoint}
+              </a>
+            </div>
+
+            <!-- 수정/삭제 버튼 (본인 댓글만) -->
+            <c:if test="${comment.memberId == LoginedMemberId}">
+              <div class="flex space-x-1 ml-2">
+                <a class="btn-back btn btn-ghost btn-xs" href="../comment/doDelete?id=${comment.id}">삭제</a>
+                <a id="editBtn" class="btn-back btn btn-ghost btn-xs" href="javascript:void(0);">수정</a>
+              </div>
+            </c:if>
+          </div>
+
+          <!-- 댓글 수정 폼 (숨김) -->
+          <form id="editForm" class="mt-2 hidden flex space-x-2" action="../comment/doModify" method="POST">
+  <input type="hidden" name="id" value="${comment.id}" />
+  <input class="input input-info input-sm" style="width: 80%;" required name="body" type="text" value="${comment.body}" />
+  <button class="btn-back btn btn-ghost btn-xs" type="submit">수정</button>
+</form>
+        </c:forEach>
+
+        <c:if test="${empty comments}">
+          <div class="text-center text-gray-500 italic p-2">댓글이 없습니다</div>
+        </c:if>
+      </div>
+    </div>
+  </div>
 </section>
 
-
-			 <c:if test="${LoginedMemberId != 0}">
-			 <form style="text-align: center;" action="../comment/doWrite" method="POST">
-					<span style="text-align: center;">게시물번호<span>
-					<input class="input input-primary input-sm" required="required" name="articleId" type="text" autocomplete="off"
-							value="${param.id}" readonly/>
-					<span style="text-align: center;">내용</span>
-						<input class="input input-primary input-sm" required="required" name="body" type="text" autocomplete="off"
-								placeholder="내용" />
-						<button class="btn">댓글작성</button>
-		</form>
-        </c:if>
-
-
-
-<table class="table" border="1" cellspacing="0" cellpadding="5" style="width: 100%; border-collapse: collapse;">
-  <thead>
-    <tr>
-      <th colspan="4" style="text-align: center; font-weight: bold; padding: 10px;">
-        댓글목록
-      </th>
-    </tr>
-    <tr>
-      <th style="text-align: center;">작성자</th>
-      <th style="text-align: center;">작성일</th>
-      <th style="text-align: center;">내용</th>
-      <th style="text-align: center;">LIKE</th>
-      <c:if test="${comment.memberId==LoginedMemberId}">
-      <th>삭제</th>
-      <th>수정</th>
-      </c:if>
-    </tr>
-  </thead>
-  <tbody>
-    <c:forEach var="comment" items="${comments}">
-      <tr style="cursor: default;">
-        <td style="text-align: center;">${comment.extra__writer}</td>
-        <td style="text-align: center;">${comment.regDate}</td>
-        <td style="text-align: center;">${comment.body}
-        <form id="editForm" style="text-align: center; display: none;" action="../comment/doModify" method="POST">
-    <span style="text-align: center;">댓글번호</span>
-    <input class="input input-primary input-sm" required="required" name="id" type="text" autocomplete="off"
-           value="${comment.id}" readonly/>
-    <span style="text-align: center;">내용</span>
-    <input class="input input-primary input-sm" required="required" name="body" type="text" autocomplete="off"
-           value="${comment.body}" />
-    <button class="btn">댓글수정</button>
-  </form></td>
-        <td style="text-align: center;">
-          <a href="javascript:void(0);"
-     onclick="doGoodReaction('comment', ${comment.id}, '${rq.currentUri}')"
-     class="btn ${comment.usercommentCanReaction == 1 ? 'btn-success' : 'btn-outline btn-success'}">
-    👍${comment.extra__goodReactionPoint}
-  </a>
-
-  <a href="javascript:void(0);"
-     onclick="doBadReaction('comment', ${comment.id}, '${rq.currentUri}')"
-     class="btn ${comment.usercommentCanReaction == 1 ? 'btn-error' : 'btn-outline btn-error'}">
-    👎${-comment.extra__badReactionPoint}
-  </a>
-        </td>
-        <c:if test="${comment.memberId==LoginedMemberId}">
-        <td><a class="btn btn-ghost" href="../comment/doDelete?id=${comment.id}">삭제</a></td>
-        </c:if>
-        <c:if test="${comment.memberId==LoginedMemberId}">
-<td>
-  <a id="editBtn" class="btn btn-ghost" href="javascript:void(0);">수정</a>
-</td>
-        </c:if>
-      </tr>
-    </c:forEach>
-
-    <c:if test="${empty comments}">
-      <tr>
-        <td colspan="4" style="text-align: center; padding: 15px; font-style: italic; color: #999;">
-          댓글이 없습니다
-        </td>
-      </tr>
-    </c:if>
-  </tbody>
-</table>
-
-
+<!-- JavaScript: 댓글 수정 토글 & 좋아요/싫어요 -->
 <script>
   const editBtn = document.getElementById('editBtn');
   const editForm = document.getElementById('editForm');
@@ -175,47 +156,43 @@
     editBtn.style.display = 'none';  // 수정 버튼 숨기기
     editForm.style.display = 'block'; // 폼 보이기
   });
+
+  function doGoodReaction(relTypeCode, relId, replaceUri) {
+    $.ajax({
+      url: '/usr/reactionPoint/doGoodReaction',
+      type: 'POST',
+      dataType: 'json',
+      data: { relTypeCode, relId, replaceUri },
+      success: function(response) {
+        if (response.replaceUri) {
+          window.location.href = response.replaceUri;
+        }
+      },
+      error: function() {
+        alert('로그인 후 이용하세요!');
+        location.replace('/usr/member/login');
+      }
+    });
+  }
+
+  function doBadReaction(relTypeCode, relId, replaceUri) {
+    $.ajax({
+      url: '/usr/reactionPoint/doBadReaction',
+      type: 'POST',
+      dataType: 'json',
+      data: { relTypeCode, relId, replaceUri },
+      success: function(response) {
+        if (response.replaceUri) {
+          window.location.href = response.replaceUri;
+        }
+      },
+      error: function() {
+        alert('로그인 후 이용하세요!');
+        location.replace('/usr/member/login');
+      }
+    });
+  }
 </script>
 
-<script>
-function doGoodReaction(relTypeCode, relId, replaceUri) {
-	  $.ajax({
-	    url: '/usr/reactionPoint/doGoodReaction',
-	    type: 'POST',
-	    dataType: 'json',
-	    data: { relTypeCode, relId, replaceUri },
-	    success: function(response) {
-	      if(response.replaceUri) {
-	        window.location.href = response.replaceUri;
-	      }
-	    },
-	    error: function(xhr, status, error) {
-	    	alert('로그인 후 이용');
-	    	location.replace('/usr/member/login');
-	    }
-	  });
-	}
-
-	function doBadReaction(relTypeCode, relId, replaceUri) {  // 함수명 변경!!
-	  $.ajax({
-	    url: '/usr/reactionPoint/doBadReaction',
-	    type: 'POST',
-	    dataType: 'json',
-	    data: { relTypeCode, relId, replaceUri },
-	    success: function(response) {
-	      if(response.replaceUri) {
-	        window.location.href = response.replaceUri;
-	      }
-	    },
-	    error: function(xhr, status, error) {
-	      alert('로그인 후 이용');
-	      location.replace('/usr/member/login');
-	    }
-	  });
-	}</script>
-	
-	
-
-
-
 <%@ include file="../common/foot.jspf"%>
+</body>

@@ -21,75 +21,66 @@
 <!-- 데이지 UI -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/daisyui/4.12.23/full.css" />
 </head>
-<body>
+<body data-theme="light">
 
-	<header>
-		<div class="flex h-20 mx-auto items-center text-3xl">
-			<a href="/">LOGO</a>
-			<div class="flex-grow"></div>
-			<ul class="flex">
-				<li>
-					<a class="hover:underline" href="/">HOME</a>
-				</li>
-				<li>
-					<div class="dropdown dropdown-hover">
-						<div tabindex="0" role="button">LIST</div>
-						<ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
-							<li>
-								<a href="../article/list?boardId=1">NOTICE</a>
-							</li>
-							<li>
-								<a href="../article/list?boardId=2">FREE</a>
-							</li>
-							<li>
-								<a href="../article/list?boardId=3">QnA</a>
-							</li>
-						</ul>
-					</div>
-				</li>
-				<!-- 				<li> -->
-				<!-- 					<a class="hover:underline" href="../article/list?boardId=1">LIST</a> -->
-				<!-- 					<ul> -->
-				<!-- 						<li> -->
-				<!-- 							<a class="hover:underline" href="../article/list?boardId=1">NOTICE</a> -->
-				<!-- 						</li> -->
-				<!-- 						<li> -->
-				<!-- 							<a class="hover:underline" href="../article/list?boardId=2">FREE</a> -->
-				<!-- 						</li> -->
-				<!-- 						<li> -->
-				<!-- 							<a class="hover:underline" href="../article/list?boardId=3">QnA</a> -->
-				<!-- 						</li> -->
-				<!-- 					</ul> -->
-				<!-- 				</li> -->
-				<c:if test="${!rq.isLogined() }">
-					<li>
-						<a class="hover:underline" href="../member/login">LOGIN</a>
-					</li>
-					<li>
-						<a class="hover:underline" href="../member/join">JOIN</a>
-					</li>
-				</c:if>
-				<c:if test="${rq.isLogined() }">
-					<li>
-						<a class="hover:underline" href="../article/write">WRITE</a>
-					</li>
-					<li>
-					<div class="dropdown dropdown-hover">
-						<div tabindex="0" role="button">MEMBER</div>
-						<ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
-							<li>
-								<a class="hover:underline" href="../member/modify">MODIFY</a>
-							</li>
-							<li>
-								<a onclick="if(confirm('로그아웃 하시겠습니까?') == false) return false;" class="hover:underline" href="../member/doLogout">LOGOUT</a>
-							</li>
-						</ul>
-					</div>
-			
-					</li>
-				</c:if>
-			</ul>
-		</div>
-	</header>
+<header>
+  <div class="flex h-20 mx-auto items-center text-2xl" 
+       style="background-color: #4a90e2; padding: 20px; text-align: center; color: white">
+       <img src="${pageContext.request.contextPath}/images/mark.png" alt="" class="h-20 mr-5 z-[1]" />
+    <a href="/">응원메이트</a>
+    <div class="flex-grow"></div>
 
-	<h1>${pageTitle }</h1>
+    <ul class="flex">
+      <li>
+        <div class="dropdown dropdown-hover">
+          <div tabindex="0" role="button">응원</div>
+          <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow" 
+              style="background-color: #4a90e2;">
+            <li><a href="../article/list?boardId=1">추천 메이트</a></li>
+            <li><a href="../article/list?boardId=2">채팅목록</a></li>
+            <li><a href="../article/list?boardId=3">추천 굿즈</a></li>
+          </ul>
+        </div>
+      </li>
+
+      <li>
+        <a class="hover:underline" href="/">정보</a>
+      </li>
+
+      <li>
+        <div class="dropdown dropdown-hover">
+          <div tabindex="0" role="button">게시판</div>
+          <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow" 
+              style="background-color: #4a90e2;">
+            <li><a href="../article/list?boardId=1">자유게시판</a></li>
+            <li><a href="../article/list?boardId=2">분실물</a></li>
+          </ul>
+        </div>
+      </li>
+
+      <li>
+        <div class="dropdown dropdown-hover">
+          <div tabindex="0" role="button">회원</div>
+          <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow" 
+              style="background-color: #4a90e2;">
+            <li><a href="../member/myPage">마이 페이지</a></li>
+            <li><a href="../member/style">스타일 등록</a></li>
+
+            <c:if test="${rq.isLogined()}">
+              <li><a onclick="if(confirm('로그아웃 하시겠습니까?') == false) return false;" href="../member/doLogout">로그아웃</a></li>
+            </c:if>
+            <c:if test="${!rq.isLogined()}">
+              <li><a href="../member/login">로그인</a></li>
+              <li><a href="../member/join">회원가입</a></li>
+            </c:if>
+          </ul>
+        </div>
+      </li>
+    </ul>
+  </div>
+</header>
+
+<h1>${pageTitle}</h1>
+
+</body>
+</html>

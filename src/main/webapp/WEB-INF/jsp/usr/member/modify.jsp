@@ -1,89 +1,111 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-
-<c:set var="pageTitle" value="MEMBER MODIFY"></c:set>
 <%@ include file="../common/head.jspf"%>
 
+<!DOCTYPE html>
+<html lang="en">
+<style>
+  option {
+    background-color: rgba(242, 247, 247, 0.8);
+  }
+  option:hover {
+    background-color: #79afe8;
+  }
+    .btn-back {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: black;
+  padding: 4px 10px;
+  border-radius: 5px;
+  background-color: #82c3f5;
+}
 
-<section class=2"mt-8 text-xl px-4">
-	<div class="mx-auto">
-		<form action="../member/doModify" method="POST">
-			<input type="hidden" name="id" value="${member.id}" />
-			<table class="table"  border="1" cellspacing="0" cellpadding="5" style="width: 100%; border-collapse: collapse;">
-				<tbody>
-					<tr>
-						<th style="text-align: center;">ID</th>
-						<td style="text-align: center;">${member.id}</td>
-					</tr>
-					<tr>
-						<th style="text-align: center;">Registration Date</th>
-						<td style="text-align: center;">${member.regDate}</td>
-					</tr>
-					<tr>
-						<th style="text-align: center;">Update Date</th>
-						<td style="text-align: center;">${member.updateDate}</td>
-					</tr>
-					<tr>
-						<th style="text-align: center;">loginId</th>
-						<td style="text-align: center;">${member.loginId}</td>
-					</tr>
-					<tr>
-						<th style="text-align: center;">new loginPw</th>
-						<td style="text-align: center;">
-							<input class="input input-primary input-sm" required="required" name="loginPw" value="${member.loginPw }" type="text"
-								autocomplete="off" placeholder="새 Pw" />
-						</td>
-					</tr>
-					<tr>
-						<th style="text-align: center;">new loginPw2</th>
-						<td style="text-align: center;">
-							<input class="input input-primary input-sm" required="required" name="loginPw2" type="text"
-								autocomplete="off" placeholder="새 Pw 확인" />
-						</td>
-					</tr>
-					<tr>
-						<th style="text-align: center;">new name</th>
-						<td style="text-align: center;">${member.name}</td>
-					</tr>
-					<tr>
-						<th style="text-align: center;">new nickname</th>
-						<td style="text-align: center;">
-							<input class="input input-primary input-sm" required="required" name="nickname" value="${member.nickname }" type="text"
-								autocomplete="off" placeholder="새 nickname" />
-						</td>
-					</tr>
-										<tr>
-						<th style="text-align: center;">new cellphoneNum</th>
-						<td style="text-align: center;">
-							<input class="input input-primary input-sm" required="required" name="cellphoneNum" value="${member.cellphoneNum }" type="tel"
-								autocomplete="off" placeholder="새 cellphoneNum" />
-						</td>
-					</tr>
-										<tr>
-						<th style="text-align: center;">new email</th>
-						<td style="text-align: center;">
-							<input class="input input-primary input-sm" required="required" name="email" value="${member.email }" type="email"
-								autocomplete="off" placeholder="새 email" />
-						</td>
-					</tr>
-					<tr>
-						<th></th>
-						<td style="text-align: center;">
-							<button class="btn btn-primary">수정</button>
-						</td>
-					</tr>
+/* 뒤로가기 버튼에 마우스 올리면 테이블 행 호버 색과 같게 */
+.btn-back:hover {
+background-color: #4a90e2;
+}
+</style>
 
-				</tbody>
-			</table>
-		</form>
-		<div class="btns">
-			<button class="btn btn-ghost" type="button" onclick="history.back();">뒤로가기</button>
-				<a class="btn btn-ghost" href="../member/doDelete?id=${member.id}">삭제</a>
-		</div>
+<body class="m-0 h-full font-sans">
 
-	</div>
-</section>
+  <!-- Hero Section (100% 화면 채움 + 배경 이미지) -->
+  <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black" style="background-image: url('/images/bg.jpg');">
 
+    <!-- 내용 박스 -->
+    <div style="width: 35%; border-radius: 10px; background-color: rgba(242, 247, 247, 0.8); padding: 15px; border: 3px dashed red;">
+      <div class="text-center text-2xl font-bold mb-4">회원정보 수정</div>
+      <form action="../member/doModify" method="POST">
+        <input type="hidden" name="id" value="${member.id}" />
+        <table class="table" cellpadding="5" style="width: 90%; color: black; margin: 0 auto;">
+          <tbody style="text-align: center;">
+            <tr>
+              <th>ID</th>
+              <td>${member.id}</td>
+            </tr>
+            <tr>
+              <th>가입일</th>
+              <td>${member.regDate}</td>
+            </tr>
+            <tr>
+              <th>수정일</th>
+              <td>${member.updateDate}</td>
+            </tr>
+            <tr>
+              <th>아이디</th>
+              <td>${member.loginId}</td>
+            </tr>
+            <tr>
+              <th>새 비밀번호</th>
+              <td>
+                <input class="input input-info input-sm w-full" required name="loginPw" value="${member.loginPw }" type="password" autocomplete="off" placeholder="새 비밀번호" />
+              </td>
+            </tr>
+            <tr>
+              <th>새 비밀번호 확인</th>
+              <td>
+                <input class="input input-info input-sm w-full" required name="loginPw2" type="password" autocomplete="off" placeholder="새 비밀번호 확인" />
+              </td>
+            </tr>
+            <tr>
+              <th>이름</th>
+              <td>${member.name}</td>
+            </tr>
+            <tr>
+              <th>새 닉네임</th>
+              <td>
+                <input class="input input-info input-sm w-full" required name="nickname" value="${member.nickname }" type="text" autocomplete="off" placeholder="새 닉네임" />
+              </td>
+            </tr>
+            <tr>
+              <th>새 전화번호</th>
+              <td>
+                <input class="input input-info input-sm w-full" required name="cellphoneNum" value="${member.cellphoneNum }" type="tel" autocomplete="off" placeholder="새 전화번호" />
+              </td>
+            </tr>
+            <tr>
+              <th>새 이메일</th>
+              <td>
+                <input class="input input-info input-sm w-full" required name="email" value="${member.email }" type="email" autocomplete="off" placeholder="새 이메일" />
+              </td>
+            </tr>
+            <tr>
+              <th></th>
+              <td>
+                <button type="submit" class="btn-back btn btn-ghost btn-xs">수정</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </form>
+    </div>
+          <div class="text-center mt-4">
+        <button class="btn-back btn btn-ghost" type="button" onclick="history.back()">뒤로가기</button>
+        <a href="../member/doDelete?id=${member.id}" class="btn-back btn btn-ghost">삭제</a>
+      </div>
 
+  </section>
 
 <%@ include file="../common/foot.jspf"%>
+</body>
+</html>

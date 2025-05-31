@@ -191,5 +191,34 @@ public class UsrMemberController {
 
 		return Ut.jsReplace(userCanDeleteRd.getResultCode(), userCanDeleteRd.getMsg(), "../home/main");
 	}
+	
+	@RequestMapping("/usr/member/myPage")
+	public String showmyPage() {
+		return "usr/member/myPage";
+	}
+
+	@RequestMapping("/usr/member/checkPw")
+	public String showCheckPw() {
+		return "usr/member/checkPw";
+	}
+
+	@RequestMapping("/usr/member/doCheckPw")
+	@ResponseBody
+	public String doCheckPw(String loginPw) {
+		if (Ut.isEmptyOrNull(loginPw)) {
+			return Ut.jsHistoryBack("F-1", "비번 써");
+		}
+
+		if (rq.getLoginedMember().getLoginPw().equals(loginPw) == false) {
+			return Ut.jsHistoryBack("F-2", "비번 틀림");
+		}
+
+		return Ut.jsReplace("S-1", Ut.f("비밀번호 확인 성공"), "modify");
+	}
+	
+	@RequestMapping("/usr/member/style")
+	public String showstyle() {
+		return "usr/member/style";
+	}
 
 }

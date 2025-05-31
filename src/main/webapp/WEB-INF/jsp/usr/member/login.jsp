@@ -1,45 +1,50 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
-<c:set var="pageTitle" value="MEMBER LOGIN"></c:set>
 <%@ include file="../common/head.jspf"%>
+<!DOCTYPE html>
+<html lang="en">
 
+  <body class="m-0 h-full font-sans">
 
-<section class="mt-8 text-xl px-4">
-	<div class="mx-auto">
+    <!-- Hero Section (100% 화면 채움 + 배경 이미지) -->
+    <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black" style="background-image: url('/images/bg.jpg');">
+      
+      <div class="mx-auto">
 		<form action="../member/doLogin" method="POST">
-			<table class="table"  border="1" cellspacing="0" cellpadding="5" style="width: 100%; border-collapse: collapse;">
+		
+		<div style="border-radius: 10px; background-color: rgba(242, 247, 247,0.8); padding: 15px; border: 3px; border-color: red; border-style: dashed;">
+		<table cellpadding="5">
 				<tbody>
 					<tr>
-						<th>아이디</th>
+						<th style="color: black;">아이디</th>
 						<td style="text-align: center;">
-							<input class="input input-primary" name="loginId" autocomplete="off" type="text" placeholder="아이디 입력" />
+							<input class="input input-info input-sm" name="loginId" autocomplete="off" type="text" placeholder="아이디 입력" />
 						</td>
 					</tr>
 					<tr>
-						<th>비밀번호</th>
+						<th style="color: black;">비밀번호</th>
 						<td style="text-align: center;">
-							<input class="input input-primary" name="loginPw" autocomplete="off" type="text" placeholder="비밀번호 입력" />
+							<input class="input input-info input-sm" name="loginPw" autocomplete="off" type="text" placeholder="비밀번호 입력" />
 						</td>
 					</tr>
 
 					<tr>
 						<th></th>
 						<td style="text-align: center;">
-							<button class="btn btn-ghost">로그인</button>
+							<button class="mt-2 px-2 py-2 bg-blue-500 hover:bg-blue-600 rounded text-white font-semibold transition" class="btn btn-ghost">로그인</button>
 						</td>
 					</tr>
 
 				</tbody>
 			</table>
+		</div>
 		</form>
 		<div class="btns">
-			<button class="btn btn-ghost" type="button" onclick="history.back();">뒤로가기</button>
+			<button class="mt-2 px-2 py-2 bg-blue-500 hover:bg-blue-600 rounded text-white font-semibold transition" onclick="history.back();" >뒤로가기</button>
 
 		</div>
 	</div>
-</section>
+    </section>
 
-
-
-<%@ include file="../common/foot.jspf"%>
+  </body>
+</html>

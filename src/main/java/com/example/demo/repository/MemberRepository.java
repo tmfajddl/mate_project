@@ -20,5 +20,10 @@ public interface MemberRepository {
 	public void modifyMember(int loginedId, String loginPw,String nickname, String cellphoneNum, String email);
 
 	public void deleteMember(int id);
+	
+	public void modify(int loginedMemberId, String loginPw, String name, String nickname, String cellphoneNum,
+			String email);
+
+	public void modifyWithoutPw(int loginedMemberId, String name, String nickname, String cellphoneNum, String email);
 
 }
