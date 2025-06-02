@@ -22,6 +22,10 @@ public class Member {
 	private String nickname;
 	private String cellphoneNum;
 	private String email;
+	private String team;
+	private String gender;
+	private String introduce;
+	private String profileImg;
 	private boolean delStatus;
 	private LocalDateTime delDate;
 	

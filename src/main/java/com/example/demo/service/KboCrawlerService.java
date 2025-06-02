@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -15,54 +16,56 @@ import java.util.List;
 public class KboCrawlerService {
 
     // 1) KBO 팀 순위 크롤링
-    public List<List<String>> getTeamRankings() throws IOException {
-        String url = "https://www.koreabaseball.com/Record/TeamRank/TeamRankDaily.aspx";
-        Document doc = Jsoup.connect(url).get();
+	public List<List<String>> getTeamRankings() throws IOException {
+	    String url = "https://www.koreabaseball.com/Record/TeamRank/TeamRankDaily.aspx";
+	    Document doc = Jsoup.connect(url).get();
 
-        Element table = doc.selectFirst("#cphContents_cphContents_cphContents_udpRecord > table");
-        Elements rows = table.select("tbody tr");
+	    Element table = doc.selectFirst("#cphContents_cphContents_cphContents_udpRecord > table");
+	    Elements rows = table.select("tbody tr");
 
-        List<List<String>> datas = new ArrayList<>();
+	    List<List<String>> datas = new ArrayList<>();
 
-        for (Element row : rows) {
-            Elements tds = row.select("td");
-            List<String> rowData = new ArrayList<>();
-            for (Element td : tds) {
-                rowData.add(td.text().trim());
-            }
-            datas.add(rowData);
-        }
-        return datas;
-    }
+	    for (Element row : rows) {
+	        Elements tds = row.select("td");
+	        if (tds.size() > 1) {
+	            String rank = tds.get(0).text().trim();    // 순위 (첫번째 컬럼)
+	            String teamName = tds.get(1).text().trim(); // 팀명 (두번째 컬럼)
+	            datas.add(Arrays.asList(rank, teamName));
+	        }
+	    }
+	    return datas;
+	}
 
     // 2) KBO 뉴스 크롤링 (이미지 포함)
-    public List<HashMap<String, String>> getBreakingNews() throws IOException {
-        String url = "https://www.koreabaseball.com/MediaNews/News/BreakingNews/List.aspx";
-        Document doc = Jsoup.connect(url).get();
+	public List<HashMap<String, String>> getBreakingNews() throws IOException {
+	    String url = "https://www.koreabaseball.com/MediaNews/News/BreakingNews/List.aspx";
+	    Document doc = Jsoup.connect(url).get();
 
-        Element ul = doc.selectFirst("#contents > div.sub-content > div.board > ul");
-        Elements lis = ul.select("li");
-        String baseUrl = "https://www.koreabaseball.com";
+	    Element ul = doc.selectFirst("#contents > div.sub-content > div.board > ul");
+	    Elements lis = ul.select("li");
+	    String baseUrl = "https://www.koreabaseball.com";
 
-        List<HashMap<String, String>> datas = new ArrayList<>();
+	    List<HashMap<String, String>> datas = new ArrayList<>();
 
-        for (Element li : lis) {
-            String title = li.selectFirst("div > strong > a").text().trim();
-            String body = li.selectFirst("div > p").text().trim();
+	    for (Element li : lis) {
+	        String title = li.selectFirst("div > strong > a").text().trim();
+	        String body = li.selectFirst("div > p").text().trim();
 
-            Element imgTag = li.selectFirst("span > a > img");
-            String pictureUrl = (imgTag != null) ? baseUrl + imgTag.attr("src") : null;
+	        // 링크 크롤링 추가
+	        Element linkTag = li.selectFirst("div > strong > a");
+	        String href = linkTag.attr("href");
+	        String linkUrl = (linkTag != null) ? (href.startsWith("/") ? baseUrl + href : baseUrl + "/" + href) : null;
 
-            HashMap<String, String> map = new HashMap<>();
-            map.put("title", title);
-            map.put("body", body);
-            map.put("pictureUrl", pictureUrl);
+	        HashMap<String, String> map = new HashMap<>();
+	        map.put("title", title);
+	        map.put("body", body);
+	        map.put("linkUrl", linkUrl);  // 링크 추가!
 
-            datas.add(map);
-        }
+	        datas.add(map);
+	    }
 
-        return datas;
-    }
+	    return datas;
+	}
 
     // 3) 네이버 야구 검색 결과 크롤링 (최대 3개 컬럼)
     public List<HashMap<String, String>> getNaverBaseballSchedule() throws IOException {

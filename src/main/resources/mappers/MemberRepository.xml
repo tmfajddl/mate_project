@@ -14,7 +14,9 @@
 		`name` = #{name},
 		nickname = #{nickname},
 		cellphoneNum = #{cellphoneNum},
-		email = #{email}
+		email = #{email},
+		gender = #{gender},
+		team = #{team}
 	</insert>
 	
 	<select id="getLastInsertId" parameterType="int">
@@ -52,6 +54,8 @@
 			<if test="nickname != null and nickname != ''">nickname = #{nickname},</if>
 			<if test="cellphoneNum != null and cellphoneNum != ''">cellphoneNum = #{cellphoneNum},</if>
 			<if test="email != null and email != ''">email = #{email},</if>
+			<if test="introduce != null and introduce != ''">introduce = #{introduce},</if>
+			<if test="introduce != null and introduce != ''">profileImg = #{profileImg},</if>
 			updateDate = NOW()
 		</set>
 		WHERE id = #{loginedId}
@@ -75,6 +79,9 @@
 			<if test="email != null">
 				email = #{email},
 			</if>
+			<if test="introduce != null">
+				introduce = #{introduce},
+			</if>
 			updateDate = NOW()
 		</set>
 		WHERE id = #{loginedMemberId}
@@ -94,6 +101,9 @@
 			</if>
 			<if test="email != null">
 				email = #{email},
+			</if>
+			<if test="introduce != null">
+				introduce = #{introduce},
 			</if>
 			updateDate = NOW()
 		</set>

@@ -11,32 +11,46 @@
   option:hover {
     background-color: #79afe8;
   }
-    .btn-back {
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: black;
-  padding: 4px 10px;
-  border-radius: 5px;
-  background-color: #82c3f5;
-}
-
-/* 뒤로가기 버튼에 마우스 올리면 테이블 행 호버 색과 같게 */
-.btn-back:hover {
-background-color: #4a90e2;
-}
+  .btn-back {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: black;
+    padding: 4px 10px;
+    border-radius: 5px;
+    background-color: #82c3f5;
+  }
+  .btn-back:hover {
+    background-color: #4a90e2;
+  }
 </style>
 
 <body class="m-0 h-full font-sans">
 
-  <!-- Hero Section (100% 화면 채움 + 배경 이미지) -->
   <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black" style="background-image: url('/images/bg.jpg');">
 
-    <!-- 내용 박스 -->
     <div style="width: 35%; border-radius: 10px; background-color: rgba(242, 247, 247, 0.8); padding: 15px; border: 3px dashed red;">
       <div class="text-center text-2xl font-bold mb-4">회원정보 수정</div>
-      <form action="../member/doModify" method="POST">
+      
+      <!-- 수정: enctype="multipart/form-data" 추가 -->
+      <form action="../member/doModify" method="POST" enctype="multipart/form-data">
         <input type="hidden" name="id" value="${member.id}" />
+        
+        <!-- 프로필 이미지 표시 -->
+        <div class="text-center mb-4">
+          <c:if test="${not empty member.profileImg}">
+            <img src="${member.profileImg}" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 2px solid #555;">
+          </c:if>
+          <c:if test="${empty member.profileImg}">
+            <img src="/images/ball.jpg" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 2px solid #555;">
+          </c:if>
+        </div>
+        
+        <!-- 이미지 업로드 input -->
+        <div class="text-center mb-4">
+          <input type="file" name="profileImgFile" accept="image/*" />
+        </div>
+
         <table class="table" cellpadding="5" style="width: 90%; color: black; margin: 0 auto;">
           <tbody style="text-align: center;">
             <tr>
@@ -72,6 +86,14 @@ background-color: #4a90e2;
               <td>${member.name}</td>
             </tr>
             <tr>
+              <th>성별</th>
+              <td>${member.gender}</td>
+            </tr>
+            <tr>
+              <th>응원팀</th>
+              <td>${member.team}</td>
+            </tr>
+            <tr>
               <th>새 닉네임</th>
               <td>
                 <input class="input input-info input-sm w-full" required name="nickname" value="${member.nickname }" type="text" autocomplete="off" placeholder="새 닉네임" />
@@ -90,6 +112,12 @@ background-color: #4a90e2;
               </td>
             </tr>
             <tr>
+              <th>자기소개</th>
+              <td>
+                <input class="input input-info input-sm w-full" required name="introduce" value="${member.introduce }" type="text" autocomplete="off" placeholder="자기소개" />
+              </td>
+            </tr>
+            <tr>
               <th></th>
               <td>
                 <button type="submit" class="btn-back btn btn-ghost btn-xs">수정</button>
@@ -99,10 +127,11 @@ background-color: #4a90e2;
         </table>
       </form>
     </div>
-          <div class="text-center mt-4">
-        <button class="btn-back btn btn-ghost" type="button" onclick="history.back()">뒤로가기</button>
-        <a href="../member/doDelete?id=${member.id}" class="btn-back btn btn-ghost">삭제</a>
-      </div>
+    
+    <div class="text-center mt-4">
+      <button class="btn-back btn btn-ghost" type="button" onclick="history.back()">뒤로가기</button>
+      <a href="../member/doDelete?id=${member.id}" class="btn-back btn btn-ghost">삭제</a>
+    </div>
 
   </section>
 

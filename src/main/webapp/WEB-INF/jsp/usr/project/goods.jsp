@@ -26,6 +26,55 @@ border-radius: 10px;
 background-color: #4a90e2;
 }
 
+.menu2 > div a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  font-size: 1.25rem;
+  text-decoration: none;
+  color: inherit;
+}
+
+.card-container {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  height: 100%;
+  padding-bottom: 10px;
+}
+
+.card {
+  background-color: #82c3f5;
+  border-radius: 12px;
+  width: 250px;
+  flex-shrink: 0; /* 카드 크기 고정 */
+  padding: 15px;
+  box-sizing: border-box;
+  color: #000;
+  text-align: left;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.card img {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+.card h3 {
+  margin: 0 0 6px 0;
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+
+.card p {
+  margin: 4px 0;
+  font-size: 0.9rem;
+}
+
 </style>
 
   <body class="m-0 h-full font-sans">
@@ -33,6 +82,20 @@ background-color: #4a90e2;
     <!-- Hero Section (100% 화면 채움 + 배경 이미지) -->
     <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black" style="background-image: url('/images/bg.jpg');">
     <div class="main">
+    
+    <div class="body" padding: 20px;">
+  <h2>굿즈 추천</h2>
+  <div class="card-container">
+    <c:forEach var="good" items="${goods}">
+      <div class="card">
+        <img src="${good.imageUrl}" alt="${good.name}" />
+        <h3>${good.name}</h3>
+        <p><strong>가격:</strong> ${good.price}</p>
+        <p><strong>추천이유:</strong> ${good.reason}</p>
+      </div>
+    </c:forEach>
+  </div>
+</div>
 	</div>
 	                     <div class="left-controls flex items-center gap-4 mt-2 mb-4" style="justify-content:flex-start; text-align:left;">
   <button class="btn-back btn btn-ghost" type="button" onclick="history.back();">뒤로가기</button>

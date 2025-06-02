@@ -20,7 +20,7 @@ public class MemberService {
 	}
 
 	public ResultData<Integer> join(String loginId, String loginPw, String name, String nickname, String cellphoneNum,
-			String email) {
+			String email, String gender, String team) {
 
 		Member existsMember = getMemberByLoginId(loginId);
 
@@ -34,7 +34,7 @@ public class MemberService {
 			return ResultData.from("F-8", Ut.f("이미 사용중인 이름(%s)과 이메일(%s)입니다", name, email));
 		}
 
-		memberRepository.doJoin(loginId, loginPw, name, nickname, cellphoneNum, email);
+		memberRepository.doJoin(loginId, loginPw, name, nickname, cellphoneNum, email, gender, team);
 
 		int id = memberRepository.getLastInsertId();
 
@@ -71,8 +71,8 @@ public class MemberService {
 		return ResultData.from("S-1", Ut.f("%d번 회원 삭제 가능", member.getId()));
 	}
 
-	public void modifyMember(int loginedId, String loginPw,String nickname, String cellphoneNum, String email) {
-		memberRepository.modifyMember(loginedId, loginPw, nickname, cellphoneNum, email);
+	public void modifyMember(int loginedId, String loginPw,String nickname, String cellphoneNum, String email, String introduce, String profileImg) {
+		memberRepository.modifyMember(loginedId, loginPw, nickname, cellphoneNum, email, introduce, profileImg);
 	}
 
 	public void deleteMember(int id) {
@@ -80,16 +80,16 @@ public class MemberService {
 	}
 	
 	public ResultData modify(int loginedMemberId, String loginPw, String name, String nickname, String cellphoneNum,
-			String email) {
+			String email, String introduce) {
 
-		memberRepository.modify(loginedMemberId, loginPw, name, nickname, cellphoneNum, email);
+		memberRepository.modify(loginedMemberId, loginPw, name, nickname, cellphoneNum, email, introduce);
 
 		return ResultData.from("S-1", "회원정보 수정 완료");
 	}
 
 	public ResultData modifyWithoutPw(int loginedMemberId, String name, String nickname, String cellphoneNum,
-			String email) {
-		memberRepository.modifyWithoutPw(loginedMemberId, name, nickname, cellphoneNum, email);
+			String email, String introduce) {
+		memberRepository.modifyWithoutPw(loginedMemberId, name, nickname, cellphoneNum, email, introduce);
 
 		return ResultData.from("S-1", "회원정보 수정 완료");
 	}

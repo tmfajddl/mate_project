@@ -6,7 +6,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class GoodsRecommendationResponse {
     private String name;
-    private String menu;
-    private String goods;
+    private String price;
+    private String reason;
     private String imageUrl;
 }

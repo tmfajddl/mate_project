@@ -1,10 +1,15 @@
 package com.example.demo.controller;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.service.MemberService;
 import com.example.demo.util.Ut;
@@ -76,7 +81,7 @@ public class UsrMemberController {
 	@RequestMapping("/usr/member/doJoin")
 	@ResponseBody
 	public String doJoin(HttpServletRequest req, String loginId, String loginPw, String name, String nickname,
-			String cellphoneNum, String email) {
+			String cellphoneNum, String email, String gender, String team) {
 
 		if (Ut.isEmptyOrNull(loginId)) {
 			return Ut.jsHistoryBack("F-1", "아이디를 입력해");
@@ -102,7 +107,7 @@ public class UsrMemberController {
 
 		}
 
-		ResultData joinRd = memberService.join(loginId, loginPw, name, nickname, cellphoneNum, email);
+		ResultData joinRd = memberService.join(loginId, loginPw, name, nickname, cellphoneNum, email, gender, team);
 
 		if (joinRd.isFail()) {
 			return Ut.jsHistoryBack(joinRd.getResultCode(), joinRd.getMsg());
@@ -136,35 +141,65 @@ public class UsrMemberController {
 	// 로그인 체크 -> 유무 체크 -> 권한체크
 	@RequestMapping("/usr/member/doModify")
 	@ResponseBody
-	public String doModify(HttpServletRequest req, String loginPw, String loginPw2, String nickname, String cellphoneNum, String email) {
+	public String doModify(HttpServletRequest req,
+	                       String loginPw,
+	                       String loginPw2,
+	                       String nickname,
+	                       String cellphoneNum,
+	                       String email,
+	                       String introduce,
+	                       MultipartFile profileImgFile) {
 
-		Rq rq = (Rq) req.getAttribute("rq");
-		
-		int loginedId = rq.getLoginedMemberId();
+	    Rq rq = (Rq) req.getAttribute("rq");
+	    int loginedId = rq.getLoginedMemberId();
 
-		Member member = memberService.getMemberById(loginedId);
+	    Member member = memberService.getMemberById(loginedId);
 
-		if (member == null) {
-			return Ut.jsHistoryBack("F-1", Ut.f("%d번 회원은 없습니다", loginedId));
-		}
-		
-		if (!loginPw.equals(loginPw2)) {
-			return Ut.jsHistoryBack("F-1", Ut.f("비밀번호 불일치"));
-		}
+	    if (member == null) {
+	        return Ut.jsHistoryBack("F-1", Ut.f("%d번 회원은 없습니다", loginedId));
+	    }
 
-		ResultData userCanModifyRd = memberService.userCanModify(rq.getLoginedMemberId(), member);
+	    if (!loginPw.equals(loginPw2)) {
+	        return Ut.jsHistoryBack("F-1", "비밀번호가 일치하지 않습니다");
+	    }
 
-		if (userCanModifyRd.isFail()) {
-			return Ut.jsHistoryBack(userCanModifyRd.getResultCode(), userCanModifyRd.getMsg());
-		}
+	    ResultData userCanModifyRd = memberService.userCanModify(loginedId, member);
+	    if (userCanModifyRd.isFail()) {
+	        return Ut.jsHistoryBack(userCanModifyRd.getResultCode(), userCanModifyRd.getMsg());
+	    }
 
-		if (userCanModifyRd.isSuccess()) {
-			memberService.modifyMember(loginedId, loginPw, nickname, cellphoneNum, email);
-		}
+	    String profileImg = member.getProfileImg(); // 기존 이미지 경로 유지용
 
-		member = memberService.getMemberById(loginedId);
+	    // 파일이 비어있지 않으면 저장 처리
+	    if (profileImgFile != null && !profileImgFile.isEmpty()) {
+	        try {
+	            // 업로드 폴더(서버 기준 경로, 절대경로로 바꾸세요)
+	            String uploadDir = "C:\\myapp\\uploads\\profile\\";
 
-		return Ut.jsReplace(userCanModifyRd.getResultCode(), userCanModifyRd.getMsg(), "../home/main");
+	            // 파일 이름 중복 방지 UUID 활용
+	            String newFilename = java.util.UUID.randomUUID().toString() + "_" + profileImgFile.getOriginalFilename();
+
+	            Path filePath = Paths.get(uploadDir + newFilename);
+
+	            // 디렉토리 없으면 생성
+	            Files.createDirectories(filePath.getParent());
+
+	            // 파일 저장
+	            profileImgFile.transferTo(filePath.toFile());
+
+	            // 저장된 경로를 DB에 저장할 경로로 세팅 (웹에서 접근 가능한 경로로 변경 필요)
+	            profileImg = "/upload/profile/" + newFilename;
+
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	            return Ut.jsHistoryBack("F-1", "이미지 업로드 실패");
+	        }
+	    }
+
+	    // 회원 정보 수정
+	    memberService.modifyMember(loginedId, loginPw, nickname, cellphoneNum, email, introduce, profileImg);
+
+	    return Ut.jsReplace(userCanModifyRd.getResultCode(), userCanModifyRd.getMsg(), "../home/main");
 	}
 	
 	@RequestMapping("/usr/member/doDelete")
@@ -187,6 +222,7 @@ public class UsrMemberController {
 
 		if (userCanDeleteRd.isSuccess()) {
 			memberService.deleteMember(id);
+			rq.logout();
 		}
 
 		return Ut.jsReplace(userCanDeleteRd.getResultCode(), userCanDeleteRd.getMsg(), "../home/main");

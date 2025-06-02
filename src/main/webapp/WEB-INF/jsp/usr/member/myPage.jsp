@@ -34,6 +34,18 @@ background-color: #4a90e2;
 <div class=" text-2xl font-bold mb-4">마이페이지</div>
     <!-- 내용 박스 -->
     <div style="width: 30%; border-radius: 10px; background-color: rgba(242, 247, 247, 0.8); padding: 15px; border: 3px dashed red;">
+    <!-- 이미지 경로를 JSP에서 가져와서 표시 -->
+<c:if test="${not empty rq.loginedMember.profileImg}">
+  <div class="mb-4 flex justify-center">
+    <img src="${rq.loginedMember.profileImg}" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 2px solid #555;">
+  </div>
+</c:if>
+
+<c:if test="${empty rq.loginedMember.profileImg}">
+  <div class="mb-4 flex justify-center">
+    <img src="/images/ball.jpg" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 2px solid #555;">
+  </div>
+</c:if>
       <table class="table" cellpadding="5" style="width: 90%; color: black; margin: 0 auto;">
         <tbody style="text-align: center;">
           <tr>
@@ -49,6 +61,14 @@ background-color: #4a90e2;
             <td>${rq.loginedMember.name}</td>
           </tr>
           <tr>
+            <th>성별</th>
+            <td>${rq.loginedMember.gender}</td>
+          </tr>
+           <tr>
+            <th>응원팀</th>
+            <td>${rq.loginedMember.team}</td>
+          </tr>
+          <tr>
             <th>닉네임</th>
             <td>${rq.loginedMember.nickname}</td>
           </tr>
@@ -59,6 +79,10 @@ background-color: #4a90e2;
           <tr>
             <th>전화번호</th>
             <td>${rq.loginedMember.cellphoneNum}</td>
+          </tr>
+          <tr>
+            <th>자기소개</th>
+            <td>${rq.loginedMember.introduce}</td>
           </tr>
           <tr>
             <th>회원정보 수정</th>

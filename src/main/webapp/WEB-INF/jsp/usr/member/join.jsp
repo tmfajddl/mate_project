@@ -16,19 +16,19 @@ background-color: #79afe8;
     <!-- Hero Section (100% 화면 채움 + 배경 이미지) -->
     <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black" style="background-image: url('/images/bg.jpg');">
       <div style="width: 30%; border-radius: 10px; background-color: rgba(242, 247, 247,0.8); padding: 15px; border: 3px; border-color: red; border-style: dashed;">
-      <form action="action="../member/doJoin" method="POST"">
+      <form action="../member/doJoin" method="POST"">
       <table class="table" cellpadding="3" style="width: 90%; color: black; margin: 0 auto;">
       <select cellpadding="5" style="	font-weight: 700; width: 50%; color: black; margin: 0 auto; border: 3px; border-radius: 10px; border-color: red; border-style: dashed;"" name="team" id="team">
-      <option value="1">한화 이글스</option>
-      <option value="2">LG 트윈스</option>
-      <option value="3">롯데 자이언츠</option>
-      <option value="4">NC 다이노스</option>
-      <option value="5">두산 베어스</option>
-      <option value="6">KIA 타이거즈</option>
-      <option value="7">삼성 라이온즈</option>
-      <option value="8">키움 히어로즈</option>
-      <option value="9">KT 위즈</option>
-      <option value="10">SSG 랜더스</option>
+      <option value="한화 이글스">한화 이글스</option>
+      <option value="LG 트윈스">LG 트윈스</option>
+      <option value="롯데 자이언츠">롯데 자이언츠</option>
+      <option value="NC 다이노스">NC 다이노스</option>
+      <option value="두산 베어스">두산 베어스</option>
+      <option value="KIA 타이거즈">KIA 타이거즈</option>
+      <option value="삼성 라이온즈">삼성 라이온즈</option>
+      <option value="키움 히어로즈">키움 히어로즈</option>
+      <option value="KT 위즈">KT 위즈</option>
+      <option value="SSG 랜더스">SSG 랜더스</option>
       </select>
 				<tbody style="text-align: center;">
 					<tr>
@@ -52,8 +52,8 @@ background-color: #79afe8;
 					<tr>
 						<th>성별</th>
 						<td style="text-align: center; 	font-weight: 700;">
-							<input checked name="gender" autocomplete="off" type="radio" />여자
-							<input name="gender" autocomplete="off" type="radio" />남자
+							<input checked name="gender" autocomplete="off" type="radio" value="여자" />여자
+							<input name="gender" autocomplete="off" type="radio" value="남자" />남자
 						</td>
 					</tr>
 					<tr>
