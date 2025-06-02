@@ -18,6 +18,7 @@ public class Comment {
 	private int articleId;
 	private int like;
 	private String body;
+	private String extra__writerProfileImg;
 	
 	private int extra__goodReactionPoint;
 	private int extra__badReactionPoint;

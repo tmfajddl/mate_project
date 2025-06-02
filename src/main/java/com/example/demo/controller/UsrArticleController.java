@@ -15,6 +15,7 @@ import com.example.demo.interceptor.BeforeActionInterceptor;
 import com.example.demo.service.ArticleService;
 import com.example.demo.service.BoardService;
 import com.example.demo.service.CommentService;
+import com.example.demo.service.MemberService;
 import com.example.demo.service.ReactionPointService;
 import com.example.demo.util.Ut;
 import com.example.demo.vo.Article;
@@ -42,6 +43,9 @@ public class UsrArticleController {
 
 	@Autowired
 	private ArticleService articleService;
+	
+	@Autowired
+	private MemberService memberService;
 
 	@Autowired
 	private BoardService boardService;

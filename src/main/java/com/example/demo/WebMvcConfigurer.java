@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 
 import com.example.demo.interceptor.BeforeActionInterceptor;
 import com.example.demo.interceptor.NeedLoginInterceptor;
@@ -82,5 +83,11 @@ public class WebMvcConfigurer implements org.springframework.web.servlet.config.
 		ir.addPathPatterns("/usr/member/doFindLoginPw");
 
 	}
+	
+	public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        // 실제 저장 경로(윈도우 경로니까 file:///C:/... 로!)
+        registry.addResourceHandler("/upload/**")
+                .addResourceLocations("file:///C:/myapp/uploads/");
+    }
 
 }

@@ -37,19 +37,34 @@
         <input type="hidden" name="id" value="${member.id}" />
         
         <!-- 프로필 이미지 표시 -->
-        <div class="text-center mb-4">
-          <c:if test="${not empty member.profileImg}">
-            <img src="${member.profileImg}" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 2px solid #555;">
-          </c:if>
-          <c:if test="${empty member.profileImg}">
-            <img src="/images/ball.jpg" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 2px solid #555;">
-          </c:if>
-        </div>
+        <div class="mb-4 flex justify-center">
+  <c:if test="${not empty member.profileImg}">
+    <img id="previewImg" src="${member.profileImg}" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 2px solid #555;">
+  </c:if>
+  <c:if test="${empty member.profileImg}">
+    <img id="previewImg" src="/images/ball.jpg" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 2px solid #555;">
+  </c:if>
+</div>
+
+<script>
+  function previewProfileImage(input) {
+    if (input.files && input.files[0]) {
+      const reader = new FileReader();
+
+      reader.onload = function(e) {
+        document.getElementById('previewImg').src = e.target.result;
+      };
+
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+</script>
         
         <!-- 이미지 업로드 input -->
         <div class="text-center mb-4">
-          <input type="file" name="profileImgFile" accept="image/*" />
+          <input type="file" name="profileImgFile" accept="image/*" onchange="previewProfileImage(this)" />
         </div>
+        
 
         <table class="table" cellpadding="5" style="width: 90%; color: black; margin: 0 auto;">
           <tbody style="text-align: center;">

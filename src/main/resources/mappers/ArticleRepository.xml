@@ -16,7 +16,6 @@
 		title =
 		#{title},
 		`body` = #{body},
-		`like` = 0,
 		`view` = 0
 	</insert>
 

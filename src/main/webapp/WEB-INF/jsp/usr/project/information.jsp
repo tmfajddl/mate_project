@@ -48,7 +48,6 @@
 .ps{
 background-color: #4a90e2;
 padding: 30px;
-padding-top: 20px;
 border-radius: 10px;
 width: 48%;
 margin-top: 30px;
@@ -148,7 +147,7 @@ border-radius: 10px;
       </div>
 
       <!-- 오른쪽: 글자 (50%) -->
-      <div class=" ps flex flex-col justify-center p-6 text-sm leading-relaxed overflow-y-auto">
+      <div class=" ps flex flex-col justify-center p-6 text-sm leading-relaxed overflow-y-auto" style="padding-top: 200px;">
         <div> <!-- 마진을 여기에! -->
           🎒 준비물 체크리스트<br />
           1. 우비 or 우산<br />
@@ -177,7 +176,7 @@ border-radius: 10px;
       </div>
 
       <!-- 오른쪽: 글자 (50%) -->
-      <div class=" ps flex flex-col justify-center p-6 text-sm leading-relaxed overflow-y-auto">
+      <div class=" ps flex flex-col justify-center p-6 text-sm leading-relaxed overflow-y-auto" style="padding-top: 20px;">
         <div> <!-- 마진을 여기에! -->
           🎒 준비물 체크리스트<br />
           1. 얇은 겉옷 (바람막이/가디건)<br />
@@ -203,7 +202,7 @@ border-radius: 10px;
       </div>
 
       <!-- 오른쪽: 글자 (50%) -->
-      <div class=" ps flex flex-col justify-center p-6 text-sm leading-relaxed overflow-y-auto">
+      <div class=" ps flex flex-col justify-center p-6 text-sm leading-relaxed overflow-y-auto" style="padding-top: 20px;">
         <div> <!-- 마진을 여기에! -->
           🎒 준비물 체크리스트<br />
           1. 모자 or 캡모자<br />
