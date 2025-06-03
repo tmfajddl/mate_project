@@ -72,7 +72,7 @@ border-radius: 10px;
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script>
-  const API_KEY = "";
+  const API_KEY = "a742b907a44edf2cb751b547e466583e";
 
   function onGeoOk(position) {
     const latitude = position.coords.latitude;
@@ -202,7 +202,7 @@ border-radius: 10px;
       </div>
 
       <!-- 오른쪽: 글자 (50%) -->
-      <div class=" ps flex flex-col justify-center p-6 text-sm leading-relaxed overflow-y-auto" style="padding-top: 20px;">
+      <div class=" ps flex flex-col justify-center p-6 text-sm leading-relaxed overflow-y-auto" style="padding-top: 100px;">
         <div> <!-- 마진을 여기에! -->
           🎒 준비물 체크리스트<br />
           1. 모자 or 캡모자<br />

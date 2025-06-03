@@ -25,6 +25,7 @@
     display: inline-block;
     vertical-align: top;
     width: 22%;
+    height: 350px;
     min-width: 200px;
     border-radius: 10px;
     background-color: #f0f8ff;
@@ -69,22 +70,22 @@
 
   /* 숨겨진 채팅하기 버튼 */
   .chat-btn {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background-color: #4a90e2;
-    border: none;
-    color: white;
-    padding: 6px 12px;
-    border-radius: 5px;
-    cursor: pointer;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    font-weight: bold;
-    font-size: 0.9em;
-    z-index: 10;
-  }
-
+  position: absolute;
+  bottom: 10px;   /* 아래에서 10px 위 */
+  left: 50%;      /* 좌측 50% 위치 */
+  transform: translateX(-50%); /* 가로 가운데 정렬 */
+  background-color: #4a90e2;
+  border: none;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  font-weight: bold;
+  font-size: 0.9em;
+  z-index: 10;
+}
   /* 카드에 마우스 올라가면 버튼 나타남 */
   .card:hover .chat-btn {
     opacity: 1;

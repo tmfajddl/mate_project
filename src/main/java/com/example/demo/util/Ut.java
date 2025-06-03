@@ -33,6 +33,14 @@ public class Ut {
 				</script>
 				""", resultMsg, replaceUri);
 	}
+	
+	public static String jsReplaceNoAlert(String resultCode, String msg, String url) {
+	    return """
+	    <script>
+	        location.replace('%s');
+	    </script>
+	    """.formatted(url);
+	}
 
 	public static String jsHistoryBack(String resultCode, String msg) {
 		if (resultCode == null) {

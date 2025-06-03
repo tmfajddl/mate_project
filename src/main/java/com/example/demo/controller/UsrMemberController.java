@@ -7,7 +7,9 @@ import java.nio.file.Paths;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -37,7 +39,7 @@ public class UsrMemberController {
 
 		rq.logout();
 
-		return Ut.jsReplace("S-1", "로그아웃 성공", "/");
+		return Ut.jsReplaceNoAlert("S-1", "로그아웃 성공", "/");
 	}
 
 	@RequestMapping("/usr/member/login")
@@ -80,30 +82,44 @@ public class UsrMemberController {
 
 	@RequestMapping("/usr/member/doJoin")
 	@ResponseBody
-	public String doJoin(HttpServletRequest req, String loginId, String loginPw, String name, String nickname,
+	public String doJoin(HttpServletRequest req, String loginId, String loginPw, String loginPw2, String name, String nickname,
 			String cellphoneNum, String email, String gender, String team) {
+		
+		if(!loginPw.equals(loginPw2)) {
+			return Ut.jsHistoryBack("F-9", "비밀번호가 일치하지 않습니다.");
+		}
 
 		if (Ut.isEmptyOrNull(loginId)) {
-			return Ut.jsHistoryBack("F-1", "아이디를 입력해");
+			return Ut.jsHistoryBack("F-1", "아이디를 입력해주세요");
 		}
 		if (Ut.isEmptyOrNull(loginPw)) {
-			return Ut.jsHistoryBack("F-2", "비밀번호를 입력해");
+			return Ut.jsHistoryBack("F-2", "비밀번호를 입력해주세요");
 
 		}
 		if (Ut.isEmptyOrNull(name)) {
-			return Ut.jsHistoryBack("F-3", "이름을 입력해");
+			return Ut.jsHistoryBack("F-3", "이름을 입력해주세요");
 
 		}
 		if (Ut.isEmptyOrNull(nickname)) {
-			return Ut.jsHistoryBack("F-4", "닉네임을 입력해");
+			return Ut.jsHistoryBack("F-4", "닉네임을 입력해주세요");
 
 		}
 		if (Ut.isEmptyOrNull(cellphoneNum)) {
-			return Ut.jsHistoryBack("F-5", "전화번호를 입력해");
+			return Ut.jsHistoryBack("F-5", "전화번호를 입력해주세요");
 
 		}
 		if (Ut.isEmptyOrNull(email)) {
-			return Ut.jsHistoryBack("F-6", "이메일을 입력해");
+			return Ut.jsHistoryBack("F-6", "이메일을 입력해주세요");
+
+		}
+		
+		if (Ut.isEmptyOrNull(gender)) {
+			return Ut.jsHistoryBack("F-7", "성별을 입력해주세요");
+
+		}
+		
+		if (Ut.isEmptyOrNull(team)) {
+			return Ut.jsHistoryBack("F-8", "응원 팀을 선택해주세요");
 
 		}
 
@@ -115,7 +131,7 @@ public class UsrMemberController {
 
 		Member member = memberService.getMemberById((int) joinRd.getData1());
 
-		return Ut.jsReplace(joinRd.getResultCode(), joinRd.getMsg(), "../member/login");
+		return Ut.jsReplaceNoAlert(joinRd.getResultCode(), joinRd.getMsg(), "../member/login");
 	}
 	
 	@RequestMapping("/usr/member/modify")
@@ -124,7 +140,7 @@ public class UsrMemberController {
 		Rq rq = (Rq) req.getAttribute("rq");
 		
 		if (rq.getLoginedMemberId() == 0) {
-			return Ut.jsHistoryBack("F-1", Ut.f("로그인 후 이용바랍니다"));
+			return Ut.jsReplace("F-1", Ut.f("로그인 후 이용바랍니다"),"../member/login");
 		}
 
 		Member member = memberService.getMemberById(rq.getLoginedMemberId());
@@ -242,19 +258,26 @@ public class UsrMemberController {
 	@ResponseBody
 	public String doCheckPw(String loginPw) {
 		if (Ut.isEmptyOrNull(loginPw)) {
-			return Ut.jsHistoryBack("F-1", "비번 써");
+			return Ut.jsHistoryBack("F-1", "비밀번호를 입력해주세요.");
 		}
 
 		if (rq.getLoginedMember().getLoginPw().equals(loginPw) == false) {
-			return Ut.jsHistoryBack("F-2", "비번 틀림");
+			return Ut.jsHistoryBack("F-2", "비밀번호가 틀립니다.");
 		}
 
-		return Ut.jsReplace("S-1", Ut.f("비밀번호 확인 성공"), "modify");
+		return Ut.jsReplaceNoAlert("S-1", Ut.f("비밀번호 확인 성공"), "modify");
 	}
 	
 	@RequestMapping("/usr/member/style")
 	public String showstyle() {
 		return "usr/member/style";
+	}
+	
+	@GetMapping("/usr/member/checkLoginId")
+	@ResponseBody
+	public String checkLoginId(@RequestParam String loginId) {
+	    Member member = memberService.getMemberByLoginId(loginId);
+	    return member == null ? "available" : "duplicated";
 	}
 
 }

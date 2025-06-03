@@ -3,12 +3,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <style>
-.main{
-border-radius: 10px;
-    width: 70%;
-    height: 50%;
-    background-color: rgba(74, 144, 226, 0.8);
+.main {
+  border-radius: 10px;
+  width: 70%;              /* 너비는 70%로 조절 */
+  min-height: 350px;
+  background-color: rgba(255, 255, 255, 0.9);  /* 반투명 흰색 */
   border: 10px solid white;
+  padding: 20px;
+  margin: 20px auto;
+
+  overflow-x: auto;        /* 가로 스크롤 */
+  box-sizing: border-box;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
 
     .btn-back {

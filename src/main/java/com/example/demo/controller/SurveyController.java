@@ -21,31 +21,25 @@ import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
 public class SurveyController {
-	
-	@Autowired
-	private Rq rq;
 
-	@Autowired
-	private MemberService memberService;
+    @Autowired
+    private Rq rq;
+
+    @Autowired
+    private MemberService memberService;
 
     @Autowired
     private SurveyService surveyService;
-    
+
     @RequestMapping("/usr/member/modifyStyle")
-	public String showModify(HttpServletRequest req, Model model) {
+    public String showModify(HttpServletRequest req, Model model) {
+        Rq rq = (Rq) req.getAttribute("rq");
 
-		Rq rq = (Rq) req.getAttribute("rq");
-		
-		if (rq.getLoginedMemberId() == 0) {
-		    return Ut.jsHistoryBack("F-1", Ut.f("로그인 후 이용바랍니다"));
-		}
+        Survey survey = surveyService.getSurveyById(rq.getLoginedMemberId());
+        model.addAttribute("survey", survey);
 
-		Survey survey = surveyService. getSurveyById(rq.getLoginedMemberId());
-
-		model.addAttribute("survey", survey);
-
-		return "/usr/member/style";
-	}
+        return "usr/member/style";
+    }
 
     @RequestMapping("/usr/member/insertStyle")
     public String insertStyle(HttpServletRequest req,
@@ -56,53 +50,81 @@ public class SurveyController {
         Rq rq = (Rq) req.getAttribute("rq");
         int memberId = rq.getLoginedMemberId();
 
-        // List<String>을 콤마로 연결 (DB 컬럼 형식에 맞게)
         String seatPreference = seatPreferences != null ? String.join(",", seatPreferences) : "";
         String cheeringStyle = cheeringStyles != null ? String.join(",", cheeringStyles) : "";
 
-        // 기존 설문조사 정보 조회
         Survey existingSurvey = surveyService.getSurveyById(memberId);
 
         if (existingSurvey != null) {
-            // 기존 정보가 있으면 update
             existingSurvey.setSeatPreference(seatPreference);
             existingSurvey.setMateGender(mateGender);
             existingSurvey.setCheeringStyle(cheeringStyle);
-            surveyService.updateSurvey(existingSurvey); // 새로 update 메서드 필요!
+            surveyService.updateSurvey(existingSurvey);
         } else {
-            // 없으면 새로 insert
             Survey newSurvey = new Survey();
             newSurvey.setMemberId(memberId);
             newSurvey.setSeatPreference(seatPreference);
             newSurvey.setMateGender(mateGender);
             newSurvey.setCheeringStyle(cheeringStyle);
-            surveyService.saveSurvey(newSurvey); // 새로 insert 메서드 필요!
+            surveyService.saveSurvey(newSurvey);
         }
 
-        // 완료 후 마이페이지로 이동
-        return "redirect:/usr/project/friend";
+        // 스타일 입력 후, 친구 추천 화면으로 리다이렉트
+        return "/usr/project/friend";
     }
-    
+
     @RequestMapping("/usr/project/friend")
+    @ResponseBody
     public String showRecommendations(HttpServletRequest req, Model model) {
         Rq rq = (Rq) req.getAttribute("rq");
+
         int memberId = rq.getLoginedMemberId();
         Member member = memberService.getMemberById(memberId);
+
+        // 멤버 정보 확인
+        if (member == null) {
+ 
+            return Ut.jsHistoryBack("F-2", "회원 정보를 찾을 수 없습니다.");
+        }
+
+        // 스타일(설문) 등록 여부 확인
         Survey survey = surveyService.getSurveyById(memberId);
+        if (survey == null) {
+            return Ut.jsReplace("F-2", "먼저 스타일 설문을 등록해주세요.","../member/modifyStyle");
+        }
 
-member.setSurvey(survey);
-
-model.addAttribute("recommend", member);
+        // 정상 처리
+        member.setSurvey(survey);
+        model.addAttribute("recommend", member);
 
         List<Member> recommendedFriends = surveyService.recommendFriends(memberId, 5);
-        
         for (Member friend : recommendedFriends) {
             Survey friendSurvey = surveyService.getSurveyById(friend.getId());
             friend.setSurvey(friendSurvey);
         }
-
         model.addAttribute("recommendedFriends", recommendedFriends);
 
-        return "/usr/project/friend";
+        return "<script>location.replace('/usr/project/friend/view');</script>"; // 실제 뷰로 이동
+    }
+    
+    @RequestMapping("/usr/project/friend/view")
+    public String showFriendView(HttpServletRequest req, Model model) {
+        Rq rq = (Rq) req.getAttribute("rq");
+
+        int memberId = rq.getLoginedMemberId();
+        Member member = memberService.getMemberById(memberId);
+        Survey survey = surveyService.getSurveyById(memberId);
+
+        member.setSurvey(survey);
+        model.addAttribute("recommend", member);
+
+        List<Member> recommendedFriends = surveyService.recommendFriends(memberId, 5);
+        for (Member friend : recommendedFriends) {
+            Survey friendSurvey = surveyService.getSurveyById(friend.getId());
+            friend.setSurvey(friendSurvey);
+        }
+        model.addAttribute("recommendedFriends", recommendedFriends);
+
+        return "usr/project/friend"; // JSP 뷰 이동!
     }
 }

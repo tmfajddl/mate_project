@@ -27,7 +27,7 @@
   <div class="flex h-20 mx-auto items-center text-2xl" 
        style="background-color: #4a90e2; padding: 20px; text-align: center; color: white">
        <img src="${pageContext.request.contextPath}/images/mark.png" alt="" class="h-20 mr-5 z-[1]" />
-    <a href="/">응원메이트</a>
+    <a href="${pageContext.request.contextPath}/">응원메이트</a>
     <div class="flex-grow"></div>
 
     <ul class="flex">
@@ -36,15 +36,15 @@
           <div tabindex="0" role="button">응원</div>
           <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow" 
               style="background-color: #4a90e2;">
-            <li><a href="../project/friend">추천 메이트</a></li>
-            <li><a href="../project/chat">채팅목록</a></li>
-            <li><a href="../project/goods">추천 굿즈</a></li>
+            <li><a href="${pageContext.request.contextPath}/usr/project/friend">추천 메이트</a></li>
+            <li><a href="${pageContext.request.contextPath}/usr/project/chat">채팅목록</a></li>
+            <li><a href="${pageContext.request.contextPath}/usr/project/goods">추천 굿즈</a></li>
           </ul>
         </div>
       </li>
 
       <li>
-        <a class="hover:underline" href="../project/information">정보</a>
+        <a class="hover:underline" href="${pageContext.request.contextPath}/usr/project/information">정보</a>
       </li>
 
       <li>
@@ -52,8 +52,8 @@
           <div tabindex="0" role="button">게시판</div>
           <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow" 
               style="background-color: #4a90e2;">
-            <li><a href="../article/list?boardId=1">자유게시판</a></li>
-            <li><a href="../article/list?boardId=2">분실물</a></li>
+            <li><a href="${pageContext.request.contextPath}/usr/article/list?boardId=1">자유게시판</a></li>
+            <li><a href="${pageContext.request.contextPath}/usr/article/list?boardId=2">분실물</a></li>
           </ul>
         </div>
       </li>
@@ -63,15 +63,15 @@
           <div tabindex="0" role="button">회원</div>
           <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow" 
               style="background-color: #4a90e2;">
-            <li><a href="../member/myPage">마이 페이지</a></li>
-            <li><a href="../member/modifyStyle"">스타일 등록</a></li>
+            <li><a href="${pageContext.request.contextPath}/usr/member/myPage">마이 페이지</a></li>
+            <li><a href="${pageContext.request.contextPath}/usr/member/modifyStyle">스타일 등록</a></li>
 
             <c:if test="${rq.isLogined()}">
-              <li><a onclick="if(confirm('로그아웃 하시겠습니까?') == false) return false;" href="../member/doLogout">로그아웃</a></li>
+              <li><a onclick="if(confirm('로그아웃 하시겠습니까?') == false) return false;" href="${pageContext.request.contextPath}/usr/member/doLogout">로그아웃</a></li>
             </c:if>
             <c:if test="${!rq.isLogined()}">
-              <li><a href="../member/login">로그인</a></li>
-              <li><a href="../member/join">회원가입</a></li>
+              <li><a href="${pageContext.request.contextPath}/usr/member/login">로그인</a></li>
+              <li><a href="${pageContext.request.contextPath}/usr/member/join">회원가입</a></li>
             </c:if>
           </ul>
         </div>

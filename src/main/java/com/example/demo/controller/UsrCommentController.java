@@ -89,7 +89,7 @@ public class UsrCommentController {
 
 		comment = commentService.getCommentById(id);
 
-		return Ut.jsReplace(userCanModifyRd.getResultCode(), userCanModifyRd.getMsg(),"../article/detail?id="+comment.getArticleId());
+		return Ut.jsReplaceNoAlert(userCanModifyRd.getResultCode(), userCanModifyRd.getMsg(),"../article/detail?id="+comment.getArticleId());
 	}
 
 	@RequestMapping("/usr/comment/doDelete")
@@ -114,7 +114,7 @@ public class UsrCommentController {
 			commentService.deleteComment(id);
 		}
 
-		return Ut.jsReplace(userCanDeleteRd.getResultCode(), userCanDeleteRd.getMsg(),"../article/detail?id="+comment.getArticleId());
+		return Ut.jsReplaceNoAlert(userCanDeleteRd.getResultCode(), userCanDeleteRd.getMsg(),"../article/detail?id="+comment.getArticleId());
 	}
 	
 	@RequestMapping("/usr/comment/write")
@@ -144,7 +144,7 @@ public class UsrCommentController {
 		Comment comment = commentService.getCommentById(id);
 		
 
-		return Ut.jsReplace(doWriteRd.getResultCode(), doWriteRd.getMsg(),"../article/detail?id="+comment.getArticleId());
+		return Ut.jsReplaceNoAlert(doWriteRd.getResultCode(), doWriteRd.getMsg(),"../article/detail?id="+comment.getArticleId());
 	}
 	
 }

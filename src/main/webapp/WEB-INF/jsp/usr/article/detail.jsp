@@ -83,7 +83,7 @@ background-color: #4a90e2;
           <a class="btn-back btn btn-ghost" href="../article/modify?id=${article.id}">수정</a>
         </c:if>
         <c:if test="${article.userCanDelete}">
-          <a class="btn-back btn btn-ghost" href="../article/doDelete?id=${article.id}">삭제</a>
+          <a class="btn-back btn btn-ghost" onclick="confirmDeleteAjax(${article.id})">삭제</a>
         </c:if>
       </div>
     </div>
@@ -208,6 +208,24 @@ background-color: #4a90e2;
       }
     });
   }
+  
+  function confirmDeleteAjax(articleId) {
+	  if (!confirm("정말 삭제하시겠습니까?")) {
+	    return;
+	  }
+
+	  $.ajax({
+	    url: '/usr/article/doDelete',
+	    method: 'POST',
+	    data: { id: articleId },
+	    success: function(response) {
+	      location.replace('/usr/article/list');
+	    },
+	    error: function() {
+	      alert("삭제 중 오류가 발생했습니다.");
+	    }
+	  });
+	}
 </script>
 
 <%@ include file="../common/foot.jspf"%>

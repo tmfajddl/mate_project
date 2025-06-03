@@ -96,7 +96,7 @@ public class UsrArticleController {
 
 		article = articleService.getArticleById(id);
 
-		return Ut.jsReplace(userCanModifyRd.getResultCode(), userCanModifyRd.getMsg(), "../article/detail?id=" + id);
+		return Ut.jsReplaceNoAlert(userCanModifyRd.getResultCode(), userCanModifyRd.getMsg(), "../article/detail?id=" + id);
 	}
 
 	@RequestMapping("/usr/article/doDelete")
@@ -121,7 +121,7 @@ public class UsrArticleController {
 			articleService.deleteArticle(id);
 		}
 
-		return Ut.jsReplace(userCanDeleteRd.getResultCode(), userCanDeleteRd.getMsg(), "../article/list");
+		return Ut.jsReplaceNoAlert(userCanDeleteRd.getResultCode(), userCanDeleteRd.getMsg(), "../article/list");
 	}
 
 	@RequestMapping("/usr/article/detail")
@@ -199,7 +199,7 @@ public class UsrArticleController {
 
 		Article article = articleService.getArticleById(id);
 
-		return Ut.jsReplace(doWriteRd.getResultCode(), doWriteRd.getMsg(), "../article/detail?id=" + id);
+		return Ut.jsReplaceNoAlert(doWriteRd.getResultCode(), doWriteRd.getMsg(), "../article/detail?id=" + id);
 	}
 
 	@RequestMapping("/usr/article/list")
