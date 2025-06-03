@@ -66,10 +66,6 @@ public class UsrHomeController {
 	    model.addAttribute("places", places);
 		return "/usr/project/information3";
 	}
-	@RequestMapping("/usr/project/friend")
-	public String showMain7() {
-		return "/usr/project/friend";
-	}
 	@RequestMapping("/usr/project/goods")
 	public String showMain8(Model model) throws IOException {
 		

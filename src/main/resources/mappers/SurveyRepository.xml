@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.repository.SurveyRepository">
+
+  <insert id="saveSurvey" parameterType="com.example.demo.vo.Survey">
+		INSERT INTO survey
+        SET memberId = #{memberId},
+            seatPreference = #{seatPreference},
+            mateGender = #{mateGender},
+            cheeringStyle = #{cheeringStyle},
+            regDate = NOW()
+	</insert>
+	
+	<select id="getSurveyById" parameterType="int"
+		resultType="com.example.demo.vo.Survey">
+		SELECT * FROM `survey`
+		WHERE memberId = #{id}
+	</select>
+	
+	<update id="updateSurvey" parameterType="com.example.demo.vo.Survey">
+  UPDATE survey
+  SET
+    seatPreference = #{seatPreference},
+    mateGender = #{mateGender},
+    cheeringStyle = #{cheeringStyle}
+  WHERE
+    memberId = #{memberId}
+</update>
+
+<select id="getAllSurveys" parameterType="int" resultType="com.example.demo.vo.Survey">
+    SELECT * FROM `survey`
+    WHERE memberId != #{memberId}
+</select>
+
+</mapper>

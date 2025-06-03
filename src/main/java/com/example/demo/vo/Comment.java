@@ -28,4 +28,7 @@ public class Comment {
 	private String extra__writer;
 	private boolean userCanModify;
 	private boolean userCanDelete;
+	
+	private String extra__writerProfileImgUrl;
+
 }

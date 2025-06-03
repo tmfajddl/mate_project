@@ -21,6 +21,7 @@ import com.example.demo.util.Ut;
 import com.example.demo.vo.Article;
 import com.example.demo.vo.Board;
 import com.example.demo.vo.Comment;
+import com.example.demo.vo.Member;
 import com.example.demo.vo.ResultData;
 import com.example.demo.vo.Rq;
 
@@ -135,9 +136,21 @@ public class UsrArticleController {
 		
 		List<Comment> comments = commentService.getForPrintComments(id);
 		
+		
 		System.out.println("댓글 개수: " + comments.size());
-		for(Comment c : comments) {
-		    System.out.println("댓글 id: " + c.getId() + ", 작성자: " + c.getExtra__writer());
+		for (Comment c : comments) {
+		    Member writer = memberService.getMemberById(c.getMemberId());
+
+		    String profileImgUrl = "/images/ball.jpg"; // 기본 이미지 경로 지정
+		    if (writer != null && writer.getProfileImg() != null && !writer.getProfileImg().isEmpty()) {
+		        profileImgUrl = writer.getProfileImg();
+		    }
+
+		    c.setExtra__writerProfileImgUrl(profileImgUrl);
+
+		    System.out.println("댓글 id: " + c.getId() +
+		                       ", 작성자: " + c.getExtra__writer() +
+		                       ", 프로필: " + c.getExtra__writerProfileImgUrl());
 		}
 		
 		

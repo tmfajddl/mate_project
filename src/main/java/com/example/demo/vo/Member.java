@@ -29,4 +29,6 @@ public class Member {
 	private boolean delStatus;
 	private LocalDateTime delDate;
 	
+	private Survey survey;
+	
 }

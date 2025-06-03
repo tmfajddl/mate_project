@@ -101,48 +101,64 @@ background-color: #4a90e2;
       </c:if>
 
       <!-- 댓글 목록 -->
-      <div>
-        <c:forEach var="comment" items="${comments}">
-          <div class="comment-row flex justify-between items-center">
-            <div class="text-sm font-semibold">${comment.extra__writer}</div>
-            <div id="comment-body-${comment.id}" class="flex-1 px-4">${comment.body}</div>
-
-            <!-- 좋아요/싫어요 아이콘 -->
-            <div class="flex space-x-2">
-              <a href="javascript:void(0);"
-                 onclick="doGoodReaction('comment', ${comment.id}, '${rq.currentUri}')"
-                 class="like-icon ${comment.usercommentCanReaction == 1 ? 'active' : 'text-gray-400'}">
-                <i class="fas fa-thumbs-up"></i>
-              ${comment.extra__goodReactionPoint}</a>
-              <a href="javascript:void(0);"
-                 onclick="doBadReaction('comment', ${comment.id}, '${rq.currentUri}')"
-                 class="dislike-icon ${comment.usercommentCanReaction == -1 ? 'active' : 'text-gray-400'}">
-                <i class="fas fa-thumbs-down"></i>
-                ${-comment.extra__badReactionPoint}
-              </a>
-            </div>
-
-            <!-- 수정/삭제 버튼 (본인 댓글만) -->
-            <c:if test="${comment.memberId == LoginedMemberId}">
-              <div class="flex space-x-1 ml-2">
-                <a class="btn-back btn btn-ghost btn-xs" href="../comment/doDelete?id=${comment.id}">삭제</a>
-                <a id="editBtn" class="btn-back btn btn-ghost btn-xs" href="javascript:void(0);">수정</a>
-              </div>
-            </c:if>
-          </div>
-
-          <!-- 댓글 수정 폼 (숨김) -->
-          <form id="editForm" class="mt-2 hidden flex space-x-2" action="../comment/doModify" method="POST">
-  <input type="hidden" name="id" value="${comment.id}" />
-  <input class="input input-info input-sm" style="width: 80%;" required name="body" type="text" value="${comment.body}" />
-  <button class="btn-back btn btn-ghost btn-xs" type="submit">수정</button>
-</form>
-        </c:forEach>
-
-        <c:if test="${empty comments}">
-          <div class="text-center text-gray-500 italic p-2">댓글이 없습니다</div>
-        </c:if>
+<div>
+  <c:forEach var="comment" items="${comments}">
+    <div class="comment-row flex items-start space-x-2 relative">
+      <!-- 왼쪽: 프로필 이미지 -->
+      <div class="flex-shrink-0">
+        <img src="${comment.extra__writerProfileImgUrl}" class="rounded-full w-10 h-10 object-cover"/>
       </div>
+
+      <!-- 오른쪽: 닉네임 + 내용 -->
+      <div class="flex-1">
+        <div class="flex items-center space-x-2">
+          <span class="text-sm font-semibold">${comment.extra__writer}</span>
+        </div>
+        <div id="comment-body-${comment.id}" class="text-sm mt-1">${comment.body}</div>
+      </div>
+
+      <!-- 좋아요/싫어요 (오른쪽 상단) -->
+      <div class="absolute right-0 top-0 flex space-x-1 text-xs text-gray-400">
+        <a href="javascript:void(0);"
+           onclick="doGoodReaction('comment', ${comment.id}, '${rq.currentUri}')"
+           class="like-icon ${comment.usercommentCanReaction == 1 ? 'active' : 'text-gray-400'}">
+          <i class="fas fa-thumbs-up"></i> ${comment.extra__goodReactionPoint}
+        </a>
+        <a href="javascript:void(0);"
+           onclick="doBadReaction('comment', ${comment.id}, '${rq.currentUri}')"
+           class="dislike-icon ${comment.usercommentCanReaction == -1 ? 'active' : 'text-gray-400'}">
+          <i class="fas fa-thumbs-down"></i> ${-comment.extra__badReactionPoint}
+        </a>
+      </div>
+
+      <!-- 수정/삭제 버튼 (본인 댓글만) -->
+      <c:if test="${comment.memberId == LoginedMemberId}">
+        <div class="flex space-x-1 ml-2">
+          <a class="btn-back btn btn-ghost btn-xs" href="../comment/doDelete?id=${comment.id}">삭제</a>
+          <a id="editBtn-${comment.id}" class="btn-back btn btn-ghost btn-xs" href="javascript:void(0);">수정</a>
+        </div>
+      </c:if>
+    </div>
+
+    <!-- 댓글 수정 폼 (숨김) -->
+    <form id="editForm-${comment.id}" class="mt-2 hidden flex space-x-2" action="../comment/doModify" method="POST">
+      <input type="hidden" name="id" value="${comment.id}" />
+      <input class="input input-info input-sm" style="width: 80%;" required name="body" type="text" value="${comment.body}" />
+      <button class="btn-back btn btn-ghost btn-xs" type="submit">수정</button>
+    </form>
+
+    <script>
+      document.getElementById("editBtn-${comment.id}")?.addEventListener("click", () => {
+        document.getElementById("editBtn-${comment.id}").style.display = "none";
+        document.getElementById("editForm-${comment.id}").style.display = "flex";
+      });
+    </script>
+  </c:forEach>
+
+  <c:if test="${empty comments}">
+    <div class="text-center text-gray-500 italic p-2">댓글이 없습니다</div>
+  </c:if>
+</div>
     </div>
   </div>
 </section>

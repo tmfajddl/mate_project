@@ -64,7 +64,7 @@
           <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow" 
               style="background-color: #4a90e2;">
             <li><a href="../member/myPage">마이 페이지</a></li>
-            <li><a href="../member/style">스타일 등록</a></li>
+            <li><a href="../member/modifyStyle"">스타일 등록</a></li>
 
             <c:if test="${rq.isLogined()}">
               <li><a onclick="if(confirm('로그아웃 하시겠습니까?') == false) return false;" href="../member/doLogout">로그아웃</a></li>
