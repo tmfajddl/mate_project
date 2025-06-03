@@ -72,7 +72,7 @@ border-radius: 10px;
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script>
-  const API_KEY = "a742b907a44edf2cb751b547e466583e";
+  const API_KEY = "";
 
   function onGeoOk(position) {
     const latitude = position.coords.latitude;
