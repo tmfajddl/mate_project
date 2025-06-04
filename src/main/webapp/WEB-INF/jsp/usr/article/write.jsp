@@ -96,9 +96,8 @@
               <td>
                 <select name="boardId" required>
                   <option value="" selected disabled>게시판을 선택해주세요</option>
-                  <option value="1">공지사항</option>
-                  <option value="2">자유</option>
-                  <option value="3">QnA</option>
+                  <option value="1">자유게시판</option>
+                  <option value="2">분실물</option>
                 </select>
               </td>
             </tr>

@@ -215,7 +215,7 @@ public class UsrMemberController {
 	    // 회원 정보 수정
 	    memberService.modifyMember(loginedId, loginPw, nickname, cellphoneNum, email, introduce, profileImg);
 
-	    return Ut.jsReplace(userCanModifyRd.getResultCode(), userCanModifyRd.getMsg(), "../home/main");
+	    return Ut.jsReplaceNoAlert(userCanModifyRd.getResultCode(), userCanModifyRd.getMsg(), "../home/main");
 	}
 	
 	@RequestMapping("/usr/member/doDelete")

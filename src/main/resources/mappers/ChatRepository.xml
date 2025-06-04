@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.repository.ChatRepository">
+
+  <select id="findByRoomName" resultType="com.example.demo.vo.ChatRoom" parameterType="string">
+    SELECT id, createdDate, updateDate, roomName, createdBy
+    FROM chat_room
+    WHERE roomName = #{roomName}
+  </select>
+
+  <insert id="insertChatRoom" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO chat_room (roomName, createdBy)
+    VALUES (#{roomName}, #{createdBy})
+  </insert>
+  
+      <!-- 메시지 저장 -->
+    <insert id="insertMessage" parameterType="com.example.demo.vo.ChatMessage">
+        INSERT INTO chat_message (roomId, senderId, message, sentDate)
+        VALUES (#{roomId}, #{senderId}, #{message}, #{sentDate})
+    </insert>
+
+    <!-- 채팅방별 메시지 조회 -->
+    <select id="findMessagesByRoomId" parameterType="int" resultType="com.example.demo.vo.ChatMessage">
+        SELECT id, roomId, senderId, message, sentDate
+        FROM chat_message
+        WHERE roomId = #{roomId}
+        ORDER BY sentDate ASC
+    </select>
+    
+    <select id="findChatRoomsByUserId" parameterType="int" resultType="com.example.demo.vo.ChatRoom">
+       SELECT * 
+  FROM chat_room 
+  WHERE roomName LIKE CONCAT('%', #{userId}, '%')
+  ORDER BY createdDate DESC
+    </select>
+    
+    <select id="getParticipants" parameterType="int" resultType="com.example.demo.vo.Member">
+  SELECT m.id, m.nickname
+  FROM member m
+  WHERE m.id IN (
+    SELECT CAST(SUBSTRING_INDEX(roomName, '_', 1) AS UNSIGNED) FROM chat_room WHERE id = #{roomId}
+    UNION
+    SELECT CAST(SUBSTRING_INDEX(roomName, '_', -1) AS UNSIGNED) FROM chat_room WHERE id = #{roomId}
+  )
+</select>
+
+</mapper>

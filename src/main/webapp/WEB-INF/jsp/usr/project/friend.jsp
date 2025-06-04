@@ -28,7 +28,7 @@
     height: 350px;
     min-width: 200px;
     border-radius: 10px;
-    background-color: #f0f8ff;
+    background-color: #b8def2;
     padding: 15px;
     margin: 0 10px 10px 0;
     box-shadow: 2px 2px 6px rgba(0,0,0,0.1);
@@ -124,7 +124,10 @@
                 </c:otherwise>
               </c:choose>
 
-              <button class="chat-btn" type="button" onclick="alert('채팅하기 기능 구현 필요');">채팅하기</button>
+              <button class="chat-btn" type="button"
+    onclick="location.href='/usr/project/chat/start?otherId=${recommend.id}'">
+    채팅하기
+</button>
 
               <div class="nickname">${recommend.nickname}</div>
               <div class="intro">${recommend.introduce}</div>

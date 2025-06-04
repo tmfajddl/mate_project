@@ -58,6 +58,8 @@ public class OpenAiService {
 
             String query = name;
             String imageUrl = naverSearchService.searchImage(query);
+            System.out.println(name);
+            System.out.println(imageUrl);
 
             list.add(new GoodsRecommendationResponse(name, price, reason, imageUrl));
         }

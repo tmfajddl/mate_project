@@ -39,24 +39,29 @@ public class SurveyService {
 		
 	}
 	
-	 public List<Member> recommendFriends(int memberId, int topN) {
-	        // 1️⃣ 내 설문조사 정보 가져오기
-	        Survey mySurvey = surveyRepository.getSurveyById(memberId);
-	        if (mySurvey == null) {
-	            return Collections.emptyList();
-	        }
+	public List<Member> recommendFriends(int memberId, int topN) {
+	    Survey mySurvey = surveyRepository.getSurveyById(memberId);
+	    if (mySurvey == null) {
+	        return Collections.emptyList();
+	    }
 
-	        // 2️⃣ 다른 모든 회원 설문조사 정보 가져오기
-	        List<Survey> allSurveys = surveyRepository.getAllSurveys(memberId);
-	        
-	        // 3️⃣ 점수 계산
-	        List<FriendScore> scoredFriends = new ArrayList<>();
-	        for (Survey otherSurvey : allSurveys) {
-	            if (otherSurvey.getMemberId() == memberId) continue;
+	    List<Survey> allSurveys = surveyRepository.getAllSurveys(memberId);
+
+	    String myMateGender = mySurvey.getMateGender();
+
+	    List<FriendScore> scoredFriends = new ArrayList<>();
+	    for (Survey otherSurvey : allSurveys) {
+	        if (otherSurvey.getMemberId() == memberId) continue;
+
+	        // mateGender 필터: "없음"일 경우 필터 안 함
+	        if (myMateGender != null && !myMateGender.contains("없음")) {
+	            if (otherSurvey.getMateGender() != null && !myMateGender.equals(otherSurvey.getMateGender())) {
+	                continue;
+	            }
+	        }
 
 	            int score = calculateScore(mySurvey, otherSurvey);
 
-	            // Member 정보 가져오기
 	            Member friend = memberRepository.getMemberById(otherSurvey.getMemberId());
 
 	            scoredFriends.add(new FriendScore(friend, score));

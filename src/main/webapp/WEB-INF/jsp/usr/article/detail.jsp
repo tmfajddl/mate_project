@@ -118,7 +118,7 @@ background-color: #4a90e2;
       </div>
 
       <!-- 좋아요/싫어요 (오른쪽 상단) -->
-      <div class="absolute right-0 top-0 flex space-x-1 text-xs text-gray-400">
+      <div class="absolute right-0 bottom-0 flex space-x-1 text-xs text-gray-400">
         <a href="javascript:void(0);"
            onclick="doGoodReaction('comment', ${comment.id}, '${rq.currentUri}')"
            class="like-icon ${comment.usercommentCanReaction == 1 ? 'active' : 'text-gray-400'}">

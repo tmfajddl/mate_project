@@ -37,7 +37,7 @@
           <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow" 
               style="background-color: #4a90e2;">
             <li><a href="${pageContext.request.contextPath}/usr/project/friend">추천 메이트</a></li>
-            <li><a href="${pageContext.request.contextPath}/usr/project/chat">채팅목록</a></li>
+            <li><a href="${pageContext.request.contextPath}/usr/project/chat/room">채팅목록</a></li>
             <li><a href="${pageContext.request.contextPath}/usr/project/goods">추천 굿즈</a></li>
           </ul>
         </div>

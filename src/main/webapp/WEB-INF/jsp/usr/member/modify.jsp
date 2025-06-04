@@ -47,14 +47,28 @@
       </c:otherwise>
     </c:choose>
     
+    <script>
+  function previewProfileImage(input) {
+    if (input.files && input.files[0]) {
+      const reader = new FileReader();
+
+      reader.onload = function(e) {
+        document.getElementById('previewImg').src = e.target.result;
+      };
+
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+</script>
+    
     <div class="text-center mb-4" style="overflow-x: auto; max-width: 100%;">
   <input type="file" name="profileImgFile" accept="image/*" onchange="previewProfileImage(this)" style="max-width: 100%;"/>
 </div>
     
     <div style="margin-top: 15px; width: 100%; text-align: center;">
       <strong>자기소개</strong>
-      <p style="margin-top: 5px; font-size: 0.9rem; color: #333; word-break: break-word;">
-        ${member.introduce}
+
+          <input class="input input-info input-sm w-full" name="introduce" value="${member.introduce}" type="text" autocomplete="off" placeholder="자기소개 입력" />
       </p>
     </div>
   </div>

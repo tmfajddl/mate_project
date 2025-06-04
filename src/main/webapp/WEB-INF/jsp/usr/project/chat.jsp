@@ -3,95 +3,171 @@
 
 <%@ include file="../common/head.jspf"%>
 
-<!-- FontAwesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
-<!-- Reaction 아이콘 색상 -->
 <style>
-  .like-icon.active { color: #6a71f7; }
-  .dislike-icon.active { color: #fa5f81; }
-  .comment-row {
-    border-bottom: 2px solid #bfdbfe; /* bg-blue-200와 같은 색 */
-    padding: 8px 0;
+  /* 채팅방 박스: 화면 높이 80% */
+  .chat-container {
+    background-color: rgba(255, 255, 255, 0.7); /* 반투명 흰색 */
+    border-radius: 10px;
+    padding: 16px;
+    min-height: 80vh;
+    display: flex;
+    flex-direction: column;
   }
+
+  /* 채팅방 목록 */
+  .chat-list {
+    background-color: #e0f2fe;
+    border-radius: 10px;
+    padding: 10px;
+  }
+  .chat-item {
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 5px;
+    margin-bottom: 4px;
+  }
+  .chat-item:hover {
+    background-color: #bae6fd;
+  }
+  .chat-item.active {
+    background-color: #7dd3fc;
+    font-weight: bold;
+  }
+
+  /* 메시지 영역: 스크롤 처리 */
+  .chat-messages {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 10px;
+    flex-grow: 1;
+    overflow-y: auto;
+    margin-bottom: 12px;
+  }
+
+  /* 말풍선 기본 스타일 */
+  .message {
+    max-width: 30%;
+    padding:0 5px;
+    margin-bottom: 10px;
+    border-radius: 20px;
+    position: relative;
+    clear: both;
+    word-wrap: break-word;
+    font-size: 14px;
+    text-align: center;
+  }
+
+  /* 내가 보낸 메시지 (오른쪽 정렬, 파란색 말풍선) */
+  .message.mine {
+    background-color: #7dd3fc;
+    color: black;
+    margin-left: auto;
+    
+  }
+  .message.mine::after {
+    content: "";
+    position: absolute;
+    right: -10px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-width: 8px 0 8px 10px;
+    border-style: solid;
+    border-color: transparent transparent transparent #7dd3fc;
+  }
+
+  /* 상대방 메시지 (왼쪽 정렬, 회색 말풍선) */
+  .message.other {
+    background-color: #e5e7eb;
+    color: black;
+    margin-right: auto;
+  }
+  .message.other::after {
+    content: "";
+    position: absolute;
+    left: -10px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-width: 8px 10px 8px 0;
+    border-style: solid;
+    border-color: transparent #e5e7eb transparent transparent;
+  }
+
+  /* 보낸 시간 작게 */
+  .message .time {
+    font-size: 10px;
+    color: #999;
+    margin-top: 4px;
+    display: block;
+    text-align: right;
+  }
+
+  /* 전송 버튼 */
   .btn-back {
-    background: none;
+    background-color: #82c3f5;
     border: none;
     cursor: pointer;
-    color: black;
+    color: #fff;
     padding: 4px 10px;
     border-radius: 5px;
-    background-color: #82c3f5;
   }
-
-  /* 뒤로가기 버튼에 마우스 올리면 테이블 행 호버 색과 같게 */
   .btn-back:hover {
     background-color: #4a90e2;
-  }
-
-  form input.input {
-    width: 90%;
-    box-sizing: border-box;
   }
 </style>
 
 <body class="m-0 h-full font-sans">
 
-<!-- Hero Section: 배경 이미지 + 연한 하늘색 오버레이 -->
 <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed relative flex items-start justify-center p-8"
          style="background-image: url('/images/bg.jpg');">
 
-  <!-- 연한 하늘색 오버레이 -->
   <div class="absolute inset-0 bg-blue-100 bg-opacity-70"></div>
 
-  <!-- 2-Column 레이아웃 (댓글 왼쪽, 본문 오른쪽으로 순서 변경) -->
-  <div class="relative flex w-full max-w-6xl">
+  <div class="relative flex w-full max-w-6xl gap-4">
 
-    <!-- 왼쪽: 댓글 영역 -->
-    <div class="w-1/2 p-4">
-      <div class="text-2xl font-bold mb-1">댓글 목록</div>
-
-      <!-- 댓글 목록 -->
-      <div>
-        <c:forEach var="comment" items="${comments}">
-          <div class="comment-row flex justify-between items-center">
-            <div class="text-sm font-semibold">${comment.extra__writer}</div>
-            <div id="comment-body-${comment.id}" class="flex-1 px-4">${comment.body}</div>
-
-            <!-- 수정/삭제 버튼 (본인 댓글만) -->
-              <div class="flex space-x-1 ml-2">
-                <a class="btn-back btn btn-ghost btn-xs" href="../comment/doDelete?id=${comment.id}">삭제</a>
-              </div>
-          </div>
-        </c:forEach>
-
-        <c:if test="${empty comments}">
-          <div class="text-center text-gray-500 italic p-2">채팅이 없습니다</div>
-        </c:if>
-      </div>
+    <!-- 왼쪽: 채팅방 목록 -->
+    <div class="w-1/3 chat-list">
+      <div class="text-xl font-bold mb-2">채팅방 목록</div>
+      <c:forEach var="room" items="${chatRooms}">
+        <div class="chat-item ${room.id == selectedRoomId ? 'active' : ''}"
+             onclick="location.href='/usr/project/chat/room?roomId=${room.id}'">
+          ${room.otherMemberNickname}
+        </div>
+      </c:forEach>
+      <c:if test="${empty chatRooms}">
+        <div class="italic text-gray-500">참여 중인 채팅방이 없습니다</div>
+      </c:if>
     </div>
 
-    <!-- 오른쪽: 게시글 정보 -->
-    <div class="w-1/2 p-4 flex flex-col">
-      <!-- 제목과 작성자 -->
-      <div class="mb-4">
-        <div class="text-2xl font-bold mb-1">닉네임</div>
+    <!-- 오른쪽: 채팅방 화면 -->
+    <div class="w-2/3 chat-container">
+      <div class="text-xl font-bold mb-2">채팅방</div>
+
+      <div class="flex-1 chat-messages mb-4">
+        <c:choose>
+          <c:when test="${not empty messages}">
+            <c:forEach var="msg" items="${messages}">
+              <div class="message ${msg.senderId == LoginedMemberId ? 'mine' : 'other'}">
+                <strong>${msg.senderName}</strong><br/>
+                ${msg.message}
+                <span class="time">${msg.sentDate}</span>
+              </div>
+            </c:forEach>
+          </c:when>
+          <c:otherwise>
+            <div class="italic text-gray-500 h-full flex items-center justify-center">
+              메시지가 없습니다
+            </div>
+          </c:otherwise>
+        </c:choose>
       </div>
 
-<!-- 본문 내용 (50% 높이 고정) -->
-<div class="flex-1 bg-white bg-opacity-50 rounded-lg shadow p-4 overflow-auto"
-     style="height: 50%;">
-</div>
-
-
-
-
-            <!-- 채팅 작성 -->
-      <c:if test="${LoginedMemberId != 0}">
-        <form class="mb-4" action="../comment/doWrite" method="POST">
-          <input type="hidden" name="articleId" value="${param.id}" />
-          <input class="input input-info input-sm" required name="body" type="text" placeholder="댓글을 입력하세요" />
-          <button class="btn-back btn btn-ghost">등록</button>
+      <c:if test="${LoginedMemberId != null && selectedRoomId != null}">
+        <form action="/usr/project/chat/send" method="POST" class="flex">
+          <input type="hidden" name="roomId" value="${selectedRoomId}" />
+          <input class="flex-1 border rounded px-2 py-1" name="message" placeholder="메시지를 입력하세요" required />
+          <button type="submit" class="btn-back ml-2">전송</button>
         </form>
       </c:if>
     </div>

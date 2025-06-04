@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.example.demo.dto.GoodsRecommendationResponse;
 import com.example.demo.dto.PlaceRecommendationResponse;
 import com.example.demo.service.KboCrawlerService;
+import com.example.demo.service.NaverSearchService;
 import com.example.demo.service.OpenAiService;
 import com.example.demo.vo.Rq;
 

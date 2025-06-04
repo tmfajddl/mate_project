@@ -70,7 +70,7 @@ public class SurveyController {
         }
 
         // 스타일 입력 후, 친구 추천 화면으로 리다이렉트
-        return "/usr/project/friend";
+        return "redirect:/usr/project/friend";
     }
 
     @RequestMapping("/usr/project/friend")
