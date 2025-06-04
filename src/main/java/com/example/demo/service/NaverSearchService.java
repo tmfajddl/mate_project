@@ -1,59 +1,69 @@
 package com.example.demo.service;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;  // 추가
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
+
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class NaverSearchService {
 
-    @Value("${naver.client-id}")
-    private String clientId;
-
-    @Value("${naver.client-secret}")
-    private String clientSecret;
-
-    private final RestTemplate restTemplate = new RestTemplate();
-
     public String searchImage(String query) {
+        String imageUrl = "";
+        WebDriver driver = null;
+
         try {
+            System.setProperty("webdriver.chrome.driver", "C:\\chromedriver\\chromedriver.exe");
+
+            // headless 옵션 추가
+            ChromeOptions options = new ChromeOptions();
+            options.addArguments("--headless");  // 브라우저 UI 없이 실행
+            options.addArguments("--disable-gpu"); // GPU 사용 안함 (일부 환경에서 필요)
+            options.addArguments("--no-sandbox"); // 보안 옵션 비활성화 (리눅스 등에서 필요)
+            options.addArguments("--disable-dev-shm-usage"); // 메모리 제한 해결
+
+            driver = new ChromeDriver(options);
+
             String encodedQuery = URLEncoder.encode(query, StandardCharsets.UTF_8.toString());
-            String url = "https://openapi.naver.com/v1/search/image?query=" + encodedQuery + "&sort=sim&filter=medium&display=10";
+            String searchUrl = "https://search.naver.com/search.naver?where=image&sm=tab_jum&query=" + encodedQuery;
 
-            HttpHeaders headers = new HttpHeaders();
-            headers.set("X-Naver-Client-Id", clientId);
-            headers.set("X-Naver-Client-Secret", clientSecret);
+            driver.get(searchUrl);
 
-            HttpEntity<String> entity = new HttpEntity<>(headers);
-            ResponseEntity<Map> response = restTemplate.exchange(url, HttpMethod.GET, entity, Map.class);
+            // 이미지가 로딩될 시간을 줌
+            Thread.sleep(2000);
 
-            List<Map<String, Object>> items = (List<Map<String, Object>>) response.getBody().get("items");
+            // 이미지 태그 찾기
+            List<WebElement> imageElements = driver.findElements(By.cssSelector("img._fe_image_tab_content_thumbnail_image"));
 
-            if (items != null && !items.isEmpty()) {
-                for (Map<String, Object> item : items) {
-                    String title = (String) item.get("title");
-                    String link = (String) item.get("link");
+            for (WebElement imageElement : imageElements) {
+                String src = imageElement.getAttribute("src");
+                if (src != null && !src.isEmpty()) {
+                    src = src.replace("&amp;", "&");
+                    String alt = imageElement.getAttribute("alt");
+                    System.out.println("alt: " + alt);
+                    System.out.println("src: " + src);
 
-                    // 간단한 필터링: 제목에 음식 키워드 포함된 경우
-                    if (title != null && (
-                            title.contains("음식") || title.contains("요리") || title.contains("식당") ||
-                            title.contains("맛집") || title.contains("메뉴") || title.contains("사진"))
-                    ) {
-                        return link;
+                    if (alt == null || (!alt.contains("로고") && !alt.contains("스티커"))) {
+                        imageUrl = src;
+                        break;
                     }
                 }
-                // 필터링된 게 없으면 첫 번째 링크 반환
-                return items.get(0).get("link").toString();
             }
+
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            if (driver != null) {
+                driver.quit();
+            }
         }
 
-        return "";
+        return imageUrl;
     }
 }

@@ -58,8 +58,6 @@ public class OpenAiService {
 
             String query = name;
             String imageUrl = naverSearchService.searchImage(query);
-            System.out.println(name);
-            System.out.println(imageUrl);
 
             list.add(new GoodsRecommendationResponse(name, price, reason, imageUrl));
         }
@@ -77,7 +75,7 @@ public class OpenAiService {
             systemPrompt = "다음 질문에 대해 총 5개의 맛집 이름, 대표 메뉴, 선정 이유, 주소를 각각 한 줄로 명확히 답변해줘. 선정이유는 야구선수 누가 방문했는지 알아야해. 포맷은 다음과 같아:\n" +
                     "이름: XXX\n메뉴: XXX\n선정이유: XXX\n주소: XXX";
         } else if ("굿즈".equals(mode)) {
-            systemPrompt = "다음 질문에 대해 그 팀에 해당하는 총 5개의 굿즈 이름, 가격, 선정 이유를 각각 한 줄로 명확히 답변해줘. 선정이유는 해당 팀과 관련이 있어야해. 포맷은 다음과 같아:\n" +
+            systemPrompt = "다음 질문에 대해 해당 구단의 굿즈샵에 들어가서 총 5개의 상품을 살거야. 사면 좋은 상품의 정확한 이름, 가격, 선정 이유를 각각 한 줄로 명확히 답변해줘. 선정이유는 해당 팀과 관련이 있어야해. 포맷은 다음과 같아:\n" +
                     "이름: XXX\n가격: XXX\n선정이유: XXX";
         }
 
