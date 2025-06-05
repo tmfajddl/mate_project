@@ -24,12 +24,12 @@
   color: inline-block;
   padding: 4px 10px;
   border-radius: 5px;
-  background-color: #82c3f5;
+  background-color: #f7ecdc;
 }
 
 /* 뒤로가기 버튼에 마우스 올리면 테이블 행 호버 색과 같게 */
 .btn-back:hover {
-background-color: #4a90e2;
+background-color: #f2d8b1;
 }
 
 .menu2 > div a {
@@ -51,7 +51,7 @@ background-color: #4a90e2;
 }
 
 .card {
-  background-color: #82c3f5;
+  background-color: #f7ecdc;
   border-radius: 12px;
   width: 250px;
   flex-shrink: 0; /* 카드 크기 고정 */
@@ -79,27 +79,89 @@ background-color: #4a90e2;
 .card p {
   margin: 4px 0;
   font-size: 0.9rem;
+  white-space: normal; /* 줄바꿈 허용 */
+  word-wrap: break-word; /* 긴 단어도 줄바꿈 */
+}
+
+/* 스피너 스타일 */
+.spinner {
+  border: 4px solid #f3f3f3; /* 회색 테두리 */
+  border-top: 4px solid #f2d8b1; /* 주황 테두리 */
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  animation: spin 1s linear infinite; /* 회전 애니메이션 */
+  display: inline-block;
+  margin-bottom: 10px;
+}
+
+/* 회전 애니메이션 정의 */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 </style>
 
-  <body class="m-0 h-full font-sans">
+  <body class="m-0 h-full font-sans" style="background-color: #f7f0e9;">
 
     <!-- Hero Section (100% 화면 채움 + 배경 이미지) -->
-    <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black" style="background-image: url('/images/bg.jpg');">
+      <c:choose>
+    <c:when test="${rq.loginedTeam == null}">
+        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
+                 style="background-image: url('/images/bg12.png') 25 25;">
+    </c:when>
+    <c:when test="${rq.loginedTeam eq '한화 이글스'}">
+        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
+                 style="background-image: url('/images/bg21.png'); cursor: url('/images/cursor2.png') 25 25, auto;">
+    </c:when>
+    <c:when test="${rq.loginedTeam eq '두산 베어스'}">
+        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
+                 style="background-image: url('/images/bg22.png') cursor: url('/images/cursor3.png') 25 25, auto;;">
+    </c:when>
+        <c:when test="${rq.loginedTeam eq '롯데 자이언츠'}">
+        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
+                 style="background-image: url('/images/bg23.png') cursor: url('/images/cursor4.png') 25 25, auto;;">
+    </c:when>
+        <c:when test="${rq.loginedTeam eq 'LG 트윈스'}">
+        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
+                 style="background-image: url('/images/bg24.png'); cursor: url('/images/cursor5.png') 25 25, auto;">
+    </c:when>
+        <c:when test="${rq.loginedTeam eq '삼성 라이온즈'}">
+        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
+                 style="background-image: url('/images/bg25.png'); cursor: url('/images/cursor6.png') 25 25, auto;">
+    </c:when>
+        <c:when test="${rq.loginedTeam eq '키움 히어로즈'}">
+        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
+                 style="background-image: url('/images/bg26.png'); cursor: url('/images/cursor7.png') , auto;">
+    </c:when>
+        <c:when test="${rq.loginedTeam eq 'SSG 랜더스'}">
+        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
+                 style="background-image: url('/images/bg27.png'); cursor: url('/images/cursor1.png') 25 25, auto;">
+    </c:when>
+        <c:when test="${rq.loginedTeam eq 'NC 다이노스'}">
+        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
+         style="background-image: url('/images/bg28.png'); cursor: url('/images/cursor8.png') 25 25, auto;">
+    </c:when>
+        <c:when test="${rq.loginedTeam eq 'KT 위즈'}">
+        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
+                 style="background-image: url('/images/bg29.png'); cursor: url('/images/cursor9.png') 25 25, auto;">
+    </c:when>
+        <c:when test="${rq.loginedTeam eq 'KIA 타이거즈'}">
+        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-white"
+                 style="background-image: url('/images/bg30.png'); cursor: url('/images/cursor10.png') 25 25, auto;">
+    </c:when>
+</c:choose>
     <div class="main">
     
     <div class="body" padding: 20px;">
   <h2>굿즈 추천</h2>
-  <div class="card-container">
-    <c:forEach var="good" items="${goods}">
-      <div class="card">
-        <img src="${good.imageUrl}" alt="${good.name}" />
-        <h3>${good.name}</h3>
-        <p><strong>가격:</strong> ${good.price}</p>
-        <p><strong>추천이유:</strong> ${good.reason}</p>
-      </div>
-    </c:forEach>
+  <!-- 로딩 메시지 -->
+    <div id="loading" style="text-align: center; margin: 20px 0;">
+  <div class="spinner"></div>
+  <p>AI가 데이터를 불러오는 중입니다...</p>
+</div>
+  <div class="card-container" id="cardContainer">
   </div>
 </div>
 	</div>
@@ -107,6 +169,40 @@ background-color: #4a90e2;
   <button class="btn-back btn btn-ghost" type="button" onclick="history.back();">뒤로가기</button>
 </div>
     </section>
+    
+    <!-- AJAX로 데이터 로딩 -->
+  <script>
+    $(document).ready(function(){
+      $.ajax({
+        url: "/usr/project/getGoodsRecommendations", // 새로 만든 데이터 엔드포인트
+        method: "GET",
+        dataType: "json",
+        success: function(data) {
+        	  var cardContainer = $("#cardContainer");
+        	  cardContainer.empty();
+
+        	  data.forEach(function(item) {
+        	    var card = $("<div>").addClass("card");
+        	    var img = $("<img>").attr("src", item.imageUrl).attr("alt", item.name);
+        	    var name = $("<h3>").text(item.name);
+
+        	    // 각각 p 태그 생성
+        	    var reason = $("<p>").append($("<strong>").text("가격:")).append(" " + item.price);
+        	    var address = $("<p>").append($("<strong>").text("추천이유:")).append(" " + item.reason);
+
+        	    card.append(img, name, reason, address);
+        	    cardContainer.append(card);
+        	  });
+
+        	  cardContainer.show();
+        	  $("#loading").hide();
+        	},
+        error: function() {
+          $("#loading").text("데이터를 불러오지 못했습니다.");
+        }
+      });
+    });
+  </script>
 
   </body>
 </html>

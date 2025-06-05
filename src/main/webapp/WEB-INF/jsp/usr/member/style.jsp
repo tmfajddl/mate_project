@@ -7,10 +7,10 @@
 <html lang="en">
 <style>
   option {
-    background-color: rgba(242, 247, 247, 0.8);
+    background-color: #f7ecdc;
   }
   option:hover {
-    background-color: #79afe8;
+    background-color: #f2d8b1;
   }
   .btn-back {
     background: none;
@@ -19,10 +19,10 @@
     color: black;
     padding: 4px 10px;
     border-radius: 5px;
-    background-color: #82c3f5;
+    background-color: #f7ecdc;
   }
   .btn-back:hover {
-    background-color: #4a90e2;
+    background-color: #f2d8b1;
   }
   label {
     display: block;
@@ -30,12 +30,56 @@
   }
 </style>
 
-<body class="m-0 h-full font-sans">
+<body class="m-0 h-full font-sans" style="background-color: #f7f0e9;">
 
-  <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
-    style="background-image: url('/images/bg.jpg');">
+  <c:choose>
+    <c:when test="${rq.loginedTeam == null}">
+        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
+                 style="background-image: url('/images/bg12.png') 25 25;">
+    </c:when>
+    <c:when test="${rq.loginedTeam eq '한화 이글스'}">
+        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
+                 style="background-image: url('/images/bg21.png'); cursor: url('/images/cursor2.png') 25 25, auto;">
+    </c:when>
+    <c:when test="${rq.loginedTeam eq '두산 베어스'}">
+        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
+                 style="background-image: url('/images/bg22.png') cursor: url('/images/cursor3.png') 25 25, auto;;">
+    </c:when>
+        <c:when test="${rq.loginedTeam eq '롯데 자이언츠'}">
+        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
+                 style="background-image: url('/images/bg23.png') cursor: url('/images/cursor4.png') 25 25, auto;;">
+    </c:when>
+        <c:when test="${rq.loginedTeam eq 'LG 트윈스'}">
+        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
+                 style="background-image: url('/images/bg24.png'); cursor: url('/images/cursor5.png') 25 25, auto;">
+    </c:when>
+        <c:when test="${rq.loginedTeam eq '삼성 라이온즈'}">
+        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
+                 style="background-image: url('/images/bg25.png'); cursor: url('/images/cursor6.png') 25 25, auto;">
+    </c:when>
+        <c:when test="${rq.loginedTeam eq '키움 히어로즈'}">
+        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
+                 style="background-image: url('/images/bg26.png'); cursor: url('/images/cursor7.png') , auto;">
+    </c:when>
+        <c:when test="${rq.loginedTeam eq 'SSG 랜더스'}">
+        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
+                 style="background-image: url('/images/bg27.png'); cursor: url('/images/cursor1.png') 25 25, auto;">
+    </c:when>
+        <c:when test="${rq.loginedTeam eq 'NC 다이노스'}">
+        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
+         style="background-image: url('/images/bg28.png'); cursor: url('/images/cursor8.png') 25 25, auto;">
+    </c:when>
+        <c:when test="${rq.loginedTeam eq 'KT 위즈'}">
+        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
+                 style="background-image: url('/images/bg29.png'); cursor: url('/images/cursor9.png') 25 25, auto;">
+    </c:when>
+        <c:when test="${rq.loginedTeam eq 'KIA 타이거즈'}">
+        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-white"
+                 style="background-image: url('/images/bg30.png'); cursor: url('/images/cursor10.png') 25 25, auto;">
+    </c:when>
+</c:choose>
 
-    <div style="width: 35%; border-radius: 10px; background-color: rgba(242, 247, 247, 0.8); padding: 15px; border: 3px dashed red;">
+    <div style="width: 35%; border-radius: 10px; background-color: rgb(242, 247, 247); padding: 15px; border: 3px dashed red;">
       <form action="/usr/member/insertStyle" method="post">
 
         <!-- ✅ 옵션이 5개인 체크박스 -->

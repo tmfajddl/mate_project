@@ -7,17 +7,93 @@
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <style>
     option {
-      background-color: rgba(242, 247, 247, 0.8);
+      background-color: #f7ecdc;
     }
     option:hover {
-      background-color: #79afe8;
+      background-color: #f2d8b1;
     }
+      /* input 통일 스타일 */
+  input.input {
+    width: 90%;
+    box-sizing: border-box;
+    padding: 6px 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f7f0e9; /* 배경색 통일 */
+    color: black; /* 글자색 통일 */
+    outline: none;
+  }
+
+  input.input:focus {
+    border-color: #f2d8b1; /* 포커스 시 테두리 색상 */
+    background-color: #fff; /* 포커스 시 배경색 살짝 밝게 */
+  }
+  
+    .btn-back {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: black;
+  padding: 4px 10px;
+  border-radius: 5px;
+  background-color: #f7ecdc;
+}
+
+/* 뒤로가기 버튼에 마우스 올리면 테이블 행 호버 색과 같게 */
+.btn-back:hover {
+background-color: #f2d8b1;
+}
   </style>
 </head>
 
-<body class="m-0 h-full font-sans">
-  <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black" style="background-image: url('/images/bg.jpg');">
-    <div style="width: 30%; border-radius: 10px; background-color: rgba(242, 247, 247,0.8); padding: 15px; border: 3px dashed red;">
+<body class="m-0 h-full font-sans" style="background-color: #f7f0e9;">
+  <c:choose>
+    <c:when test="${rq.loginedTeam == null}">
+        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
+                 style="background-image: url('/images/bg12.png') 25 25;">
+    </c:when>
+    <c:when test="${rq.loginedTeam eq '한화 이글스'}">
+        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
+                 style="background-image: url('/images/bg21.png'); cursor: url('/images/cursor2.png') 25 25, auto;">
+    </c:when>
+    <c:when test="${rq.loginedTeam eq '두산 베어스'}">
+        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
+                 style="background-image: url('/images/bg22.png') cursor: url('/images/cursor3.png') 25 25, auto;;">
+    </c:when>
+        <c:when test="${rq.loginedTeam eq '롯데 자이언츠'}">
+        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
+                 style="background-image: url('/images/bg23.png') cursor: url('/images/cursor4.png') 25 25, auto;;">
+    </c:when>
+        <c:when test="${rq.loginedTeam eq 'LG 트윈스'}">
+        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
+                 style="background-image: url('/images/bg24.png'); cursor: url('/images/cursor5.png') 25 25, auto;">
+    </c:when>
+        <c:when test="${rq.loginedTeam eq '삼성 라이온즈'}">
+        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
+                 style="background-image: url('/images/bg25.png'); cursor: url('/images/cursor6.png') 25 25, auto;">
+    </c:when>
+        <c:when test="${rq.loginedTeam eq '키움 히어로즈'}">
+        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
+                 style="background-image: url('/images/bg26.png'); cursor: url('/images/cursor7.png') , auto;">
+    </c:when>
+        <c:when test="${rq.loginedTeam eq 'SSG 랜더스'}">
+        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
+                 style="background-image: url('/images/bg27.png'); cursor: url('/images/cursor1.png') 25 25, auto;">
+    </c:when>
+        <c:when test="${rq.loginedTeam eq 'NC 다이노스'}">
+        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
+         style="background-image: url('/images/bg28.png'); cursor: url('/images/cursor8.png') 25 25, auto;">
+    </c:when>
+        <c:when test="${rq.loginedTeam eq 'KT 위즈'}">
+        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
+                 style="background-image: url('/images/bg29.png'); cursor: url('/images/cursor9.png') 25 25, auto;">
+    </c:when>
+        <c:when test="${rq.loginedTeam eq 'KIA 타이거즈'}">
+        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-white"
+                 style="background-image: url('/images/bg30.png'); cursor: url('/images/cursor10.png') 25 25, auto;">
+    </c:when>
+</c:choose>
+    <div style="width: 30%; border-radius: 10px; background-color: rgb(242, 247, 247); padding: 15px; border: 3px dashed red;">
       <form action="../member/doJoin" method="POST">
         <table class="table" cellpadding="3" style="width: 90%; color: black; margin: 0 auto;">
           <tbody style="text-align: center;">
@@ -40,7 +116,7 @@
             <tr>
               <th>아이디</th>
               <td>
-                <input id="loginIdInput" class="input input-info input-sm" name="loginId" autocomplete="off" type="text" placeholder="아이디 입력" />
+                <input id="loginIdInput" class="input input-sm" name="loginId" autocomplete="off" type="text" placeholder="아이디 입력" />
                 <br>
                 <span id="idCheckMsg" style="font-size: 0.9rem;"></span>
               </td>
@@ -48,13 +124,13 @@
             <tr>
               <th>비밀번호</th>
               <td>
-                <input class="input input-info input-sm" name="loginPw" autocomplete="off" type="text" placeholder="비밀번호 입력" />
+                <input class="input input-sm" name="loginPw" autocomplete="off" type="text" placeholder="비밀번호 입력" />
               </td>
             </tr>
             <tr>
   <th>비밀번호 확인</th>
   <td>
-    <input class="input input-info input-sm" name="loginPw2" autocomplete="off" type="text" placeholder="비밀번호 확인" />
+    <input class="input input-sm" name="loginPw2" autocomplete="off" type="text" placeholder="비밀번호 확인" />
     <br>
     <span id="pwCheckMsg" style="font-size: 0.9rem;"></span>
   </td>
@@ -62,7 +138,7 @@
             <tr>
               <th>이름</th>
               <td>
-                <input class="input input-info input-sm" name="name" autocomplete="off" type="text" placeholder="이름 입력" />
+                <input class="input input-sm" name="name" autocomplete="off" type="text" placeholder="이름 입력" />
               </td>
             </tr>
             <tr>
@@ -75,25 +151,25 @@
             <tr>
               <th>닉네임</th>
               <td>
-                <input class="input input-info input-sm" name="nickname" autocomplete="off" type="text" placeholder="닉네임 입력" />
+                <input class="input input-sm" name="nickname" autocomplete="off" type="text" placeholder="닉네임 입력" />
               </td>
             </tr>
             <tr>
               <th>전화번호</th>
               <td>
-                <input class="input input-info input-sm" name="cellphoneNum" autocomplete="off" type="text" placeholder="전화번호 입력" />
+                <input class="input input-sm" name="cellphoneNum" autocomplete="off" type="text" placeholder="전화번호 입력" />
               </td>
             </tr>
             <tr>
               <th>이메일</th>
               <td>
-                <input class="input input-info input-sm" name="email" autocomplete="off" type="text" placeholder="이메일 입력" />
+                <input class="input input-sm" name="email" autocomplete="off" type="text" placeholder="이메일 입력" />
               </td>
             </tr>
             <tr>
               <th></th>
               <td>
-                <button type="submit" class="mt-2 px-2 py-2 bg-blue-500 hover:bg-blue-600 rounded text-white font-semibold transition">회원가입</button>
+                <button type="submit" class="btn-back">회원가입</button>
               </td>
             </tr>
           </tbody>

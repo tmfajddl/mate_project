@@ -7,7 +7,7 @@
     <style>
       /* 배경에 연한 하늘색 반투명 오버레이 */
       .overlay {
-        background-color: rgba(173, 216, 230, 0.6); /* 연한 하늘색 */
+        background-color: rgba(247, 246, 245, 0.6); /* 연한 하늘색 */
         position: absolute;
         top: 0;
         left: 0;
@@ -51,17 +51,17 @@
       }
 
       thead {
-        background-color: #d0e7f9;
+        background-color: #f7ecdc;
       }
 
       tbody tr:hover {
-        background-color: #d0e7f9;
+        background-color: #f7ecdc;
       }
 
       /* 페이지네이션 스타일 */
       .pagination a {
         margin: 0 5px;
-        color: #1d4ed8;
+        color: black;
       }
       .left-controls {
   justify-content: flex-start; /* 왼쪽 정렬 */
@@ -76,18 +76,64 @@
   color: black;
   padding: 4px 10px;
   border-radius: 5px;
-  background-color: #82c3f5;
+  background-color: #f7ecdc;
 }
 
 /* 뒤로가기 버튼에 마우스 올리면 테이블 행 호버 색과 같게 */
 .btn-back:hover {
-background-color: #4a90e2;
+background-color: #f2d8b1;
 }
+
     </style>
   </head>
 
-  <body class="m-0 h-screen font-sans">
-    <section class="h-screen relative flex flex-col items-center justify-start text-white" style="background-image: url('/images/bg.jpg'); background-size: cover; background-position: center;">
+  <body class="m-0 font-sans" style="background-color: #f7f0e9;">
+     <c:choose>
+    <c:when test="${rq.loginedTeam == null}">
+        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
+                 style="background-image: url('/images/bg12.png') 25 25; position: relative;">
+    </c:when>
+    <c:when test="${rq.loginedTeam eq '한화 이글스'}">
+        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
+                 style="background-image: url('/images/bg21.png'); cursor: url('/images/cursor2.png') 25 25, auto; position: relative;">
+    </c:when>
+    <c:when test="${rq.loginedTeam eq '두산 베어스'}">
+        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
+                 style="background-image: url('/images/bg22.png') cursor: url('/images/cursor3.png') 25 25, auto; position: relative;">
+    </c:when>
+        <c:when test="${rq.loginedTeam eq '롯데 자이언츠'}">
+        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
+                 style="background-image: url('/images/bg23.png') cursor: url('/images/cursor4.png') 25 25, auto; position: relative;">
+    </c:when>
+        <c:when test="${rq.loginedTeam eq 'LG 트윈스'}">
+        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
+                 style="background-image: url('/images/bg24.png'); cursor: url('/images/cursor5.png') 25 25, auto;">
+    </c:when>
+        <c:when test="${rq.loginedTeam eq '삼성 라이온즈'}">
+        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
+                 style="background-image: url('/images/bg25.png'); cursor: url('/images/cursor6.png') 25 25, auto; position: relative;">
+    </c:when>
+        <c:when test="${rq.loginedTeam eq '키움 히어로즈'}">
+        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
+                 style="background-image: url('/images/bg26.png'); cursor: url('/images/cursor7.png') 25 25, auto; position: relative;">
+    </c:when>
+        <c:when test="${rq.loginedTeam eq 'SSG 랜더스'}">
+        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
+                 style="background-image: url('/images/bg27.png'); cursor: url('/images/cursor1.png') 25 25, auto; position: relative;">
+    </c:when>
+        <c:when test="${rq.loginedTeam eq 'NC 다이노스'}">
+        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
+         style="background-image: url('/images/bg28.png'); cursor: url('/images/cursor8.png') 25 25, auto; position: relative;" >
+    </c:when>
+        <c:when test="${rq.loginedTeam eq 'KT 위즈'}">
+        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
+                 style="background-image: url('/images/bg29.png'); cursor: url('/images/cursor9.png') 25 25, auto; position: relative;">
+    </c:when>
+        <c:when test="${rq.loginedTeam eq 'KIA 타이거즈'}">
+        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-white"
+                 style="background-image: url('/images/bg30.png'); cursor: url('/images/cursor10.png') 25 25, auto; position: relative;">
+    </c:when>
+</c:choose>
       
       <!-- 연한 하늘색 오버레이 -->
       <div class="overlay"></div>
@@ -134,7 +180,7 @@ background-color: #4a90e2;
                 <td>${article.id}</td>
                 <td>${article.regDate.substring(0,10)}</td>
                 <td>
-                  <a class="hover:underline text-blue-600" href="detail?id=${article.id}">${article.title}</a>
+                  <a class="hover:underline text-black-600" href="detail?id=${article.id}">${article.title}</a>
                 </td>
                 <td>${article.extra__writer}</td>
                 <td>${article.view}</td>

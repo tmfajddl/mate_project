@@ -6,10 +6,10 @@
 <html lang="en">
 <style>
   option {
-    background-color: rgba(242, 247, 247, 0.8);
+    background-color: #f7ecdc;
   }
   option:hover {
-    background-color: #79afe8;
+    background-color: #f2d8b1;
   }
   .btn-back {
     background: none;
@@ -18,19 +18,81 @@
     color: black;
     padding: 4px 10px;
     border-radius: 5px;
-    background-color: #82c3f5;
+    background-color: #f7ecdc;
   }
   .btn-back:hover {
-    background-color: #4a90e2;
+    background-color: #f2d8b1;
+  }
+  
+    /* input 통일 스타일 */
+  input.input {
+    width: 90%;
+    box-sizing: border-box;
+    padding: 6px 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f7f0e9; /* 배경색 통일 */
+    color: black; /* 글자색 통일 */
+    outline: none;
+  }
+
+  input.input:focus {
+    border-color: #f2d8b1; /* 포커스 시 테두리 색상 */
+    background-color: #fff; /* 포커스 시 배경색 살짝 밝게 */
   }
 </style>
 
-<body class="m-0 h-full font-sans">
+<body class="m-0 h-full font-sans" style="background-color: #f7f0e9;">
 
-  <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black" style="background-image: url('/images/bg.jpg');">
+  <c:choose>
+    <c:when test="${rq.loginedTeam == null}">
+        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
+                 style="background-image: url('/images/bg12.png') 25 25;">
+    </c:when>
+    <c:when test="${rq.loginedTeam eq '한화 이글스'}">
+        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
+                 style="background-image: url('/images/bg21.png'); cursor: url('/images/cursor2.png') 25 25, auto;">
+    </c:when>
+    <c:when test="${rq.loginedTeam eq '두산 베어스'}">
+        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
+                 style="background-image: url('/images/bg22.png') cursor: url('/images/cursor3.png') 25 25, auto;;">
+    </c:when>
+        <c:when test="${rq.loginedTeam eq '롯데 자이언츠'}">
+        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
+                 style="background-image: url('/images/bg23.png') cursor: url('/images/cursor4.png') 25 25, auto;;">
+    </c:when>
+        <c:when test="${rq.loginedTeam eq 'LG 트윈스'}">
+        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
+                 style="background-image: url('/images/bg24.png'); cursor: url('/images/cursor5.png') 25 25, auto;">
+    </c:when>
+        <c:when test="${rq.loginedTeam eq '삼성 라이온즈'}">
+        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
+                 style="background-image: url('/images/bg25.png'); cursor: url('/images/cursor6.png') 25 25, auto;">
+    </c:when>
+        <c:when test="${rq.loginedTeam eq '키움 히어로즈'}">
+        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
+                 style="background-image: url('/images/bg26.png'); cursor: url('/images/cursor7.png') , auto;">
+    </c:when>
+        <c:when test="${rq.loginedTeam eq 'SSG 랜더스'}">
+        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
+                 style="background-image: url('/images/bg27.png'); cursor: url('/images/cursor1.png') 25 25, auto;">
+    </c:when>
+        <c:when test="${rq.loginedTeam eq 'NC 다이노스'}">
+        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
+         style="background-image: url('/images/bg28.png'); cursor: url('/images/cursor8.png') 25 25, auto;">
+    </c:when>
+        <c:when test="${rq.loginedTeam eq 'KT 위즈'}">
+        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
+                 style="background-image: url('/images/bg29.png'); cursor: url('/images/cursor9.png') 25 25, auto;">
+    </c:when>
+        <c:when test="${rq.loginedTeam eq 'KIA 타이거즈'}">
+        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-white"
+                 style="background-image: url('/images/bg30.png'); cursor: url('/images/cursor10.png') 25 25, auto;">
+    </c:when>
+</c:choose>
 
 <div class="text-center text-2xl font-bold mb-4">회원정보 수정</div>
-    <div style="width: 50%; border-radius: 10px; background-color: rgba(242, 247, 247, 0.8); padding: 15px; border: 3px dashed red;">
+    <div style="width: 50%; border-radius: 10px; background-color: rgb(242, 247, 247); padding: 15px; border: 3px dashed red;">
       
       <!-- 수정: enctype="multipart/form-data" 추가 -->
       <form action="../member/doModify" method="POST" enctype="multipart/form-data" style="display: flex; gap: 20px; align-items: flex-start;">
@@ -68,7 +130,7 @@
     <div style="margin-top: 15px; width: 100%; text-align: center;">
       <strong>자기소개</strong>
 
-          <input class="input input-info input-sm w-full" name="introduce" value="${member.introduce}" type="text" autocomplete="off" placeholder="자기소개 입력" />
+          <input class="input input-sm w-full" name="introduce" value="${member.introduce}" type="text" autocomplete="off" placeholder="자기소개 입력" />
       </p>
     </div>
   </div>
@@ -95,13 +157,13 @@
       <tr>
         <th>새 비밀번호</th>
         <td>
-          <input class="input input-info input-sm w-full" required name="loginPw" value="${member.loginPw }" type="password" autocomplete="off" placeholder="새 비밀번호" />
+          <input class="input input-sm w-full" required name="loginPw" value="${member.loginPw }" type="password" autocomplete="off" placeholder="새 비밀번호" />
         </td>
       </tr>
       <tr>
         <th>새 비밀번호 확인</th>
         <td>
-          <input class="input input-info input-sm w-full" required name="loginPw2" type="password" autocomplete="off" placeholder="새 비밀번호 확인" />
+          <input class="input input-sm w-full" required name="loginPw2" type="password" autocomplete="off" placeholder="새 비밀번호 확인" />
         </td>
       </tr>
       <tr>
@@ -119,19 +181,19 @@
       <tr>
         <th>새 닉네임</th>
         <td>
-          <input class="input input-info input-sm w-full" required name="nickname" value="${member.nickname }" type="text" autocomplete="off" placeholder="새 닉네임" />
+          <input class="input input-sm w-full" required name="nickname" value="${member.nickname }" type="text" autocomplete="off" placeholder="새 닉네임" />
         </td>
       </tr>
       <tr>
         <th>새 전화번호</th>
         <td>
-          <input class="input input-info input-sm w-full" required name="cellphoneNum" value="${member.cellphoneNum }" type="tel" autocomplete="off" placeholder="새 전화번호" />
+          <input class="input input-sm w-full" required name="cellphoneNum" value="${member.cellphoneNum }" type="tel" autocomplete="off" placeholder="새 전화번호" />
         </td>
       </tr>
       <tr>
         <th>새 이메일</th>
         <td>
-          <input class="input input-info input-sm w-full" required name="email" value="${member.email }" type="email" autocomplete="off" placeholder="새 이메일" />
+          <input class="input input-sm w-full" required name="email" value="${member.email }" type="email" autocomplete="off" placeholder="새 이메일" />
         </td>
       </tr>
       <tr>

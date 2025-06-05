@@ -21,28 +21,82 @@
   color: black;
   padding: 4px 10px;
   border-radius: 5px;
-  background-color: #82c3f5;
+  background-color: #f7ecdc;
 }
 
 /* 뒤로가기 버튼에 마우스 올리면 테이블 행 호버 색과 같게 */
 .btn-back:hover {
-background-color: #4a90e2;
+background-color: #f2d8b1;
 }
 
- form input.input {
+  /* input 통일 스타일 */
+  input.input {
     width: 90%;
     box-sizing: border-box;
+    padding: 6px 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f7f0e9; /* 배경색 통일 */
+    color: black; /* 글자색 통일 */
+    outline: none;
+  }
+
+  input.input:focus {
+    border-color: #f2d8b1; /* 포커스 시 테두리 색상 */
+    background-color: #fff; /* 포커스 시 배경색 살짝 밝게 */
   }
 </style>
 
-<body class="m-0 h-full font-sans">
-
-<!-- Hero Section: 배경 이미지 + 연한 하늘색 오버레이 -->
-<section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed relative flex items-start justify-center p-8"
-         style="background-image: url('/images/bg.jpg');">
+ <body class="m-0 font-sans" style="background-color: #f7f0e9;">
+     <c:choose>
+    <c:when test="${rq.loginedTeam == null}">
+        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center text-black"
+                 style="background-image: url('/images/bg12.png') 25 25; position: relative;">
+    </c:when>
+    <c:when test="${rq.loginedTeam eq '한화 이글스'}">
+        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center text-black"
+                 style="background-image: url('/images/bg21.png'); cursor: url('/images/cursor2.png') 25 25, auto; position: relative;">
+    </c:when>
+    <c:when test="${rq.loginedTeam eq '두산 베어스'}">
+        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center text-black"
+                 style="background-image: url('/images/bg22.png') cursor: url('/images/cursor3.png') 25 25, auto; position: relative;">
+    </c:when>
+        <c:when test="${rq.loginedTeam eq '롯데 자이언츠'}">
+        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center text-black"
+                 style="background-image: url('/images/bg23.png') cursor: url('/images/cursor4.png') 25 25, auto; position: relative;">
+    </c:when>
+        <c:when test="${rq.loginedTeam eq 'LG 트윈스'}">
+        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center text-black"
+                 style="background-image: url('/images/bg24.png'); cursor: url('/images/cursor5.png') 25 25, auto;">
+    </c:when>
+        <c:when test="${rq.loginedTeam eq '삼성 라이온즈'}">
+        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center text-black"
+                 style="background-image: url('/images/bg25.png'); cursor: url('/images/cursor6.png') 25 25, auto; position: relative;">
+    </c:when>
+        <c:when test="${rq.loginedTeam eq '키움 히어로즈'}">
+        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center text-black"
+                 style="background-image: url('/images/bg26.png'); cursor: url('/images/cursor7.png') 25 25, auto; position: relative;">
+    </c:when>
+        <c:when test="${rq.loginedTeam eq 'SSG 랜더스'}">
+        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center text-black"
+                 style="background-image: url('/images/bg27.png'); cursor: url('/images/cursor1.png') 25 25, auto; position: relative;">
+    </c:when>
+        <c:when test="${rq.loginedTeam eq 'NC 다이노스'}">
+        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center text-black"
+         style="background-image: url('/images/bg28.png'); cursor: url('/images/cursor8.png') 25 25, auto; position: relative;" >
+    </c:when>
+        <c:when test="${rq.loginedTeam eq 'KT 위즈'}">
+        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center text-black"
+                 style="background-image: url('/images/bg29.png'); cursor: url('/images/cursor9.png') 25 25, auto; position: relative;">
+    </c:when>
+        <c:when test="${rq.loginedTeam eq 'KIA 타이거즈'}">
+        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center text-white"
+                 style="background-image: url('/images/bg30.png'); cursor: url('/images/cursor10.png') 25 25, auto; position: relative;">
+    </c:when>
+</c:choose>
 
   <!-- 연한 하늘색 오버레이 -->
-  <div class="absolute inset-0 bg-blue-100 bg-opacity-70"></div>
+  <div class="absolute inset-0" style = "background-color: rgba(247, 246, 245, 0.6);"></div>
 
   <!-- 2-Column 레이아웃 -->
   <div class="relative flex w-full max-w-6xl">
@@ -52,11 +106,11 @@ background-color: #4a90e2;
       <!-- 제목과 작성자만 위쪽에 -->
       <div class="mb-4">
         <div class="text-2xl font-bold mb-1">${article.title}</div>
-        <div class="text-sm text-gray-600">작성자: ${article.extra__writer}</div>
+        <div class="text-sm text-black-600">작성자: ${article.extra__writer}</div>
       </div>
 
       <!-- 본문 내용 (50% 높이, 스크롤) -->
-      <div class="flex-1 bg-white bg-opacity-50 rounded-lg shadow p-4 overflow-auto" style="max-height: 50vh;">
+      <div class="flex-1 bg-white rounded-lg shadow p-4 overflow-auto" style="color: black; max-height: 50vh;">
         ${article.body}
       </div>
 
@@ -93,9 +147,9 @@ background-color: #4a90e2;
     <div class="text-2xl font-bold mb-1">댓글 목록</div>
       <!-- 댓글 작성 -->
       <c:if test="${LoginedMemberId != 0}">
-        <form class="mb-4" action="../comment/doWrite" method="POST">
+        <form class="mb-4" action="../comment/doWrite" method="POST" style="color: black;">
           <input type="hidden" name="articleId" value="${param.id}" />
-          <input class="input input-info input-sm" required name="body" type="text" placeholder="댓글을 입력하세요" />
+          <input class="input input-sm" required name="body" type="text" placeholder="댓글을 입력하세요" />
           <button class="btn-back btn btn-ghost">등록</button>
         </form>
       </c:if>

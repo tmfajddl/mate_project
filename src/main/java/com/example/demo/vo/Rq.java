@@ -27,6 +27,7 @@ public class Rq {
 
 	private boolean isLogined = false;
 	private int loginedMemberId = 0;
+	private String loginedTeam = null;
 
 	@Getter
 	private Member loginedMember;
@@ -40,6 +41,7 @@ public class Rq {
 			isLogined = true;
 			loginedMemberId = (int) session.getAttribute("loginedMemberId");
 			loginedMember = memberService.getMemberById(loginedMemberId);
+			loginedTeam = loginedMember.getTeam();
 		}
 
 		this.req.setAttribute("rq", this);
