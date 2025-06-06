@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class KboCrawlerService {
@@ -130,44 +131,58 @@ public class KboCrawlerService {
         return datas;
     }
     // 4) KBO 등록 선수 정보 크롤링
-    public List<List<String>> getRegisteredPlayers() throws IOException {
+    public List<Map<String, String>> getRegisteredPlayers() throws IOException {
         String url = "https://www.koreabaseball.com/Player/RegisterAll.aspx";
         Document doc = Jsoup.connect(url).get();
 
         Element table = doc.selectFirst("#cphContents_cphContents_cphContents_udpRecord > div > div.fistStatus > table");
         Elements rows = table.select("tbody tr");
 
-        List<List<String>> datas = new ArrayList<>();
+        List<Map<String, String>> players = new ArrayList<>();
 
         for (Element row : rows) {
             Elements tds = row.select("td");
-            List<String> rowData = new ArrayList<>();
-            for (Element td : tds) {
-                rowData.add(td.text().trim());
-            }
-            datas.add(rowData);
+
+            // 예: 선수명(1번째 td), 포지션(3번째 td), 팀(5번째 td) - 실제 인덱스는 크롤링 페이지 구조 확인 필요 (0부터 시작)
+            String name = tds.get(0).text().trim();
+            String position = tds.get(1).text().trim();
+            String team = tds.get(2).text().trim();
+
+            Map<String, String> playerData = new HashMap<>();
+            playerData.put("name", name);
+            playerData.put("position", position);
+            playerData.put("team", team);
+
+            players.add(playerData);
         }
 
-        return datas;
+        return players;
     }
 
     // 5) KBO 말소 선수 정보 크롤링
-    public List<List<String>> getCanceledPlayers() throws IOException {
+    public List<Map<String, String>> getCanceledPlayers() throws IOException {
         String url = "https://www.koreabaseball.com/Player/RegisterAll.aspx";
         Document doc = Jsoup.connect(url).get();
 
         Element table = doc.selectFirst("#cphContents_cphContents_cphContents_udpRecord > div > div.fistCancelStatus > table");
         Elements rows = table.select("tbody tr");
 
-        List<List<String>> datas = new ArrayList<>();
+        List<Map<String, String>> datas = new ArrayList<>();
 
         for (Element row : rows) {
             Elements tds = row.select("td");
-            List<String> rowData = new ArrayList<>();
-            for (Element td : tds) {
-                rowData.add(td.text().trim());
-            }
-            datas.add(rowData);
+
+            // 예: 선수명(1번째 td), 포지션(3번째 td), 팀(5번째 td) - 실제 인덱스는 크롤링 페이지 구조 확인 필요 (0부터 시작)
+            String name = tds.get(0).text().trim();
+            String position = tds.get(1).text().trim();
+            String team = tds.get(2).text().trim();
+
+            Map<String, String> playerData = new HashMap<>();
+            playerData.put("name", name);
+            playerData.put("position", position);
+            playerData.put("team", team);
+
+            datas.add(playerData);
         }
 
         return datas;

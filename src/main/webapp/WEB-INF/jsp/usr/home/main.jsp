@@ -2,83 +2,262 @@
 <%@ include file="../common/head.jspf"%>
 <!DOCTYPE html>
 <html lang="en">
-<style>
-  .btn-back {
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: black;
-  padding: 4px 10px;
-  border-radius: 5px;
-  background-color: #f7ecdc;
-}
-
-/* 뒤로가기 버튼에 마우스 올리면 테이블 행 호버 색과 같게 */
-.btn-back:hover {
-background-color: #f2d8b1;
-}
-</style>
-
-  <body class="m-0 h-full font-sans" style="background-color: #f7f0e9;">
-
-    <!-- Hero Section (100% 화면 채움 + 배경 이미지) -->
+<head>
+  <style>
+    .btn-back {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: black;
+      padding: 4px 10px;
+      border-radius: 5px;
+      background-color: #f7ecdc;
+    }
+    .btn-back:hover {
+      background-color: #f2d8b1;
+    }
     
+    /* 뉴스 슬라이더 스타일 */
+.news-slider-container {
+  width: 80vw;
+  height: 50vh; /* 기존 60vh → 3배 확대 */
+  margin: 20px auto;
+  overflow: hidden;
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  position: relative;
+}
+
+    .news-slider {
+      display: flex;
+      height: 100%;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      scrollbar-width: none; /* Firefox */
+    }
+    .news-slider::-webkit-scrollbar {
+      display: none; /* Chrome, Safari */
+    }
+
+    .news-card {
+      min-width: 300px;
+      height: 100%;
+      flex-shrink: 0;
+      border-radius: 15px;
+      margin-right: 15px;
+      background-size: cover;
+      background-position: center;
+      position: relative;
+      color: white;
+      display: flex;
+      align-items: flex-end;
+      padding: 20px;
+      box-shadow: inset 0 -60px 60px -20px rgba(0, 0, 0, 0.7);
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .news-title {
+      font-size: 1.25rem;
+      font-weight: bold;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+    }
+
+    .slider-button {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background-color: rgba(247,236,220,0.7);
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      cursor: pointer;
+      z-index: 10;
+    }
+    .slider-button:hover {
+      background-color: #f2d8b1;
+    }
+    .slider-button.left {
+      left: 10px;
+    }
+    .slider-button.right {
+      right: 10px;
+    }
+    
+    .players-container {
+  display: flex;
+  width: 50vw;
+  margin: 0;
+  gap: 20px;
+  transform: scale(0.5);
+  transform-origin: top center;
+}
+
+  .box-rounded {
+    background-color: #fff7e6;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    width: 50%; /* 부모 컨테이너 너비의 절반 */
+    overflow-x: auto; /* 테이블 가로 스크롤 방지용 */
+  }
+
+  .player-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .player-table th, .player-table td {
+    padding: 8px 12px;
+    border-bottom: 1px solid #ddd;
+    text-align: center;
+  }
+
+  .player-table th {
+    background-color: #f7ecdc;
+  }
+    
+  </style>
+</head>
+<body class="m-0 h-full font-sans" style="background-color: #f7f0e9;">
+
 <c:choose>
     <c:when test="${rq.loginedTeam == null}">
-        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
+        <section class=" bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center text-black"
                  style="background-image: url('/images/bg12.png'); cursor: url('/images/cursor0.png') 25 25, auto;">
     </c:when>
     <c:when test="${rq.loginedTeam eq '한화 이글스'}">
-        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
+        <section class="bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center text-black"
                  style="background-image: url('/images/bg21.png'); cursor: url('/images/cursor2.png') 25 25, auto;">
     </c:when>
     <c:when test="${rq.loginedTeam eq '두산 베어스'}">
-        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
-                 style="background-image: url('/images/bg22.png') cursor: url('/images/cursor3.png') 25 25, auto;;">
+        <section class="bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center text-black"
+                 style="background-image: url('/images/bg22.png'); cursor: url('/images/cursor3.png') 25 25, auto;">
     </c:when>
-        <c:when test="${rq.loginedTeam eq '롯데 자이언츠'}">
-        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
-                 style="background-image: url('/images/bg23.png') cursor: url('/images/cursor4.png') 25 25, auto;;">
+    <c:when test="${rq.loginedTeam eq '롯데 자이언츠'}">
+        <section class="bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center text-black"
+                 style="background-image: url('/images/bg23.png'); cursor: url('/images/cursor4.png') 25 25, auto;">
     </c:when>
-        <c:when test="${rq.loginedTeam eq 'LG 트윈스'}">
-        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
+    <c:when test="${rq.loginedTeam eq 'LG 트윈스'}">
+        <section class="bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center text-black"
                  style="background-image: url('/images/bg24.png'); cursor: url('/images/cursor5.png') 25 25, auto;">
     </c:when>
-        <c:when test="${rq.loginedTeam eq '삼성 라이온즈'}">
-        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
+    <c:when test="${rq.loginedTeam eq '삼성 라이온즈'}">
+        <section class="bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center text-black"
                  style="background-image: url('/images/bg25.png'); cursor: url('/images/cursor6.png') 25 25, auto;">
     </c:when>
-        <c:when test="${rq.loginedTeam eq '키움 히어로즈'}">
-        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
+    <c:when test="${rq.loginedTeam eq '키움 히어로즈'}">
+        <section class="bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center text-black"
                  style="background-image: url('/images/bg26.png'); cursor: url('/images/cursor7.png') 25 25, auto;">
     </c:when>
-        <c:when test="${rq.loginedTeam eq 'SSG 랜더스'}">
-        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
+    <c:when test="${rq.loginedTeam eq 'SSG 랜더스'}">
+        <section class="bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center text-black"
                  style="background-image: url('/images/bg27.png'); cursor: url('/images/cursor1.png') 25 25, auto;">
     </c:when>
-        <c:when test="${rq.loginedTeam eq 'NC 다이노스'}">
-        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
+    <c:when test="${rq.loginedTeam eq 'NC 다이노스'}">
+        <section class="bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center text-black"
          style="background-image: url('/images/bg28.png'); cursor: url('/images/cursor8.png') 25 25, auto;">
     </c:when>
-        <c:when test="${rq.loginedTeam eq 'KT 위즈'}">
-        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
+    <c:when test="${rq.loginedTeam eq 'KT 위즈'}">
+        <section class="bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center text-black"
                  style="background-image: url('/images/bg29.png'); cursor: url('/images/cursor9.png') 25 25, auto;">
     </c:when>
-        <c:when test="${rq.loginedTeam eq 'KIA 타이거즈'}">
-        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-white"
+    <c:when test="${rq.loginedTeam eq 'KIA 타이거즈'}">
+        <section class="bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center text-white"
                  style="background-image: url('/images/bg30.png'); cursor: url('/images/cursor10.png') 25 25, auto;">
     </c:when>
 </c:choose>
-   
-    
-    <c:if test="${!rq.isLogined()}">
-              <button class="btn-back" class="btn btn-ghost"><a href="../member/login">로그인</a></button>
-              <button class="btn-back" class="btn btn-ghost">회원가입</a></button>
-            </c:if>
-                <c:if test="${rq.isLogined()}">
-              <button class="btn-back" class="btn btn-ghost"><a onclick="if(confirm('로그아웃 하시겠습니까?') == false) return false;" href="../member/doLogout">로그아웃</a></button>
-            </c:if>
-    </section>
 
-  </body>
+  <!-- 뉴스 슬라이더를 상단에 배치 -->
+  <div class="news-slider-container">
+    <button class="slider-button left" aria-label="왼쪽으로 이동">&#10094;</button>
+    <div class="news-slider" id="newsSlider">
+      <c:forEach var="news" items="${breakingNews}">
+        <a href="${news.linkUrl}" target="_blank" class="news-card" style="background-image: url('${news.imgUrl != null ? news.imgUrl : '/images/default-news.png'}');">
+          <div class="news-title">${news.title}</div>
+        </a>
+      </c:forEach>
+    </div>
+    <button class="slider-button right" aria-label="오른쪽으로 이동">&#10095;</button>
+  </div>
+  
+ <!-- 선수 등록 / 말소 현황을 가로 배치하는 컨테이너 -->
+<div class="players-container self-start">
+  <div class="box-rounded">
+    <div class="section-title">등록 선수 현황</div>
+    <table class="player-table">
+      <thead>
+        <tr>
+          <th>선수명</th>
+          <th>포지션</th>
+          <th>팀</th>
+        </tr>
+      </thead>
+      <tbody>
+        <c:forEach var="player" items="${registeredPlayers}">
+          <tr>
+            <td><c:out value="${player.name}" /></td>
+            <td><c:out value="${player.position}" /></td>
+            <td><c:out value="${player.team}" /></td>
+          </tr>
+        </c:forEach>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="box-rounded">
+    <div class="section-title">말소 선수 현황</div>
+    <table class="player-table">
+      <thead>
+        <tr>
+          <th>선수명</th>
+          <th>포지션</th>
+          <th>팀</th>
+        </tr>
+      </thead>
+      <tbody>
+        <c:forEach var="player" items="${canceledPlayers}">
+          <tr>
+            <td><c:out value="${player.name}" /></td>
+            <td><c:out value="${player.position}" /></td>
+            <td><c:out value="${player.team}" /></td>
+          </tr>
+        </c:forEach>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+  <!-- 로그인 / 로그아웃 버튼 영역 -->
+  <div style="margin-top: 20px;">
+    <c:if test="${!rq.isLogined()}">
+      <button class="btn-back"><a href="../member/login">로그인</a></button>
+      <button class="btn-back">회원가입</button>
+    </c:if>
+    <c:if test="${rq.isLogined()}">
+      <button class="btn-back">
+        <a onclick="if(confirm('로그아웃 하시겠습니까?') == false) return false;" href="../member/doLogout">로그아웃</a>
+      </button>
+    </c:if>
+  </div>
+
+</section>
+
+<script>
+  const slider = document.getElementById('newsSlider');
+  const btnLeft = document.querySelector('.slider-button.left');
+  const btnRight = document.querySelector('.slider-button.right');
+  const scrollAmount = 320;
+
+  btnLeft.addEventListener('click', () => {
+    slider.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+  });
+
+  btnRight.addEventListener('click', () => {
+    slider.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+  });
+</script>
+
+</body>
 </html>

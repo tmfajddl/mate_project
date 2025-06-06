@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,7 +31,15 @@ public class UsrHomeController {
 	private OpenAiService openAiService;
 	
 	@RequestMapping("/usr/home/main")
-	public String showMain() {
+	public String showMain(Model model) throws IOException {
+		List<HashMap<String, String>> breakingNews = kboCrawlerService.getBreakingNews();
+		 model.addAttribute("breakingNews", breakingNews);
+		 
+		 List<Map<String, String>> registeredPlayers = kboCrawlerService.getRegisteredPlayers();
+		 model.addAttribute("registeredPlayers", registeredPlayers);
+		 
+		 List<Map<String, String>> canceledPlayers = kboCrawlerService.getCanceledPlayers();
+		 model.addAttribute("canceledPlayers", canceledPlayers);
 		return "/usr/home/main";
 	}
 
