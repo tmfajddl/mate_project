@@ -18,4 +18,5 @@ public class ChatRoom {
     private String roomName;  // ex: "1_2"
     private int createdBy;    // member.id
     private String otherMemberNickname;
+    private String otherProfileImg;
 }

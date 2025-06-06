@@ -174,10 +174,13 @@
     <div class="w-1/3 chat-list">
       <div class="text-xl font-bold mb-2">채팅방 목록</div>
       <c:forEach var="room" items="${chatRooms}">
-        <div class="chat-item ${room.id == selectedRoomId ? 'active' : ''}"
-             onclick="location.href='/usr/project/chat/room?roomId=${room.id}'">
-          ${room.otherMemberNickname}
-        </div>
+       <div class="chat-item flex items-center gap-2 ${room.id == selectedRoomId ? 'active' : ''}"
+     onclick="location.href='/usr/project/chat/room?roomId=${room.id}'">
+ <img src="${room.otherProfileImg != null ? room.otherProfileImg : '/images/ball.jpg'}"
+     alt="profile"
+     class="w-8 h-8 rounded-full border border-gray-300 object-cover" />
+  <span>${room.otherMemberNickname}</span>
+</div>
       </c:forEach>
       <c:if test="${empty chatRooms}">
         <div class="italic text-gray-500">참여 중인 채팅방이 없습니다</div>

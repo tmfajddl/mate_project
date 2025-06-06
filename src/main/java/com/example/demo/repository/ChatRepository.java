@@ -23,4 +23,6 @@ public interface ChatRepository {
     List<ChatMessage> findMessagesByRoomId(int roomId);
 
 	public List<Member> getParticipants(int roomId);
+
+	public List<Member> getProfileImg(int roomId);
 }

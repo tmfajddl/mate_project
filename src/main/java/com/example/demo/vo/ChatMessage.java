@@ -18,4 +18,5 @@ public class ChatMessage {
     private String message;
     private LocalDateTime sentDate;
     private String senderName;
+    private String senderProfileImg;
 }

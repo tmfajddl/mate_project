@@ -47,7 +47,9 @@ public class ChatController {
 
         for (ChatRoom room : chatRooms) {
             String otherNickname = chatService.getOtherMemberNickname(room.getId(), loginUserId);
+            String profileImg = chatService.getProfileImg(room.getId(), loginUserId);
             room.setOtherMemberNickname(otherNickname);
+            room.setOtherProfileImg(profileImg);
         }
 
         model.addAttribute("chatRooms", chatRooms);

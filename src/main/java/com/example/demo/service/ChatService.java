@@ -73,4 +73,16 @@ public class ChatService {
         }
         return "알 수 없음";
     }
+    
+    public String getProfileImg(int roomId, int loginUserId) {
+        List<Member> profileImgs = chatRepository.getProfileImg(roomId);
+        for (Member m : profileImgs) {
+            if (m.getId() != loginUserId) {
+                return m.getProfileImg();
+            }
+        }
+        return null;
+    }
+    
+    
 }

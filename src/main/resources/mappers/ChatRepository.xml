@@ -47,4 +47,14 @@
   )
 </select>
 
+    <select id="getProfileImg" parameterType="int" resultType="com.example.demo.vo.Member">
+  SELECT m.id, m.profileImg
+  FROM member m
+  WHERE m.id IN (
+    SELECT CAST(SUBSTRING_INDEX(roomName, '_', 1) AS UNSIGNED) FROM chat_room WHERE id = #{roomId}
+    UNION
+    SELECT CAST(SUBSTRING_INDEX(roomName, '_', -1) AS UNSIGNED) FROM chat_room WHERE id = #{roomId}
+  )
+</select>
+
 </mapper>
