@@ -36,14 +36,13 @@ public class KboCrawlerService {
 	    return datas;
 	}
 
-    // 2) KBO 뉴스 크롤링 (이미지 포함)
 	public List<HashMap<String, String>> getBreakingNews() throws IOException {
 	    String url = "https://www.koreabaseball.com/MediaNews/News/BreakingNews/List.aspx";
 	    Document doc = Jsoup.connect(url).get();
 
 	    Element ul = doc.selectFirst("#contents > div.sub-content > div.board > ul");
 	    Elements lis = ul.select("li");
-	    String baseUrl = "https://www.koreabaseball.com";
+	    String baseUrl = "https://www.koreabaseball.com/MediaNews/News/BreakingNews";
 
 	    List<HashMap<String, String>> datas = new ArrayList<>();
 
@@ -51,15 +50,40 @@ public class KboCrawlerService {
 	        String title = li.selectFirst("div > strong > a").text().trim();
 	        String body = li.selectFirst("div > p").text().trim();
 
-	        // 링크 크롤링 추가
+	        // 상세페이지 링크 가져오기
 	        Element linkTag = li.selectFirst("div > strong > a");
-	        String href = linkTag.attr("href");
-	        String linkUrl = (linkTag != null) ? (href.startsWith("/") ? baseUrl + href : baseUrl + "/" + href) : null;
+	        String linkUrl = null;
+	        if (linkTag != null) {
+	            String href = linkTag.attr("href");
+	            if (!href.startsWith("/")) {
+	                href = "/" + href;
+	            }
+	            linkUrl = baseUrl + href;
+	        }
+
+	        // 이미지 크롤링
+	        Element imgTag = li.selectFirst("span > a > img");
+	        String imgUrl = null;
+	        if (imgTag != null) {
+	            String src = imgTag.attr("src");
+
+	            if (src.startsWith("//")) {
+	                // // 로 시작하면 https: 붙이기
+	                imgUrl = "https:" + src;
+	            } else if (!src.startsWith("http")) {
+	                // 상대경로이면 도메인 붙이기
+	                imgUrl = "https://www.koreabaseball.com" + (src.startsWith("/") ? "" : "/") + src;
+	            } else {
+	                imgUrl = src;
+	            }
+	        }
+	        System.out.println(imgUrl);
 
 	        HashMap<String, String> map = new HashMap<>();
 	        map.put("title", title);
 	        map.put("body", body);
-	        map.put("linkUrl", linkUrl);  // 링크 추가!
+	        map.put("linkUrl", linkUrl);
+	        map.put("imgUrl", imgUrl);
 
 	        datas.add(map);
 	    }

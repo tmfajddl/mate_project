@@ -11,7 +11,7 @@
   .like-icon.active { color: #6a71f7; }
   .dislike-icon.active { color: #fa5f81; }
   .comment-row {
-    border-bottom: 2px solid #bfdbfe; /* bg-blue-200와 같은 색 */
+    border-bottom: 2px solid #f2d8b1; /* bg-blue-200와 같은 색 */
     padding: 8px 0;
   }
   .btn-back {
@@ -51,7 +51,7 @@ background-color: #f2d8b1;
      <c:choose>
     <c:when test="${rq.loginedTeam == null}">
         <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center text-black"
-                 style="background-image: url('/images/bg12.png') 25 25; position: relative;">
+                 style="background-image: url('/images/bg12.png'); position: relative; cursor: url('/images/cursor0.png') 25 25, auto;">
     </c:when>
     <c:when test="${rq.loginedTeam eq '한화 이글스'}">
         <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center text-black"

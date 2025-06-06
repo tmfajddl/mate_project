@@ -71,9 +71,9 @@ public class WebMvcConfigurer implements org.springframework.web.servlet.config.
 //		프로젝트 관련
 		ir.addPathPatterns("/usr/project/chat");
 		ir.addPathPatterns("/usr/project/friend");
-		ir.addPathPatterns("/user/project/chat/start");
-		ir.addPathPatterns("/user/project/chat/room");
-		ir.addPathPatterns("/user/project/chat/send");
+		ir.addPathPatterns("/usr/project/chat/start");
+		ir.addPathPatterns("/usr/project/chat/room");
+		ir.addPathPatterns("/usr/project/chat/send");
 
 //		좋아요 싫어요
 		ir.addPathPatterns("/usr/reactionPoint/doGoodReaction");

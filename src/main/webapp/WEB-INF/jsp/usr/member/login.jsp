@@ -37,13 +37,13 @@ background-color: #f2d8b1;
 
 </style>
 
-  <body class="m-0 h-full font-sans" style="background-color: #f7f0e9;">
+ <body class="m-0 h-full font-sans" style="background-color: #f7f0e9;">
 
-    <!-- Hero Section (100% 화면 채움 + 배경 이미지) -->
-     <c:choose>
+  <!-- Hero Section (100% 화면 채움 + 배경 이미지) -->
+ <c:choose>
     <c:when test="${rq.loginedTeam == null}">
         <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
-                 style="background-image: url('/images/bg12.png') 25 25;">
+                 style="background-image: url('/images/bg12.png'); cursor: url('/images/cursor0.png') 25 25, auto;">
     </c:when>
     <c:when test="${rq.loginedTeam eq '한화 이글스'}">
         <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
