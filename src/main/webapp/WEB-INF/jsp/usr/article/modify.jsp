@@ -2,6 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <link href="https://cdn.jsdelivr.net/gh/projectnoonnu/2411-3@1.0/index.css" rel="stylesheet">
 <%@ include file="../common/head.jspf"%>
+<%@ include file="../common/toastUiEditorLib.jspf"%>
 
 <style>
 body {
@@ -23,11 +24,10 @@ body {
     position: relative;
     z-index: 1;
     width: 100%;
-    max-width: 800px;
+    max-width: 100%;
     padding: 20px;
     margin: 0 auto 10% auto;
     overflow-y: auto;
-    background-color: white;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
   }
@@ -168,11 +168,26 @@ body {
               </td>
             </tr>
             <tr>
-              <th>Body</th>
-              <td>
-                <input class="input" required="required" name="body" value="${article.body}" type="text" autocomplete="off" placeholder="새 내용" />
-              </td>
-            </tr>
+  <th>Body</th>
+  <td>
+    <textarea id="body" name="body" style="display:none;">${article.body}</textarea>
+    <div id="editor"></div>
+  </td>
+</tr>
+
+<script>
+  const editor = new toastui.Editor({
+    el: document.querySelector('#editor'),
+    height: '400px',
+    initialEditType: 'markdown',
+    previewStyle: 'vertical',
+    initialValue: `${article.body}`
+  });
+
+  document.querySelector('form').addEventListener('submit', function(e) {
+    document.querySelector('#body').value = editor.getMarkdown();
+  });
+</script>
           </tbody>
         </table>
         <div style="text-align: right; margin-top: 8px;">

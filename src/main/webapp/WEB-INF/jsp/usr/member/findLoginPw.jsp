@@ -1,29 +1,31 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<link href="https://cdn.jsdelivr.net/gh/projectnoonnu/2411-3@1.0/index.css" rel="stylesheet">
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ include file="../common/head.jspf"%>
-<!DOCTYPE html>
-<html lang="en">
+
+<link href="https://cdn.jsdelivr.net/gh/projectnoonnu/2411-3@1.0/index.css" rel="stylesheet">
+
 <style>
 body {
   font-family: 'Ownglyph_ParkDaHyun', sans-serif;
 }
-  /* input 통일 스타일 */
-  input.input {
-    width: 90%;
-    box-sizing: border-box;
-    padding: 6px 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    background-color: #f7f0e9; /* 배경색 통일 */
-    color: black; /* 글자색 통일 */
-    outline: none;
-  }
 
-  input.input:focus {
-    border-color: #f2d8b1; /* 포커스 시 테두리 색상 */
-    background-color: #fff; /* 포커스 시 배경색 살짝 밝게 */
-  }
-    .btn-back {
+input.input {
+  width: 90%;
+  box-sizing: border-box;
+  padding: 6px 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #f7f0e9;
+  color: black;
+  outline: none;
+}
+
+input.input:focus {
+  border-color: #f2d8b1;
+  background-color: #fff;
+}
+
+.btn-back {
   background: none;
   border: none;
   cursor: pointer;
@@ -33,17 +35,38 @@ body {
   background-color: #f7ecdc;
 }
 
-/* 뒤로가기 버튼에 마우스 올리면 테이블 행 호버 색과 같게 */
 .btn-back:hover {
-background-color: #f2d8b1;
+  background-color: #f2d8b1;
 }
-
 </style>
 
- <body class="m-0 h-full" style="background-color: #f7f0e9;">
+<script type="text/javascript">
+  let MemberFindLoginPw__submitFormDone = false;
+  function MemberFindLoginPw__submit(form) {
+    if (MemberFindLoginPw__submitFormDone) {
+      return;
+    }
+    form.loginId.value = form.loginId.value.trim();
+    form.email.value = form.email.value.trim();
+    if (form.loginId.value.length == 0) {
+      alert('아이디 써라');
+      form.loginId.focus();
+      return;
+    }
+    if (form.email.value.length == 0) {
+      alert('email 써라');
+      form.email.focus();
+      return;
+    }
+    MemberFindLoginPw__submitFormDone = true;
+    alert('메일로 임시 비밀번호를 발송했습니다');
+    form.submit();
+  }
+</script>
 
-  <!-- Hero Section (100% 화면 채움 + 배경 이미지) -->
- <c:choose>
+<body class="m-0 h-full" style="background-color: #f7f0e9;">
+  <!-- 팀별 배경/커서 -->
+<c:choose>
     <c:when test="${rq.loginedTeam == null}">
         <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
                  style="background-image: url('/images/bg12.png'); cursor: url('/images/cursor0.png') 25 25, auto;">
@@ -89,52 +112,50 @@ background-color: #f2d8b1;
                  style="background-image: url('/images/bg30.png'); cursor: url('/images/cursor10.png') 25 25, auto;">
     </c:when>
 </c:choose>
-      
-      <div class="mx-auto">
-		<form action="../member/doLogin" method="POST">
-		
-		<div style="border-radius: 10px; background-color: rgb(242, 247, 247); padding: 15px; border: 3px; border-color: red; border-style: dashed;">
-		<input type="hidden" name="afterLoginUri" value="${param.afterLoginUri}" />
-			<table class="table" border="1" cellspacing="0" cellpadding="5" style="width: 100%; border-collapse: collapse;">
-				<tbody>
-					<tr>
-						<th style="color: black;">아이디</th>
-						<td style="text-align: center;">
-							<input class="input input-sm" name="loginId" autocomplete="off" type="text" placeholder="아이디 입력" />
-						</td>
-					</tr>
-					<tr>
-						<th style="color: black;">비밀번호</th>
-						<td style="text-align: center;">
-							<input class="input input-sm" name="loginPw" autocomplete="off" type="text" placeholder="비밀번호 입력" />
-						</td>
-					</tr>
 
-					<tr>
-						<th></th>
-						<td style="text-align: center;">
-							<button class="btn-back" class="btn btn-ghost">로그인</button>
-						</td>
-					</tr>
-										<tr>
-						<th></th>
-						<td style="text-align: center;">
-							<a class="btn-back" href="${rq.findLoginIdUri }">아이디 찾기</a>
-							<a class="btn-back" href="${rq.findLoginPwUri }">비밀번호찾기</a>
-						</td>
-					</tr>
-					
+    <div class="mx-auto">
+      <form action="../member/doFindLoginPw" method="POST" onsubmit="MemberFindLoginPw__submit(this);">
+        <div style="border-radius: 10px; background-color: rgb(242, 247, 247); padding: 15px; border: 3px dashed red;">
+          <input type="hidden" name="afterFindLoginPwUri" value="${param.afterFindLoginPwUri}" />
+          <table class="table" border="1" cellspacing="0" cellpadding="5" style="width: 100%; border-collapse: collapse;">
+            <tbody>
+              <tr>
+                <th style="color: black;">아이디</th>
+                <td style="text-align: center;">
+                  <input class="input input-sm" autocomplete="off" type="text" placeholder="아이디를 입력해주세요"
+                         name="loginId" />
+                </td>
+              </tr>
+              <tr>
+                <th style="color: black;">이메일</th>
+                <td style="text-align: center;">
+                  <input class="input input-sm" autocomplete="off" type="text" placeholder="이메일을 입력해주세요"
+                         name="email" />
+                </td>
+              </tr>
+              <tr>
+                <th></th>
+                <td style="text-align: center;">
+                  <button class="btn-back" type="submit">비밀번호 찾기</button>
+                </td>
+              </tr>
+              <tr>
+                <th></th>
+                <td style="text-align: center;">
+                  <a class="btn-back" href="../member/login">로그인</a>
+                  <a class="btn-back" href="${rq.findLoginIdUri}">아이디 찾기</a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </form>
 
-				</tbody>
-			</table>
-		</div>
-		</form>
-		<div class="btns">
-			<button class="btn-back" onclick="history.back();" >뒤로가기</button>
+      <div class="btns mt-4">
+        <button class="btn-back" type="button" onclick="history.back();">뒤로가기</button>
+      </div>
+    </div>
+  </section>
+</body>
 
-		</div>
-	</div>
-    </section>
-
-  </body>
-</html>
+<%@ include file="../common/foot.jspf"%>

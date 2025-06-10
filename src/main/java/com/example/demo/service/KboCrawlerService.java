@@ -78,7 +78,6 @@ public class KboCrawlerService {
 	                imgUrl = src;
 	            }
 	        }
-	        System.out.println(imgUrl);
 
 	        HashMap<String, String> map = new HashMap<>();
 	        map.put("title", title);

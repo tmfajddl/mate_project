@@ -24,6 +24,7 @@ public class Rq {
 	private final HttpServletRequest req;
 	private final HttpServletResponse resp;
 	private final HttpSession session;
+	private String findLoginPwUri;
 
 	private boolean isLogined = false;
 	private int loginedMemberId = 0;
@@ -100,4 +101,28 @@ public class Rq {
 
 		return currentUri;
 	}
+	public void printReplace(String resultCode, String msg, String replaceUri) throws IOException {
+		resp.setContentType("text/html; charset=UTF-8");
+		print(Ut.jsReplace(resultCode, msg, replaceUri));
+	}
+
+	public String getEncodedCurrentUri() {
+		return Ut.getEncodedCurrentUri(getCurrentUri());
+	}
+	
+	public String getLoginUri() {
+		return "../member/login?afterLoginUri=" + getAfterLoginUri();
+	}
+	private String getAfterLoginUri() {
+		return getEncodedCurrentUri();
+	}
+	
+	public String getFindLoginPwUri() {
+	    return "../member/findLoginPw?afterFindLoginPwUri=" + getAfterLoginUri();
+	}
+	
+	public String getFindLoginIdUri() {
+	    return "../member/findLoginId?afterFindLoginIdUri=" + getAfterLoginUri();
+	}
+	
 }

@@ -1,6 +1,31 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ include file="../common/head.jspf"%>
+<%@ include file="../common/toastUiEditorLib.jspf"%>
+
+<script type="text/javascript">
+	function ArticleWrite__submit(form) {
+		form.title.value = form.title.value.trim();
+
+		if (form.title.value.length == 0) {
+			alert('제목 써');
+			return;
+		}
+
+		const editor = $(form).find('.toast-ui-editor').data(
+				'data-toast-editor');
+		const markdown = editor.getMarkdown().trim();
+
+		if (markdown.length == 0) {
+			alert('내용 써');
+			return;
+		}
+
+		form.body.value = markdown;
+		form.submit();
+	}
+</script>
+
 <link href="https://cdn.jsdelivr.net/gh/projectnoonnu/2411-3@1.0/index.css" rel="stylesheet">
 <!DOCTYPE html>
 <html lang="ko">
@@ -22,10 +47,10 @@
     .content-box {
       position: relative;
       z-index: 1;
-      width: 50%;
+      width: 100%;
       margin: 0 auto 10% auto;
       padding: 20px;
-      background-color: white;
+
       border-radius: 12px;
       box-shadow: 0 0 12px rgba(0,0,0,0.15);
     }
@@ -151,7 +176,8 @@
 </div>
   <!-- 흰색 박스: 폼 + 뒤로가기 버튼 -->
   <div class="content-box">
-    <form action="../article/doWrite" method="POST">
+    <form onsubmit="ArticleWrite__submit(this); return false;" action="../article/doWrite" method="POST">
+			<input type="hidden" name="body" />
       <table>
         <tbody>
           <tr>
@@ -173,7 +199,9 @@
           <tr>
             <th>내용</th>
             <td>
-              <input class="input" required name="body" type="text" autocomplete="off" placeholder="내용" />
+              <div class="toast-ui-editor">
+								<script type="text/x-template"></script>
+							</div>
             </td>
           </tr>
         </tbody>

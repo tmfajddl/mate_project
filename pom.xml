@@ -130,6 +130,18 @@
     <version>5.8.0</version>
 </dependency>
 
+<!-- Spring Boot Starter Mail 추가 -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-mail</artifactId>
+		</dependency>
+
+		<!-- 메일 보내기 위한 -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
+		</dependency>
+
 
 	</dependencies>
 

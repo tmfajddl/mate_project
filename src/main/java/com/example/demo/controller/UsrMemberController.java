@@ -49,7 +49,8 @@ public class UsrMemberController {
 
 	@RequestMapping("/usr/member/doLogin")
 	@ResponseBody
-	public String doLogin(HttpServletRequest req, String loginId, String loginPw) {
+	public String doLogin(HttpServletRequest req, String loginId, String loginPw,
+			@RequestParam(defaultValue = "/") String afterLoginUri) {
 
 		Rq rq = (Rq) req.getAttribute("rq");
 
@@ -63,16 +64,16 @@ public class UsrMemberController {
 		Member member = memberService.getMemberByLoginId(loginId);
 
 		if (member == null) {
-			return Ut.jsHistoryBack("F-3", Ut.f("%s는(은) 없는 아이디야", loginId));
+			return Ut.jsHistoryBack("F-3", Ut.f("%s는(은) 없는 아이디입니다.", loginId));
 		}
 
-		if (member.getLoginPw().equals(loginPw) == false) {
-			return Ut.jsHistoryBack("F-4", "비밀번호가 일치하지 않습니다");
+		if (member.getLoginPw().equals(Ut.sha256(loginPw)) == false) {
+			return Ut.jsHistoryBack("F-4", Ut.f("비밀번호가 일치하지 않습니다."));
 		}
 
 		rq.login(member);
 
-		return Ut.jsReplace("S-1", Ut.f("%s님 환영합니다", member.getNickname()), "/");
+		return Ut.jsReplace("S-1", Ut.f("%s님 환영합니다", member.getNickname()), afterLoginUri);
 	}
 
 	@RequestMapping("/usr/member/join")
@@ -213,7 +214,7 @@ public class UsrMemberController {
 	    }
 
 	    // 회원 정보 수정
-	    memberService.modifyMember(loginedId, loginPw, nickname, cellphoneNum, email, introduce, profileImg);
+	    memberService.modifyMember(loginedId, Ut.sha256(loginPw), nickname, cellphoneNum, email, introduce, profileImg);
 
 	    return Ut.jsReplaceNoAlert(userCanModifyRd.getResultCode(), userCanModifyRd.getMsg(), "../home/main");
 	}
@@ -261,7 +262,7 @@ public class UsrMemberController {
 			return Ut.jsHistoryBack("F-1", "비밀번호를 입력해주세요.");
 		}
 
-		if (rq.getLoginedMember().getLoginPw().equals(loginPw) == false) {
+		if (rq.getLoginedMember().getLoginPw().equals(Ut.sha256(loginPw)) == false) {
 			return Ut.jsHistoryBack("F-2", "비밀번호가 틀립니다.");
 		}
 
@@ -278,6 +279,69 @@ public class UsrMemberController {
 	public String checkLoginId(@RequestParam String loginId) {
 	    Member member = memberService.getMemberByLoginId(loginId);
 	    return member == null ? "available" : "duplicated";
+	}
+	@RequestMapping("/usr/member/findLoginId")
+	public String showFindLoginId() {
+
+		return "usr/member/findLoginId";
+	}
+	
+	@RequestMapping("/usr/member/doFindLoginId")
+	@ResponseBody
+	public String doFindLoginId(@RequestParam(defaultValue = "/") String afterFindLoginIdUri, String name,
+			String email) {
+
+		Member member = memberService.getMemberByNameAndEmail(name, email);
+
+		if (member == null) {
+			return Ut.jsHistoryBack("F-1", "너는 없는 사람이야");
+		}
+
+		return Ut.jsReplace("S-1", Ut.f("너의 아이디는 [ %s ] 야", member.getLoginId()), afterFindLoginIdUri);
+	}
+
+	@RequestMapping("/usr/member/findLoginPw")
+	public String showFindLoginPw() {
+
+		return "usr/member/findLoginPw";
+	}
+
+	@RequestMapping("/usr/member/doFindLoginPw")
+	@ResponseBody
+	public String doFindLoginPw(@RequestParam(defaultValue = "/") String afterFindLoginPwUri, String loginId,
+			String email) {
+
+		Member member = memberService.getMemberByLoginId(loginId);
+
+		if (member == null) {
+			return Ut.jsHistoryBack("F-1", "너는 없는 사람이야");
+		}
+
+		if (member.getEmail().equals(email) == false) {
+			return Ut.jsHistoryBack("F-2", "일치하는 이메일이 없는데?");
+		}
+
+		ResultData notifyTempLoginPwByEmailRd = memberService.notifyTempLoginPwByEmail(member);
+
+		return Ut.jsReplace(notifyTempLoginPwByEmailRd.getResultCode(), notifyTempLoginPwByEmailRd.getMsg(),
+				afterFindLoginPwUri);
+	}
+	
+	@RequestMapping("/usr/member/getLoginIdDup")
+	@ResponseBody
+	public ResultData getLoginIdDup(String loginId) {
+
+		if (Ut.isEmpty(loginId)) {
+			return ResultData.from("F-1", "아이디를 입력해주세요");
+		}
+
+		Member existsMember = memberService.getMemberByLoginId(loginId);
+
+		if (existsMember != null) {
+			return ResultData.from("F-2", "해당 아이디는 이미 사용중이야", "loginId", loginId);
+		}
+
+		return ResultData.from("S-1", "사용 가능!", "loginId", loginId);
 	}
 
 }

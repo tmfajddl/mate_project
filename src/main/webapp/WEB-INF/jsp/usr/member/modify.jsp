@@ -46,6 +46,28 @@ body {
   }
 </style>
 
+<script>
+  // 비밀번호 확인 AJAX
+  function checkPasswordMatch() {
+    const pw = document.querySelector('input[name="loginPw"]').value;
+    const pw2 = document.querySelector('input[name="loginPw2"]').value;
+
+    if (pw === "" || pw2 === "") {
+      document.getElementById('pwMatchResult').innerText = "";
+      return;
+    }
+
+    // AJAX 요청 (비밀번호 확인은 클라이언트에서 할 수 있음)
+    if (pw === pw2) {
+      document.getElementById('pwMatchResult').innerText = "비밀번호가 일치합니다.";
+      document.getElementById('pwMatchResult').style.color = "green";
+    } else {
+      document.getElementById('pwMatchResult').innerText = "비밀번호가 일치하지 않습니다.";
+      document.getElementById('pwMatchResult').style.color = "red";
+    }
+  }
+</script>
+
 <body class="m-0 h-full" style="background-color: #f7f0e9;">
 
   <c:choose>
@@ -125,6 +147,17 @@ body {
       reader.readAsDataURL(input.files[0]);
     }
   }
+  
+  function togglePasswordFields() {
+    const passwordFields = document.getElementById("passwordFields");
+    // 토글 (숨김 <-> 표시)
+    if (passwordFields.style.display === "none") {
+      passwordFields.style.display = "block";
+    } else {
+      passwordFields.style.display = "none";
+    }
+  }
+
 </script>
     
     <div class="text-center mb-4" style="overflow-x: auto; max-width: 100%;">
@@ -158,18 +191,20 @@ body {
         <th>아이디</th>
         <td>${member.loginId}</td>
       </tr>
-      <tr>
-        <th>새 비밀번호</th>
-        <td>
-          <input class="input input-sm w-full" required name="loginPw" value="${member.loginPw }" type="password" autocomplete="off" placeholder="새 비밀번호" />
-        </td>
-      </tr>
-      <tr>
-        <th>새 비밀번호 확인</th>
-        <td>
-          <input class="input input-sm w-full" required name="loginPw2" type="password" autocomplete="off" placeholder="새 비밀번호 확인" />
-        </td>
-      </tr>
+<tr>
+  <th>새 비밀번호</th>
+  <td>
+    <!-- 새 비밀번호 변경 버튼 -->
+    <button type="button" class="btn-back" onclick="togglePasswordFields()">변경</button>
+
+    <!-- 비밀번호 입력창 (처음엔 숨김) -->
+    <div id="passwordFields" style="display: none; margin-top: 10px;">
+  <input class="input input-sm w-full mb-2" name="loginPw" type="password" autocomplete="off" placeholder="새 비밀번호" onkeyup="checkPasswordMatch()" />
+  <input class="input input-sm w-full" name="loginPw2" type="password" autocomplete="off" placeholder="새 비밀번호 확인" onkeyup="checkPasswordMatch()" />
+  <div id="pwMatchResult" style="margin-top: 5px; font-size: 0.9em;"></div>
+</div>
+  </td>
+</tr>
       <tr>
         <th>이름</th>
         <td>${member.name}</td>
