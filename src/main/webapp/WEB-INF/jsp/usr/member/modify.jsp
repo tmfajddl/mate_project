@@ -1,10 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ include file="../common/head.jspf"%>
+<link href="https://cdn.jsdelivr.net/gh/projectnoonnu/2411-3@1.0/index.css" rel="stylesheet">
 
 <!DOCTYPE html>
 <html lang="en">
 <style>
+body {
+  font-family: 'Ownglyph_ParkDaHyun', sans-serif;
+}
   option {
     background-color: #f7ecdc;
   }
@@ -42,7 +46,7 @@
   }
 </style>
 
-<body class="m-0 h-full font-sans" style="background-color: #f7f0e9;">
+<body class="m-0 h-full" style="background-color: #f7f0e9;">
 
   <c:choose>
     <c:when test="${rq.loginedTeam == null}">

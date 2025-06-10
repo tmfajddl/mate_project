@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="../common/head.jspf"%>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -87,11 +88,11 @@
     
     .players-container {
   display: flex;
-  width: 50vw;
+  width: 100vw;
   margin: 0;
   gap: 20px;
-  transform: scale(0.5);
-  transform-origin: top center;
+  transform: scale(0.8);
+  
 }
 
   .box-rounded {
@@ -117,10 +118,27 @@
   .player-table th {
     background-color: #f7ecdc;
   }
+  
+  .box-rounded.schedule {
+  width: 80%; /* 가로폭을 100%로 확장 */
+}
+
+@font-face {
+    font-family: 'Ownglyph_ParkDaHyun';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2411-3@1.0/Ownglyph_ParkDaHyun.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+  font-family: 'Ownglyph_ParkDaHyun', sans-serif;
+}
+  
+  
     
   </style>
 </head>
-<body class="m-0 h-full font-sans" style="background-color: #f7f0e9;">
+<body class="m-0 h-full" style="background-color: #f7f0e9;">
 
 <c:choose>
     <c:when test="${rq.loginedTeam == null}">
@@ -195,13 +213,22 @@
         </tr>
       </thead>
       <tbody>
-        <c:forEach var="player" items="${registeredPlayers}">
-          <tr>
-            <td><c:out value="${player.name}" /></td>
-            <td><c:out value="${player.position}" /></td>
-            <td><c:out value="${player.team}" /></td>
-          </tr>
-        </c:forEach>
+      <c:choose>
+    <c:when test="${empty registeredPlayers}">
+      <tr>
+        <td colspan="3">당일 1군 등록된 선수가 없습니다.</td>
+      </tr>
+    </c:when>
+    <c:otherwise>
+      <c:forEach var="player" items="${registeredPlayers}">
+        <tr>
+          <td><c:out value="${player.name}" /></td>
+          <td><c:out value="${player.position}" /></td>
+          <td><c:out value="${player.team}" /></td>
+        </tr>
+      </c:forEach>
+    </c:otherwise>
+  </c:choose>
       </tbody>
     </table>
   </div>
@@ -217,19 +244,58 @@
         </tr>
       </thead>
       <tbody>
-        <c:forEach var="player" items="${canceledPlayers}">
-          <tr>
-            <td><c:out value="${player.name}" /></td>
-            <td><c:out value="${player.position}" /></td>
-            <td><c:out value="${player.team}" /></td>
-          </tr>
-        </c:forEach>
+        <c:choose>
+    <c:when test="${empty canceledPlayers}">
+      <tr>
+        <td colspan="3">당일 1군 말소된 선수가 없습니다.</td>
+      </tr>
+    </c:when>
+    <c:otherwise>
+      <c:forEach var="player" items="${canceledPlayers}">
+        <tr>
+          <td><c:out value="${player.name}" /></td>
+          <td><c:out value="${player.position}" /></td>
+          <td><c:out value="${player.team}" /></td>
+        </tr>
+      </c:forEach>
+    </c:otherwise>
+  </c:choose>
       </tbody>
     </table>
   </div>
-</div>
-
-  <!-- 로그인 / 로그아웃 버튼 영역 -->
+  
+  <div class="box-rounded schedule">
+    <div class="section-title">오늘 야구 일정</div>
+    <table class="player-table">
+      <thead>
+        <tr>
+          <c:forEach var="column" items="${naverBaseballSchedule[0].keySet()}">
+            <th><c:out value="${column}" /></th>
+          </c:forEach>
+        </tr>
+      </thead>
+      <tbody>
+        <c:choose>
+          <c:when test="${empty naverBaseballSchedule}">
+            <tr>
+              <td colspan="3">오늘 야구 일정 없습니다.</td>
+            </tr>
+          </c:when>
+          <c:otherwise>
+            <c:forEach var="row" items="${naverBaseballSchedule}">
+              <tr>
+                <c:forEach var="column" items="${row.keySet()}">
+                  <td><c:out value="${row[column]}" /></td>
+                </c:forEach>
+              </tr>
+            </c:forEach>
+          </c:otherwise>
+        </c:choose>
+      </tbody>
+    </table>
+  </div>
+  
+    <!-- 로그인 / 로그아웃 버튼 영역 -->
   <div style="margin-top: 20px;">
     <c:if test="${!rq.isLogined()}">
       <button class="btn-back"><a href="../member/login">로그인</a></button>
@@ -241,6 +307,8 @@
       </button>
     </c:if>
   </div>
+</div>
+
 
 </section>
 

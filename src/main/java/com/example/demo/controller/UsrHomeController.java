@@ -40,6 +40,9 @@ public class UsrHomeController {
 		 
 		 List<Map<String, String>> canceledPlayers = kboCrawlerService.getCanceledPlayers();
 		 model.addAttribute("canceledPlayers", canceledPlayers);
+		 
+		 List<HashMap<String, String>> naverBaseballSchedule = kboCrawlerService.getNaverBaseballSchedule();
+		 model.addAttribute("naverBaseballSchedule", naverBaseballSchedule);
 		return "/usr/home/main";
 	}
 

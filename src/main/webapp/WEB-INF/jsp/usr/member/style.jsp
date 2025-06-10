@@ -2,10 +2,14 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ include file="../common/head.jspf"%>
+<link href="https://cdn.jsdelivr.net/gh/projectnoonnu/2411-3@1.0/index.css" rel="stylesheet">
 
 <!DOCTYPE html>
 <html lang="en">
 <style>
+body {
+  font-family: 'Ownglyph_ParkDaHyun', sans-serif;
+}
   option {
     background-color: #f7ecdc;
   }
@@ -30,7 +34,7 @@
   }
 </style>
 
-<body class="m-0 h-full font-sans" style="background-color: #f7f0e9;">
+<body class="m-0 h-full" style="background-color: #f7f0e9;">
 
   <c:choose>
     <c:when test="${rq.loginedTeam == null}">
@@ -78,6 +82,11 @@
                  style="background-image: url('/images/bg30.png'); cursor: url('/images/cursor10.png') 25 25, auto;">
     </c:when>
 </c:choose>
+
+<div style="width: 80%; margin: 20px auto 0 auto;">
+  <h2 style="font-size: 3em; font-weight: bold; color: #918c84; text-align: left; margin-left: 28%;">응원 스타일 등록/수정</h2>
+  <h2 style="font-size: 1em; font-weight: bold; color: #918c84; text-align: left; margin-left: 28%;">응원 스타일을 등록하고 마음이 통하는 친구를 찾아보는건 어떠신가요?</h2>
+</div>
 
     <div style="width: 35%; border-radius: 10px; background-color: rgb(242, 247, 247); padding: 15px; border: 3px dashed red;">
       <form action="/usr/member/insertStyle" method="post">

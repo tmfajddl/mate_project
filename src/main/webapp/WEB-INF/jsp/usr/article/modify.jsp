@@ -1,9 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-
+<link href="https://cdn.jsdelivr.net/gh/projectnoonnu/2411-3@1.0/index.css" rel="stylesheet">
 <%@ include file="../common/head.jspf"%>
 
 <style>
+body {
+  font-family: 'Ownglyph_ParkDaHyun', sans-serif;
+}
   /* 배경에 연한 하늘색 반투명 오버레이 */
   .overlay {
     background-color: rgba(247, 246, 245, 0.6); /* 연한 하늘색 */
@@ -22,7 +25,7 @@
     width: 100%;
     max-width: 800px;
     padding: 20px;
-    margin: 10% auto;
+    margin: 0 auto 10% auto;
     overflow-y: auto;
     background-color: white;
     border-radius: 10px;
@@ -80,7 +83,7 @@
   }
 </style>
 
- <body class="m-0 font-sans" style="background-color: #f7f0e9;">
+ <body class="m-0" style="background-color: #f7f0e9;">
 
   <c:choose>
     <c:when test="${rq.loginedTeam == null}">
@@ -131,6 +134,10 @@
 
     <!-- 오버레이: 모든 배경 위에 고정 -->
     <div class="overlay"></div>
+    
+        <div style="width: 80%; margin: 20px auto 0 auto;">
+  <h2 style="font-size: 3em; font-weight: bold; color: black; text-align: center;">${article.title} 게시글 수정하기</h2>
+</div>
 
     <!-- 내용 컨테이너 -->
     <div class="content-container">

@@ -1,8 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="../common/head.jspf"%>
+<link href="https://cdn.jsdelivr.net/gh/projectnoonnu/2411-3@1.0/index.css" rel="stylesheet">
 <!DOCTYPE html>
 <html lang="en">
 <style>
+
+body {
+  font-family: 'Ownglyph_ParkDaHyun', sans-serif;
+}
 .menu2 {
   display: flex;
   flex-direction: row;
@@ -130,7 +135,7 @@ border-radius: 10px;
   navigator.geolocation.getCurrentPosition(onGeoOk, onGeoError);
   </script>
 
-<body class="m-0 h-full font-sans" style="background-color: #f7f0e9;">
+<body class="m-0 h-full" style="background-color: #f7f0e9;">
 
   <!-- Hero Section -->
     <c:choose>
@@ -180,9 +185,9 @@ border-radius: 10px;
     </c:when>
 </c:choose>
     <div class="menu2">
-      <div style="background-color: rgb(242, 247, 247);"><a href="../project/information">날씨/준비물</a></div>
-      <div style="background-color: rgb(242, 247, 247);"><a href="../project/information2">최근경기순위</a></div>
-      <div style="background-color: rgb(242, 247, 247);"><a href="../project/information3">주변 맛집</a></div>
+    <div style="background-color: rgb(242, 247, 247);"><a href="../project/information">날씨/준비물</a></div>
+    <div style="background-color: rgb(242, 247, 247);"><a href="../project/information2">순위/뉴스</a></div>
+    <div style="background-color: rgb(242, 247, 247);"><a href="../project/information3">선수들 맛집</a></div>
     </div>
 
     <div id="bodySection1" class="body shadow-lg" style="display: none;">

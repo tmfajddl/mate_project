@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-
+<link href="https://cdn.jsdelivr.net/gh/projectnoonnu/2411-3@1.0/index.css" rel="stylesheet">
 <%@ include file="../common/head.jspf"%>
 
 <!-- FontAwesome -->
@@ -8,6 +8,9 @@
 
 <!-- Reaction 아이콘 색상 -->
 <style>
+body {
+  font-family: 'Ownglyph_ParkDaHyun', sans-serif;
+}
   .like-icon.active { color: #6a71f7; }
   .dislike-icon.active { color: #fa5f81; }
   .comment-row {
@@ -47,7 +50,7 @@ background-color: #f2d8b1;
   }
 </style>
 
- <body class="m-0 font-sans" style="background-color: #f7f0e9;">
+ <body class="m-0" style="background-color: #f7f0e9;">
      <c:choose>
     <c:when test="${rq.loginedTeam == null}">
         <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center text-black"
@@ -97,6 +100,7 @@ background-color: #f2d8b1;
 
   <!-- 연한 하늘색 오버레이 -->
   <div class="absolute inset-0" style = "background-color: rgba(247, 246, 245, 0.6);"></div>
+  
 
   <!-- 2-Column 레이아웃 -->
   <div class="relative flex w-full max-w-6xl">

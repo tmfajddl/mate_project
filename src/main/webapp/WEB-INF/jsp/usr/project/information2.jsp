@@ -1,9 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="../common/head.jspf"%>
+<link href="https://cdn.jsdelivr.net/gh/projectnoonnu/2411-3@1.0/index.css" rel="stylesheet">
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <style>
+body {
+  font-family: 'Ownglyph_ParkDaHyun', sans-serif;
+}
   .menu2 {
     display: flex;
     flex-direction: row;
@@ -113,7 +117,7 @@
 </style>
 </head>
 
-<body class="m-0 h-full font-sans" style="background-color: #f7f0e9;">
+<body class="m-0 h-full" style="background-color: #f7f0e9;">
  <c:choose>
     <c:when test="${rq.loginedTeam == null}">
         <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
@@ -163,8 +167,8 @@
 
   <div class="menu2">
     <div style="background-color: rgb(242, 247, 247);"><a href="../project/information">날씨/준비물</a></div>
-    <div style="background-color: rgb(242, 247, 247);"><a href="../project/information2">최근경기순위</a></div>
-    <div style="background-color: rgb(242, 247, 247);"><a href="../project/information3">주변 맛집</a></div>
+    <div style="background-color: rgb(242, 247, 247);"><a href="../project/information2">순위/뉴스</a></div>
+    <div style="background-color: rgb(242, 247, 247);"><a href="../project/information3">선수들 맛집</a></div>
   </div>
 
   <div class="body" style="background-color: rgb(242, 247, 247); padding: 20px;">
@@ -214,7 +218,7 @@
 
     <!-- 오른쪽: 속보 뉴스 (이미지 포함, 스크롤 가능) -->
     <div class="news-list">
-      <h2 style="margin-bottom: 1rem;">KBO 속보 뉴스</h2>
+      <h2 style="margin-bottom: 1rem;">KBO 최신 뉴스</h2>
       <c:forEach var="news" items="${breakingNews}">
         <div class="news-item">
           <div class="news-img">

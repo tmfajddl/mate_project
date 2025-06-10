@@ -1,8 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="../common/head.jspf"%>
+<link href="https://cdn.jsdelivr.net/gh/projectnoonnu/2411-3@1.0/index.css" rel="stylesheet">
 <!DOCTYPE html>
 <html lang="en">
 <style>
+body {
+  font-family: 'Ownglyph_ParkDaHyun', sans-serif;
+}
+
 .main {
   border-radius: 10px;
   width: 70%;              /* 너비는 70%로 조절 */
@@ -103,7 +108,7 @@ background-color: #f2d8b1;
 
 </style>
 
-  <body class="m-0 h-full font-sans" style="background-color: #f7f0e9;">
+  <body class="m-0 h-full" style="background-color: #f7f0e9;">
 
     <!-- Hero Section (100% 화면 채움 + 배경 이미지) -->
       <c:choose>
@@ -152,10 +157,14 @@ background-color: #f2d8b1;
                  style="background-image: url('/images/bg30.png'); cursor: url('/images/cursor10.png') 25 25, auto;">
     </c:when>
 </c:choose>
+
+  <div style="width: 80%; margin: 20px auto 0 auto;">
+  <h2 style="font-size: 3em; font-weight: bold; color: #918c84; text-align: left; margin-left: 7%;">추천굿즈</h2>
+  <h2 style="font-size: 1em; font-weight: bold; color: #918c84; text-align: left; margin-left: 7%;">우리팀을 응원하는 굿즈들을 추천해 드릴게요!</h2>
+</div>
     <div class="main">
     
     <div class="body" padding: 20px;">
-  <h2>굿즈 추천</h2>
   <!-- 로딩 메시지 -->
     <div id="loading" style="text-align: center; margin: 20px 0;">
   <div class="spinner"></div>

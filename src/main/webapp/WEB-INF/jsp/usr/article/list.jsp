@@ -1,10 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="../common/head.jspf"%>
-
+<link href="https://cdn.jsdelivr.net/gh/projectnoonnu/2411-3@1.0/index.css" rel="stylesheet">
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <style>
+    body {
+  font-family: 'Ownglyph_ParkDaHyun', sans-serif;
+}
       /* 배경에 연한 하늘색 반투명 오버레이 */
       .overlay {
         background-color: rgba(247, 246, 245, 0.6); /* 연한 하늘색 */
@@ -87,7 +90,7 @@ background-color: #f2d8b1;
     </style>
   </head>
 
-  <body class="m-0 font-sans" style="background-color: #f7f0e9;">
+  <body class="m-0" style="background-color: #f7f0e9;">
      <c:choose>
     <c:when test="${rq.loginedTeam == null}">
         <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
@@ -140,6 +143,9 @@ background-color: #f2d8b1;
 
       <!-- 메인 컨텐츠 -->
       <div class="content-container text-black">
+<div style="width: 80%; margin: 20px 0 0 0;">
+  <h2 style="font-size: 3em; font-weight: bold; color: #918c84; text-align: left;">${board.name}</h2>
+</div>
         <%-- 페이지 정보 --%>
         <%
           int pageLimit = (int) request.getAttribute("pageLimit");

@@ -1,11 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ include file="../common/head.jspf"%>
-
+<link href="https://cdn.jsdelivr.net/gh/projectnoonnu/2411-3@1.0/index.css" rel="stylesheet">
 <!DOCTYPE html>
 <html lang="ko">
 <head>
   <style>
+  body {
+  font-family: 'Ownglyph_ParkDaHyun', sans-serif;
+}
     /* 연한 하늘색 오버레이 */
     .overlay {
       background-color: rgba(247, 246, 245, 0.6);
@@ -20,7 +23,7 @@
       position: relative;
       z-index: 1;
       width: 50%;
-      margin: 10% auto;
+      margin: 0 auto 10% auto;
       padding: 20px;
       background-color: white;
       border-radius: 12px;
@@ -90,7 +93,7 @@
   </style>
 </head>
 
-<body class="m-0 font-sans" style="background-color: #f7f0e9;">
+<body class="m-0" style="background-color: #f7f0e9;">
   
   <!-- 배경 이미지 및 팀별 배경 설정 -->
 <c:choose>
@@ -142,7 +145,10 @@
 
   <!-- 연한 하늘색 오버레이 -->
   <div class="overlay"></div>
-
+ 
+    <div style="width: 80%; margin: 20px auto 0 auto;">
+  <h2 style="font-size: 3em; font-weight: bold; color: black; text-align: center;">글쓰기</h2>
+</div>
   <!-- 흰색 박스: 폼 + 뒤로가기 버튼 -->
   <div class="content-box">
     <form action="../article/doWrite" method="POST">

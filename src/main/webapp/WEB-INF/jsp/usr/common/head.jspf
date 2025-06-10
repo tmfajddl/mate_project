@@ -20,6 +20,13 @@
 
 <!-- 데이지 UI -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/daisyui/4.12.23/full.css" />
+
+<link href="https://cdn.jsdelivr.net/gh/projectnoonnu/2411-3@1.0/index.css" rel="stylesheet">
+<style>
+body {
+  font-family: 'Ownglyph_ParkDaHyun', sans-serif;
+}
+</style>
 </head>
 <body data-theme="light">
 

@@ -139,21 +139,24 @@ public class KboCrawlerService {
         Elements rows = table.select("tbody tr");
 
         List<Map<String, String>> players = new ArrayList<>();
+        
+        
 
         for (Element row : rows) {
             Elements tds = row.select("td");
 
-            // 예: 선수명(1번째 td), 포지션(3번째 td), 팀(5번째 td) - 실제 인덱스는 크롤링 페이지 구조 확인 필요 (0부터 시작)
-            String name = tds.get(0).text().trim();
-            String position = tds.get(1).text().trim();
-            String team = tds.get(2).text().trim();
+            if (tds.size() >= 3) {
+                String name = tds.get(0).text().trim();
+                String position = tds.get(1).text().trim();
+                String team = tds.get(2).text().trim();
 
-            Map<String, String> playerData = new HashMap<>();
-            playerData.put("name", name);
-            playerData.put("position", position);
-            playerData.put("team", team);
+                Map<String, String> playerData = new HashMap<>();
+                playerData.put("name", name);
+                playerData.put("position", position);
+                playerData.put("team", team);
 
-            players.add(playerData);
+                players.add(playerData);
+            }
         }
 
         return players;
@@ -168,9 +171,12 @@ public class KboCrawlerService {
         Elements rows = table.select("tbody tr");
 
         List<Map<String, String>> datas = new ArrayList<>();
+        
 
         for (Element row : rows) {
             Elements tds = row.select("td");
+            
+            if (tds.size() >= 3) {
 
             // 예: 선수명(1번째 td), 포지션(3번째 td), 팀(5번째 td) - 실제 인덱스는 크롤링 페이지 구조 확인 필요 (0부터 시작)
             String name = tds.get(0).text().trim();
@@ -183,6 +189,7 @@ public class KboCrawlerService {
             playerData.put("team", team);
 
             datas.add(playerData);
+            }
         }
 
         return datas;

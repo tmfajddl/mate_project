@@ -1,9 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="../common/head.jspf"%>
+<link href="https://cdn.jsdelivr.net/gh/projectnoonnu/2411-3@1.0/index.css" rel="stylesheet">
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <style>
+body {
+  font-family: 'Ownglyph_ParkDaHyun', sans-serif;
+}
 /* 기존 스타일 유지 */
 .menu2 {
   display: flex;
@@ -110,7 +114,7 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
-<body class="m-0 h-full font-sans" style="background-color: #f7f0e9;">
+<body class="m-0 h-full" style="background-color: #f7f0e9;">
 
   <!-- Hero Section (팀 배경화면 선택) -->
    <c:choose>
@@ -163,8 +167,8 @@
   <!-- 메뉴 -->
   <div class="menu2">
     <div style="background-color: rgb(242, 247, 247);"><a href="../project/information">날씨/준비물</a></div>
-    <div style="background-color: rgb(242, 247, 247);"><a href="../project/information2">최근경기순위</a></div>
-    <div style="background-color: rgb(242, 247, 247);"><a href="../project/information3">주변 맛집</a></div>
+    <div style="background-color: rgb(242, 247, 247);"><a href="../project/information2">순위/뉴스</a></div>
+    <div style="background-color: rgb(242, 247, 247);"><a href="../project/information3">선수들 맛집</a></div>
   </div>
 
   <!-- 본문 -->

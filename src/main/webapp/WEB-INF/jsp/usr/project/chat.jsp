@@ -4,8 +4,12 @@
 <%@ include file="../common/head.jspf"%>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-
+<link href="https://cdn.jsdelivr.net/gh/projectnoonnu/2411-3@1.0/index.css" rel="stylesheet">
 <style>
+
+body {
+  font-family: 'Ownglyph_ParkDaHyun', sans-serif;
+}
   /* 채팅방 박스: 화면 높이 80% */
   .chat-container {
     background-color: rgba(255, 255, 255, 0.7); /* 반투명 흰색 */
@@ -117,7 +121,7 @@
   }
 </style>
 
-<body class="m-0 h-full font-sans" style="background-color: #f7f0e9;">
+<body class="m-0 h-full" style="background-color: #f7f0e9;">
 
   <c:choose>
     <c:when test="${rq.loginedTeam == null}">
@@ -164,9 +168,13 @@
         <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-white"
                  style="background-image: url('/images/bg30.png'); cursor: url('/images/cursor10.png') 25 25, auto;">
     </c:when>
-</c:choose>
+    </c:choose>
 
   <div class="absolute inset-0 "></div>
+  
+  <div style="width: 80%; margin: 20px auto 0 auto;">
+  <h2 style="font-size: 3em; font-weight: bold; color: #918c84; text-align: left; margin-left: 1%;">채팅</h2>
+</div>
 
   <div class="relative flex w-full max-w-6xl gap-4">
 

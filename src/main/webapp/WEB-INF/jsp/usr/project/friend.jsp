@@ -2,11 +2,16 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ include file="../common/head.jspf"%>
+<link href="https://cdn.jsdelivr.net/gh/projectnoonnu/2411-3@1.0/index.css" rel="stylesheet">
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <style>
+
+body {
+  font-family: 'Ownglyph_ParkDaHyun', sans-serif;
+}
   .main {
     border-radius: 10px;
     width: 80%;
@@ -103,10 +108,11 @@
   .btn-back:hover {
     background-color: #f2d8b1;
   }
+  
 </style>
 </head>
 
-<body class="m-0 h-full font-sans" style="background-color: #f7f0e9;">
+<body class="m-0 h-full" style="background-color: #f7f0e9;">
 
     <c:choose>
     <c:when test="${rq.loginedTeam == null}">
@@ -155,6 +161,11 @@
     </c:when>
 </c:choose>
 
+
+<div style="width: 80%; margin: 20px auto 0 auto;">
+  <h2 style="font-size: 3em; font-weight: bold; color: #918c84; text-align: left;">추천 친구 목록</h2>
+  <h2 style="font-size: 1em; font-weight: bold; color: #918c84; text-align: left;">취향이 비슷한 친구들을 추천 드려요!</h2>
+</div>
     <div class="main">
       <c:choose>
         <c:when test="${not empty recommendedFriends}">
