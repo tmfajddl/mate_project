@@ -1,16 +1,21 @@
 package com.example.demo.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.example.demo.interceptor.BeforeActionInterceptor;
 import com.example.demo.service.ArticleService;
 import com.example.demo.service.BoardService;
@@ -264,6 +269,40 @@ public class UsrArticleController {
 		model.addAttribute("articles", articles);
 
 		return "usr/article/search";
+	}
+	
+	@PostMapping("/usr/project/article/uploadImage")
+	@ResponseBody
+	public Map<String, Object> uploadImage(@RequestParam("image") MultipartFile imageFile) {
+	    Map<String, Object> response = new HashMap<>();
+
+	    if (imageFile.isEmpty()) {
+	        response.put("success", false);
+	        response.put("message", "이미지 파일이 없습니다.");
+	        return response;
+	    }
+
+	    try {
+	        // 서버 저장 경로 예시 (실제 경로 환경에 맞게 변경)
+	        String uploadDir = "/path/to/upload/images/";
+
+	        // 파일 이름 유니크하게 생성
+	        String filename = UUID.randomUUID().toString() + "_" + imageFile.getOriginalFilename();
+
+	        File dest = new File(uploadDir + filename);
+	        imageFile.transferTo(dest);
+
+	        // 웹에서 접근 가능한 URL
+	        String imageUrl = "/upload/images/" + filename;
+
+	        response.put("success", true);
+	        response.put("imageUrl", imageUrl);
+	    } catch (Exception e) {
+	        response.put("success", false);
+	        response.put("message", "이미지 저장 실패: " + e.getMessage());
+	    }
+
+	    return response;
 	}
 	
 }

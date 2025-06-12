@@ -38,59 +38,58 @@ public class KboCrawlerService {
 	}
 
 	public List<HashMap<String, String>> getBreakingNews() throws IOException {
-	    String url = "https://www.koreabaseball.com/MediaNews/News/BreakingNews/List.aspx";
-	    Document doc = Jsoup.connect(url).get();
+	    List<HashMap<String, String>> allNews = new ArrayList<>();
+	    int maxPages = 10; // 전체 몇 페이지까지 가져올지 설정 (원하면 늘릴 수 있음)
 
-	    Element ul = doc.selectFirst("#contents > div.sub-content > div.board > ul");
-	    Elements lis = ul.select("li");
-	    String baseUrl = "https://www.koreabaseball.com/MediaNews/News/BreakingNews";
+	    for (int page = 1; page <= maxPages; page++) {
+	        String url = "https://www.koreabaseball.com/MediaNews/News/BreakingNews/List.aspx?page=" + page;
+	        Document doc = Jsoup.connect(url).get();
 
-	    List<HashMap<String, String>> datas = new ArrayList<>();
+	        Element ul = doc.selectFirst("#contents > div.sub-content > div.board > ul");
+	        if (ul == null) continue; // 예외처리
 
-	    for (Element li : lis) {
-	        String title = li.selectFirst("div > strong > a").text().trim();
-	        String body = li.selectFirst("div > p").text().trim();
+	        Elements lis = ul.select("li");
+	        String baseUrl = "https://www.koreabaseball.com/MediaNews/News/BreakingNews";
 
-	        // 상세페이지 링크 가져오기
-	        Element linkTag = li.selectFirst("div > strong > a");
-	        String linkUrl = null;
-	        if (linkTag != null) {
-	            String href = linkTag.attr("href");
-	            if (!href.startsWith("/")) {
-	                href = "/" + href;
+	        for (Element li : lis) {
+	            String title = li.selectFirst("div > strong > a").text().trim();
+	            String body = li.selectFirst("div > p").text().trim();
+
+	            // 링크
+	            Element linkTag = li.selectFirst("div > strong > a");
+	            String linkUrl = null;
+	            if (linkTag != null) {
+	                String href = linkTag.attr("href");
+	                if (!href.startsWith("/")) href = "/" + href;
+	                linkUrl = baseUrl + href;
 	            }
-	            linkUrl = baseUrl + href;
-	        }
 
-	        // 이미지 크롤링
-	        Element imgTag = li.selectFirst("span > a > img");
-	        String imgUrl = null;
-	        if (imgTag != null) {
-	            String src = imgTag.attr("src");
-
-	            if (src.startsWith("//")) {
-	                // // 로 시작하면 https: 붙이기
-	                imgUrl = "https:" + src;
-	            } else if (!src.startsWith("http")) {
-	                // 상대경로이면 도메인 붙이기
-	                imgUrl = "https://www.koreabaseball.com" + (src.startsWith("/") ? "" : "/") + src;
-	            } else {
-	                imgUrl = src;
+	            // 이미지
+	            Element imgTag = li.selectFirst("span > a > img");
+	            String imgUrl = null;
+	            if (imgTag != null) {
+	                String src = imgTag.attr("src");
+	                if (src.startsWith("//")) {
+	                    imgUrl = "https:" + src;
+	                } else if (!src.startsWith("http")) {
+	                    imgUrl = "https://www.koreabaseball.com" + (src.startsWith("/") ? "" : "/") + src;
+	                } else {
+	                    imgUrl = src;
+	                }
 	            }
+
+	            HashMap<String, String> map = new HashMap<>();
+	            map.put("title", title);
+	            map.put("body", body);
+	            map.put("linkUrl", linkUrl);
+	            map.put("imgUrl", imgUrl);
+
+	            allNews.add(map);
 	        }
-
-	        HashMap<String, String> map = new HashMap<>();
-	        map.put("title", title);
-	        map.put("body", body);
-	        map.put("linkUrl", linkUrl);
-	        map.put("imgUrl", imgUrl);
-
-	        datas.add(map);
 	    }
 
-	    return datas;
+	    return allNews;
 	}
-
     // 3) 네이버 야구 검색 결과 크롤링 (최대 3개 컬럼)
     public List<HashMap<String, String>> getNaverBaseballSchedule() throws IOException {
         String url = "https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query=야구";

@@ -121,6 +121,7 @@
   
   .box-rounded.schedule {
   width: 80%; /* 가로폭을 100%로 확장 */
+  height: 20%;
 }
 
 @font-face {
@@ -264,36 +265,36 @@ body {
     </table>
   </div>
   
-  <div class="box-rounded schedule">
-    <div class="section-title">오늘 야구 일정</div>
-    <table class="player-table">
-      <thead>
-        <tr>
-          <c:forEach var="column" items="${naverBaseballSchedule[0].keySet()}">
-            <th><c:out value="${column}" /></th>
-          </c:forEach>
-        </tr>
-      </thead>
-      <tbody>
-        <c:choose>
-          <c:when test="${empty naverBaseballSchedule}">
+<div class="box-rounded schedule"> 
+  <div class="section-title">오늘 야구 일정</div>
+  <table class="player-table">
+    <thead>
+      <tr>
+        <c:forEach var="column" items="${naverBaseballSchedule[0].keySet()}">
+          <th><c:out value="${column}" /></th>
+        </c:forEach>
+      </tr>
+    </thead>
+    <tbody>
+      <c:choose>
+        <c:when test="${empty naverBaseballSchedule}">
+          <tr>
+            <td colspan="4">오늘 야구 일정이 없습니다.</td>
+          </tr>
+        </c:when>
+        <c:otherwise>
+          <c:forEach var="row" items="${naverBaseballSchedule}">
             <tr>
-              <td colspan="3">오늘 야구 일정 없습니다.</td>
+              <c:forEach var="column" items="${row.keySet()}">
+                <td><c:out value="${row[column]}" /></td>
+              </c:forEach>
             </tr>
-          </c:when>
-          <c:otherwise>
-            <c:forEach var="row" items="${naverBaseballSchedule}">
-              <tr>
-                <c:forEach var="column" items="${row.keySet()}">
-                  <td><c:out value="${row[column]}" /></td>
-                </c:forEach>
-              </tr>
-            </c:forEach>
-          </c:otherwise>
-        </c:choose>
-      </tbody>
-    </table>
-  </div>
+          </c:forEach>
+        </c:otherwise>
+      </c:choose>
+    </tbody>
+  </table>
+</div>
   
     <!-- 로그인 / 로그아웃 버튼 영역 -->
   <div style="margin-top: 20px;">

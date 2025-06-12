@@ -67,18 +67,6 @@
     .button-container {
       display: none;
     }
-    /* 전송 버튼 */
-  .btn-back {
-    background-color: #f7ecdc;
-    border: none;
-    cursor: pointer;
-    color: black;
-    padding: 4px 10px;
-    border-radius: 5px;
-  }
-  .btn-back:hover {
-    background-color: #f2d8b1;
-  }
   </style>
 </head>
 <body class="m-0 h-full" style="background-color: #f7f0e9;">
@@ -131,7 +119,36 @@
     </c:when>
 </c:choose>
 
-
+<div class="box-rounded schedule"> 
+  <div class="section-title">오늘 야구 일정</div>
+  <table class="player-table">
+    <thead>
+      <tr>
+        <c:forEach var="column" items="${naverBaseballSchedule[0].keySet()}">
+          <th><c:out value="${column}" /></th>
+        </c:forEach>
+      </tr>
+    </thead>
+    <tbody>
+      <c:choose>
+        <c:when test="${empty naverBaseballSchedule}">
+          <tr>
+            <td colspan="4">오늘 야구 일정이 없습니다.</td>
+          </tr>
+        </c:when>
+        <c:otherwise>
+          <c:forEach var="row" items="${naverBaseballSchedule}">
+            <tr>
+              <c:forEach var="column" items="${row.keySet()}">
+                <td><c:out value="${row[column]}" /></td>
+              </c:forEach>
+            </tr>
+          </c:forEach>
+        </c:otherwise>
+      </c:choose>
+    </tbody>
+  </table>
+</div>
 
 <div style="width: 80%; margin: 20px auto 0 auto;">
   <h2 style="font-size: 3em; font-weight: bold; color: #918c84; text-align: left; margin-left: 1%;">구장 별 날씨</h2>
@@ -153,7 +170,7 @@
     <button class="stadium-btn" style="left: 200px; top: 130px;" onclick="onStadiumClick('inchun')" title="인천SSG랜더스필드">인</button>
   </div>
   
-  <div id="checklist" class="ps flex flex-col justify-center p-6 text-sm leading-relaxed overflow-y-auto" style="display:none; position:absolute; top:200px; right: 100px; width: 300px; background: rgba(255,255,255,0.9); border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+  <div id="checklist" class="ps flex flex-col justify-center p-6 text-sm leading-relaxed overflow-y-auto" style="display:none; position:absolute; top:100px; right: 100px; width: 300px; background: rgba(255,255,255,0.9); border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
   <div>
     🎒 준비물 체크리스트<br />
     1. 우비 or 우산<br />
@@ -174,7 +191,7 @@
   </div>
 </div>
 
-<div id="checklist2" class="ps flex flex-col justify-center p-6 text-sm leading-relaxed overflow-y-auto" style="display:none; position:absolute; top:200px; right: 100px; width: 300px; background: rgba(255,255,255,0.9); border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+<div id="checklist2" class="ps flex flex-col justify-center p-6 text-sm leading-relaxed overflow-y-auto" style="display:none; position:absolute; top:100px; right: 100px; width: 300px; background: rgba(255,255,255,0.9); border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
   <div>
     🎒 준비물 체크리스트<br />
           1. 얇은 겉옷 (바람막이/가디건)<br />
@@ -192,7 +209,7 @@
   </div>
 </div>
 
-<div id="checklist3" class="ps flex flex-col justify-center p-6 text-sm leading-relaxed overflow-y-auto" style="display:none; position:absolute; top:200px; right: 100px; width: 300px; background: rgba(255,255,255,0.9); border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+<div id="checklist3" class="ps flex flex-col justify-center p-6 text-sm leading-relaxed overflow-y-auto" style="display:none; position:absolute; top:100px; right: 100px; width: 300px; background: rgba(255,255,255,0.9); border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
   <div>
     🎒 준비물 체크리스트<br />
           1. 모자 or 캡모자<br />
@@ -290,26 +307,24 @@ document.addEventListener("DOMContentLoaded", function () {
 
       weatherSpan.textContent = '🌡'+temp+'°C / '+desc+' / 강수량: '+rain+'mm';
       
-      if (desc.includes("비") || desc.includes("눈") || desc.includes("우박")) {
-    	    checklist.style.display = "block";
-    	    checklist2.style.display = "none";
-    	    checklist3.style.display = "none";
-    	} 
-    	else if (desc.includes("흐림") || desc.includes("구름")) {
-    	    checklist2.style.display = "block";
-    	    checklist.style.display = "none";
-    	    checklist3.style.display = "none";
-    	}
-    	else if (desc.includes("맑음")) {
-    	    checklist3.style.display = "block";
-    	    checklist2.style.display = "none";
-    	    checklist.style.display = "none";
-    	}
-    	else {
-    	    checklist.style.display = "none";
-    	    checklist2.style.display = "none";
-    	    checklist3.style.display = "none";
-    	}
+      if(desc.includes("비" || "눈" || "우박")) {
+          checklist.style.display = "block";
+          checklist2.style.display = "none";
+          checklist3.style.display = "none";
+        } 
+      else if(desc.includes("흐림" || "구름")){
+    	  checklist2.style.display = "block";
+    	  checklist.style.display = "none";
+    	  checklist3.style.display = "none";
+      }
+      else if(desc.includes("맑음")){
+    	  checklist3.style.display = "block";
+    	  checklist2.style.display = "none";
+    	  checklist.style.display = "none";
+      }
+      else {
+          checklist.style.display = "none";
+        }
     } catch (err) {
       weatherSpan.textContent = "날씨 정보를 불러올 수 없음";
       console.error("fetch 에러:", err);
@@ -321,13 +336,6 @@ document.addEventListener("DOMContentLoaded", function () {
   onStadiumClick('jamshil');
 });
 </script>
-    
-                     <div class="left-controls flex items-center gap-4 mt-2 mb-4" style="justify-content:flex-start; text-align:left;">
-  <button class="btn-back btn btn-ghost" type="button" onclick="history.back();">뒤로가기</button>
-</div>
-  </section>
-
+</section>
 </body>
 </html>
-
-

@@ -7,218 +7,189 @@
 <style>
 body {
   font-family: 'Ownglyph_ParkDaHyun', sans-serif;
+  overflow-x: hidden; /* 가로 스크롤 제거 */
 }
-  .menu2 {
-    display: flex;
-    flex-direction: row;
-    justify-content: end;
-    width: 70%;
-    height: 80px;
-    margin: 0;
-    padding: 0;
-  }
-  .menu2 > :nth-child(2) {
-    width: 20%;
-    height: 100%;
-    border: 2px solid #f2d8b1;
-    border-bottom: none;
-    border-radius: 10px 10px 0 0;
-  }
-  .menu2 > div {
-    width: 20%;
-    height: 100%;
-    border: 2px solid #f2d8b1;
-    border-radius: 10px 10px 0 0;
-  }
-  .body {
-    border-radius: 10px 0 10px 10px;
-    width: 70%;
-    height: 60%;
-    display: flex;
-    gap: 20px;
-  }
-  /* 왼쪽: 순위 영역 */
-  .ranking {
-    width: 10%;
-    height: 100%;
-    overflow: hidden; /* 스크롤 없음 */
-  }
-  /* 오른쪽: 뉴스 영역 */
-  .news-list {
-    width: 90%;
-    height: 100%;
-    overflow-y: auto; /* 높이 초과시 세로 스크롤 */
-    padding-right: 10px; /* 스크롤 공간 확보 */
-  }
-  .btn-back {
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: inline-block;
-    padding: 4px 10px;
-    border-radius: 5px;
-    background-color: #f7ecdc;
-  }
-  .btn-back:hover {
-    background-color: #f2d8b1;
-  }
-  .menu2 > div a {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    font-size: 1.25rem;
-    text-decoration: none;
-    color: inherit;
-  }
-  .news-item {
-    display: flex;
-    align-items: center;
-    border-bottom: 1px solid #f2d8b1;
-    padding: 5px 0;
-    gap: 10px;
-  }
-  .news-img {
-    flex: 0 0 80px;
-    height: 60px;
-    overflow: hidden;
-    border-radius: 8px;
-  }
-  .news-img img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-  }
-  .news-text {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    min-width: 0; /* 말줄임에 필요 */
-  }
-  .news-title {
-    font-size: 0.85rem;
-    margin: 0 0 4px 0;
-    color: #000;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    text-decoration: none;
-  }
-  .news-body {
-    font-size: 0.75rem;
-    margin: 0;
-    color: #333;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
+.filter-section {
+  width: 15%;
+  min-width: 150px;
+  background-color: rgba(255, 255, 255, 0.6);
+  padding: 10px;
+  border-radius: 10px;
+  height: 100%;
+}
+.filter-button {
+  display: block;
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 8px;
+  background-color: #f7ecdc;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+.filter-button:hover {
+  background-color: #f2d8b1;
+}
+.content-wrapper {
+  display: flex;
+  width: 90%;
+  height: 90%;
+  background-color: rgba(255, 255, 255, 0.6);
+  border-radius: 20px;
+  padding: 20px;
+  gap: 20px;
+}
+.news-list {
+  width: 100%;
+  max-height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden; /* 가로 스크롤 제거 */
+  padding-right: 10px;
+}
+
+.news-item {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #f2d8b1;
+  padding: 8px 0;
+  gap: 10px;
+}
+.news-img {
+  flex: 0 0 80px;
+  height: 60px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.news-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.news-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+  overflow: hidden; /* 자식 요소 넘침 방지 */
+}
+.news-title {
+  font-size: 0.95rem;
+  color: #000;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-decoration: none;
+}
+.news-body {
+  font-size: 0.8rem;
+  color: #333;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+   .btn-back {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: inline-block;
+  padding: 4px 10px;
+  border-radius: 5px;
+  background-color: #f7ecdc;
+}
+
+/* 뒤로가기 버튼에 마우스 올리면 테이블 행 호버 색과 같게 */
+.btn-back:hover {
+background-color: #f2d8b1;
+}
+
 </style>
+<script>
+function filterNews(team) {
+  const items = document.querySelectorAll('.news-item');
+  items.forEach(item => {
+    const title = item.querySelector('.news-title').innerText;
+    if (team === '전체' || title.includes(team)) {
+      item.style.display = 'flex';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+</script>
 </head>
 
 <body class="m-0 h-full" style="background-color: #f7f0e9;">
  <c:choose>
     <c:when test="${rq.loginedTeam == null}">
-        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
+        <section class="bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
                  style="background-image: url('/images/bg12.png'); cursor: url('/images/cursor0.png') 25 25, auto;">
     </c:when>
     <c:when test="${rq.loginedTeam eq '한화 이글스'}">
-        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
+        <section class="bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
                  style="background-image: url('/images/bg21.png'); cursor: url('/images/cursor2.png') 25 25, auto;">
     </c:when>
     <c:when test="${rq.loginedTeam eq '두산 베어스'}">
-        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
+        <section class="bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
                  style="background-image: url('/images/bg22.png'); cursor: url('/images/cursor3.png') 25 25, auto;;">
     </c:when>
     <c:when test="${rq.loginedTeam eq '롯데 자이언츠'}">
-        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
+        <section class="bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
                  style="background-image: url('/images/bg23.png'); cursor: url('/images/cursor4.png') 25 25, auto;;">
     </c:when>
     <c:when test="${rq.loginedTeam eq 'LG 트윈스'}">
-        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
+        <section class="bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
                  style="background-image: url('/images/bg24.png'); cursor: url('/images/cursor5.png') 25 25, auto;">
     </c:when>
     <c:when test="${rq.loginedTeam eq '삼성 라이온즈'}">
-        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
+        <section class="bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
                  style="background-image: url('/images/bg25.png'); cursor: url('/images/cursor6.png') 25 25, auto;">
     </c:when>
     <c:when test="${rq.loginedTeam eq '키움 히어로즈'}">
-        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
+        <section class="bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
                  style="background-image: url('/images/bg26.png'); cursor: url('/images/cursor7.png') , auto;">
     </c:when>
     <c:when test="${rq.loginedTeam eq 'SSG 랜더스'}">
-        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
+        <section class="bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
                  style="background-image: url('/images/bg27.png'); cursor: url('/images/cursor1.png') 25 25, auto;">
     </c:when>
     <c:when test="${rq.loginedTeam eq 'NC 다이노스'}">
-        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
+        <section class="bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
          style="background-image: url('/images/bg28.png'); cursor: url('/images/cursor8.png') 25 25, auto;">
     </c:when>
     <c:when test="${rq.loginedTeam eq 'KT 위즈'}">
-        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
+        <section class="bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-black"
                  style="background-image: url('/images/bg29.png'); cursor: url('/images/cursor9.png') 25 25, auto;">
     </c:when>
     <c:when test="${rq.loginedTeam eq 'KIA 타이거즈'}">
-        <section class="h-screen bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-white"
+        <section class="bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center text-white"
                  style="background-image: url('/images/bg30.png'); cursor: url('/images/cursor10.png') 25 25, auto;">
     </c:when>
 </c:choose>
 
-  <div class="menu2">
-    <div style="background-color: rgb(242, 247, 247);"><a href="../project/information">날씨/준비물</a></div>
-    <div style="background-color: rgb(242, 247, 247);"><a href="../project/information2">순위/뉴스</a></div>
-    <div style="background-color: rgb(242, 247, 247);"><a href="../project/information3">선수들 맛집</a></div>
-  </div>
+<div style="width: 80%; margin: 20px auto 0 auto;">
+  <h2 style="font-size: 3em; font-weight: bold; color: #918c84; text-align: left; margin-left: 1%; margin-top: 40px;"> 최신 뉴스</h2>
+</div>
 
-  <div class="body" style="background-color: rgb(242, 247, 247); padding: 20px;">
-    <!-- 왼쪽: 팀 순위 -->
-    <div class="ranking">
-      <h2 style="margin-bottom: 1rem;">팀 순위</h2>
-      <table style="border-collapse: collapse; width: 100%;">
-        <tbody>
-          <c:forEach var="row" items="${rankings}">
-            <tr style="
-                display: flex;
-                align-items: center;
-                border-bottom: 2px solid #f2d8b1;
-                width: 100%;
-                margin-bottom: 5px;">
-              <td style="flex: 0 0 auto;">
-                <div style="
-                    display: inline-flex;
-                    justify-content: center;
-                    align-items: center;
-                    width: 30px;
-                    height: 30px;
-                    border-radius: 50%;
-                    background-color: #f2d8b1;
-                    font-size: 0.85rem;
-                    color: #000;
-                    overflow: hidden;
-                    text-align: center;">
-                  ${row[0]}
-                </div>
-              </td>
-              <td style="
-                  flex: 1;
-                  padding-left: 10px;
-                  font-size: 0.9rem;
-                  text-align: left;
-                  white-space: nowrap;
-                  overflow: hidden;
-                  text-overflow: ellipsis;">
-                ${row[1]}
-              </td>
-            </tr>
-          </c:forEach>
-        </tbody>
-      </table>
-    </div>
+  <div class="content-wrapper">
+    <!-- 왼쪽 필터 -->
+    <div class="filter-section">
+  <button class="filter-button" onclick="location.href='?team=전체&page=1'">전체</button>
+  <button class="filter-button" onclick="location.href='?team=한화&page=1'">한화 이글스</button>
+  <button class="filter-button" onclick="location.href='?team=두산&page=1'">두산 베어스</button>
+  <button class="filter-button" onclick="location.href='?team=롯데&page=1'">롯데 자이언츠</button>
+  <button class="filter-button" onclick="location.href='?team=LG&page=1'">LG 트윈스</button>
+  <button class="filter-button" onclick="location.href='?team=삼성&page=1'">삼성 라이온즈</button>
+  <button class="filter-button" onclick="location.href='?team=키움&page=1'">키움 히어로즈</button>
+  <button class="filter-button" onclick="location.href='?team=SSG&page=1'">SSG 랜더스</button>
+  <button class="filter-button" onclick="location.href='?team=NC&page=1'">NC 다이노스</button>
+  <button class="filter-button" onclick="location.href='?team=KT&page=1'">KT 위즈</button>
+  <button class="filter-button" onclick="location.href='?team=KIA&page=1'">KIA 타이거즈</button>
+</div>
 
-    <!-- 오른쪽: 속보 뉴스 (이미지 포함, 스크롤 가능) -->
+    <!-- 뉴스 리스트 -->
     <div class="news-list">
-      <h2 style="margin-bottom: 1rem;">KBO 최신 뉴스</h2>
       <c:forEach var="news" items="${breakingNews}">
         <div class="news-item">
           <div class="news-img">
@@ -237,8 +208,32 @@ body {
       </c:forEach>
     </div>
   </div>
+  
+  <div style="margin-top: 20px; text-align: center;">
+  <!-- 이전 버튼 -->
+<c:if test="${startPage > 1}">
+  <a href="?team=${selectedTeam}&page=${startPage - 1}" style="margin: 0 10px;">◀ 이전</a>
+</c:if>
 
-  <div class="left-controls flex items-center gap-4 mt-2 mb-4" style="justify-content:flex-start; text-align:left;">
+<!-- 페이지 숫자 -->
+<c:forEach var="i" begin="${startPage}" end="${endPage}">
+  <c:choose>
+    <c:when test="${i == currentPage}">
+      <span style="margin: 0 5px; font-weight: bold; color: #918c84;">${i}</span>
+    </c:when>
+    <c:otherwise>
+      <a href="?team=${selectedTeam}&page=${i}" style="margin: 0 5px; color: #555; text-decoration: none;">${i}</a>
+    </c:otherwise>
+  </c:choose>
+</c:forEach>
+
+<!-- 다음 버튼 -->
+<c:if test="${endPage < totalPages}">
+  <a href="?team=${selectedTeam}&page=${endPage + 1}" style="margin: 0 10px;">다음 ▶</a>
+</c:if>
+</div>
+
+  <div class="left-controls flex items-center gap-4 mt-4" style="justify-content:flex-start;">
     <button class="btn-back btn btn-ghost" type="button" onclick="history.back();">뒤로가기</button>
   </div>
 </section>

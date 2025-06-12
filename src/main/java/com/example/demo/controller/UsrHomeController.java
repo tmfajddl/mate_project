@@ -4,11 +4,13 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.demo.dto.GoodsRecommendationResponse;
@@ -45,6 +47,13 @@ public class UsrHomeController {
 		 model.addAttribute("naverBaseballSchedule", naverBaseballSchedule);
 		return "/usr/home/main";
 	}
+	
+	@RequestMapping("/usr/home/test")
+	public String showMain12(Model model) throws IOException {
+		 List<HashMap<String, String>> naverBaseballSchedule = kboCrawlerService.getNaverBaseballSchedule();
+		 model.addAttribute("naverBaseballSchedule", naverBaseballSchedule);
+		return "/usr/home/test";
+	}
 
 	@RequestMapping("/")
 	public String showMain2() {
@@ -53,17 +62,53 @@ public class UsrHomeController {
 
 	
 	@RequestMapping("/usr/project/information")
-	public String showMain4() {
+	public String showMain4(Model model) throws IOException {
+		 List<HashMap<String, String>> naverBaseballSchedule = kboCrawlerService.getNaverBaseballSchedule();
+		 model.addAttribute("naverBaseballSchedule", naverBaseballSchedule);
 		return "/usr/project/information";
 	}
 	@RequestMapping("/usr/project/information2")
-	public String showMain5(Model model) throws IOException {
-		 List<List<String>> rankings = kboCrawlerService.getTeamRankings();
-		    model.addAttribute("rankings", rankings);
-		    
-		 List<HashMap<String, String>> breakingNews = kboCrawlerService.getBreakingNews();
-		 model.addAttribute("breakingNews", breakingNews);
-		return "/usr/project/information2";
+	public String showMain5(Model model,
+	                        @RequestParam(value = "page", defaultValue = "1") int page,
+	                        @RequestParam(value = "team", defaultValue = "전체") String team) throws IOException {
+
+	    // 팀 순위 정보
+	    List<List<String>> rankings = kboCrawlerService.getTeamRankings();
+	    model.addAttribute("rankings", rankings);
+
+	    // 전체 뉴스 데이터
+	    List<HashMap<String, String>> allNews = kboCrawlerService.getBreakingNews();
+
+	    // 팀 필터링
+	    if (!team.equals("전체")) {
+	        allNews = allNews.stream()
+	                .filter(news -> news.get("title").contains(team))
+	                .collect(Collectors.toList());
+	    }
+
+	    // 페이징 처리
+	    int itemsPerPage = 10;
+	    int totalItems = allNews.size();
+	    int totalPages = (int) Math.ceil((double) totalItems / itemsPerPage);
+
+	    int start = (page - 1) * itemsPerPage;
+	    int end = Math.min(start + itemsPerPage, totalItems);
+	    List<HashMap<String, String>> pagedNews = allNews.subList(start, end);
+
+	    // 페이지 블럭 계산
+	    int pageBlockSize = 10;
+	    int startPage = ((page - 1) / pageBlockSize) * pageBlockSize + 1;
+	    int endPage = Math.min(startPage + pageBlockSize - 1, totalPages);
+
+	    // 모델에 추가
+	    model.addAttribute("breakingNews", pagedNews);
+	    model.addAttribute("currentPage", page);
+	    model.addAttribute("totalPages", totalPages);
+	    model.addAttribute("startPage", startPage);
+	    model.addAttribute("endPage", endPage);
+	    model.addAttribute("selectedTeam", team);
+
+	    return "/usr/project/information2";
 	}
 	@RequestMapping("/usr/project/information3")
 	public String showMain6(Model model) {
