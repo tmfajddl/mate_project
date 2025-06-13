@@ -12,6 +12,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 public class KboCrawlerService {
@@ -192,4 +194,109 @@ public class KboCrawlerService {
 
         return datas;
     }
+    
+    public List<HashMap<String, String>> getBaseballSchedule() throws IOException {
+        String url = "https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query=야구";
+        Document doc = Jsoup.connect(url).get();
+
+        Element table = doc.selectFirst("#myschedule_1 > table");
+        List<HashMap<String, String>> datas = new ArrayList<>();
+
+        if (table == null) {
+            return datas; // 빈 리스트 반환
+        }
+
+        // 팀명 리스트 (필요에 따라 조절)
+        List<String> teamNames = Arrays.asList("두산", "한화", "LG", "삼성", "롯데", "키움", "KT", "NC", "SSG", "KIA");
+
+        // 헤더
+        Elements ths = table.select("thead tr th");
+        List<String> columns = new ArrayList<>();
+        for (int i = 0; i < Math.min(3, ths.size()); i++) {
+            columns.add(ths.get(i).text().trim());
+        }
+        if (columns.isEmpty()) {
+            columns.add("시간");
+            columns.add("경기정보");
+            columns.add("구장");
+        }
+
+        // 바디
+        Elements trs = table.select("tbody tr");
+        for (Element tr : trs) {
+            Elements tds = tr.select("td");
+            if (tds.size() < 3) continue; // 3개 칸이 안되면 스킵
+
+            HashMap<String, String> row = new HashMap<>();
+
+            // 시간 (첫번째 칸)
+            row.put("시간", tds.get(0).text().trim());
+
+            // 경기정보 (두번째 칸) 예: "두산잭로그패 2 : 3 한화승주현상"
+            String gameInfo = tds.get(1).text().trim();
+
+            // 점수 추출
+            Pattern scorePattern = Pattern.compile("(\\d+)\\s*:\\s*(\\d+)");
+            Matcher m = scorePattern.matcher(gameInfo);
+
+            if (m.find()) {
+                int start = m.start();
+                int end = m.end();
+
+                String leftPart = gameInfo.substring(0, start).trim();   // 왼쪽 팀 + 상태+투수
+                String rightPart = gameInfo.substring(end).trim();        // 오른쪽 팀 + 상태+투수
+                String score = gameInfo.substring(start, end).trim();     // 점수 (ex: 2 : 3)
+
+             // 왼쪽 팀명 분리
+                String leftTeam = "";
+                String leftStatusPitcher = "";
+                for (String team : teamNames) {
+                    if (leftPart.startsWith(team)) {
+                        leftTeam = team;
+                        leftStatusPitcher = leftPart.substring(team.length());
+                        break;
+                    }
+                }
+                // 왼쪽 선발 선수 마지막 글자 제거
+                if (leftStatusPitcher.length() > 0) {
+                    leftStatusPitcher = leftStatusPitcher.substring(0, leftStatusPitcher.length() - 1);
+                }
+
+                // 오른쪽 팀명 분리
+                String rightTeam = "";
+                String rightStatusPitcher = "";
+                for (String team : teamNames) {
+                    if (rightPart.startsWith(team)) {
+                        rightTeam = team;
+                        rightStatusPitcher = rightPart.substring(team.length());
+                        break;
+                    }
+                }
+                // 오른쪽 선발 선수 첫 글자 제거
+                if (rightStatusPitcher.length() > 0) {
+                    rightStatusPitcher = rightStatusPitcher.substring(1);
+                }
+
+                // 결과를 별도로 저장
+                row.put("왼쪽팀명", leftTeam);
+                row.put("왼쪽상태및투수", leftStatusPitcher);
+                row.put("스코어", score);
+                row.put("오른쪽팀명", rightTeam);
+                row.put("오른쪽상태및투수", rightStatusPitcher);
+            } else {
+                // 점수 패턴 못찾으면 그냥 원본 경기정보 저장
+                row.put("경기정보", gameInfo);
+            }
+
+            // 구장 (세번째 칸)
+            row.put("구장", tds.get(2).text().trim());
+
+            datas.add(row);
+        }
+
+        return datas;
+    }
 }
+
+
+

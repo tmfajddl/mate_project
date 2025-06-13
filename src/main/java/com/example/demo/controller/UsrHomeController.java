@@ -49,9 +49,9 @@ public class UsrHomeController {
 	}
 	
 	@RequestMapping("/usr/home/test")
-	public String showMain12(Model model) throws IOException {
-		 List<HashMap<String, String>> naverBaseballSchedule = kboCrawlerService.getNaverBaseballSchedule();
-		 model.addAttribute("naverBaseballSchedule", naverBaseballSchedule);
+	  public String showSchedule(Model model) throws IOException {
+		List<HashMap<String, String>> naverBaseballSchedule = kboCrawlerService.getBaseballSchedule();
+		 model.addAttribute("scheduleList", naverBaseballSchedule);
 		return "/usr/home/test";
 	}
 
@@ -63,8 +63,8 @@ public class UsrHomeController {
 	
 	@RequestMapping("/usr/project/information")
 	public String showMain4(Model model) throws IOException {
-		 List<HashMap<String, String>> naverBaseballSchedule = kboCrawlerService.getNaverBaseballSchedule();
-		 model.addAttribute("naverBaseballSchedule", naverBaseballSchedule);
+		 List<HashMap<String, String>> naverBaseballSchedules = kboCrawlerService.getBaseballSchedule();
+		 model.addAttribute("scheduleList", naverBaseballSchedules);
 		return "/usr/project/information";
 	}
 	@RequestMapping("/usr/project/information2")

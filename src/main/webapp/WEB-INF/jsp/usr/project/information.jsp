@@ -132,10 +132,29 @@
 </c:choose>
 
 
-
 <div style="width: 80%; margin: 20px auto 0 auto;">
   <h2 style="font-size: 3em; font-weight: bold; color: #918c84; text-align: left; margin-left: 1%;">구장 별 날씨</h2>
 </div>
+  <!-- 날씨 정보 표시 영역 -->
+  <div id="weather-info"></div>
+
+<div class="ps flex flex-col justify-center p-6 text-sm leading-relaxed overflow-y-auto" style="position:absolute; top:400px; left: 100px; width: 300px; background: rgb(255,255,255); border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1);text-align: center;">
+  <div id="gamesContainer">
+    <%-- 전체 경기 초기 렌더링: 모두 보여줌 --%>
+    <c:forEach var="row" items="${scheduleList}">
+        <div class="game" data-stadium="${row['구장']}" style="display: block;">
+            <div class="stadium-name">${row['구장']}</div>
+            <div class="teams">${row['왼쪽팀명']} VS ${row['오른쪽팀명']}</div>
+            <div class="pitchers">${row['왼쪽상태및투수']}   ${row['오른쪽상태및투수']}</div>
+            <div style="margin-top:6px; font-size:0.9em; color:#666;">${row['시간']}</div>
+        </div>
+    </c:forEach>
+</div>
+
+<div id="noGamesMessage" style="display:none; color:red; font-weight:bold;"></div>
+</div>
+
+
 
   <div id="map-container">
     <img src="/images/map.png" id="map" alt="한국 지도">
@@ -153,7 +172,7 @@
     <button class="stadium-btn" style="left: 200px; top: 130px;" onclick="onStadiumClick('inchun')" title="인천SSG랜더스필드">인</button>
   </div>
   
-  <div id="checklist" class="ps flex flex-col justify-center p-6 text-sm leading-relaxed overflow-y-auto" style="display:none; position:absolute; top:200px; right: 100px; width: 300px; background: rgba(255,255,255,0.9); border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+  <div id="checklist" class="ps flex flex-col justify-center p-6 text-sm leading-relaxed overflow-y-auto" style="display:none; position:absolute; top:200px; right: 100px; width: 300px; background: rgb(255,255,255); border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
   <div>
     🎒 준비물 체크리스트<br />
     1. 우비 or 우산<br />
@@ -174,7 +193,7 @@
   </div>
 </div>
 
-<div id="checklist2" class="ps flex flex-col justify-center p-6 text-sm leading-relaxed overflow-y-auto" style="display:none; position:absolute; top:200px; right: 100px; width: 300px; background: rgba(255,255,255,0.9); border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+<div id="checklist2" class="ps flex flex-col justify-center p-6 text-sm leading-relaxed overflow-y-auto" style="display:none; position:absolute; top:200px; right: 100px; width: 300px; background: rgb(255,255,255); border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
   <div>
     🎒 준비물 체크리스트<br />
           1. 얇은 겉옷 (바람막이/가디건)<br />
@@ -192,7 +211,7 @@
   </div>
 </div>
 
-<div id="checklist3" class="ps flex flex-col justify-center p-6 text-sm leading-relaxed overflow-y-auto" style="display:none; position:absolute; top:200px; right: 100px; width: 300px; background: rgba(255,255,255,0.9); border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+<div id="checklist3" class="ps flex flex-col justify-center p-6 text-sm leading-relaxed overflow-y-auto" style="display:none; position:absolute; top:200px; right: 100px; width: 300px; background: rgb(255,255,255); border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
   <div>
     🎒 준비물 체크리스트<br />
           1. 모자 or 캡모자<br />
@@ -216,9 +235,6 @@
   </div>
 </div>
 
-  <!-- 날씨 정보 표시 영역 -->
-  <div id="weather-info"></div>
-
 <script>
 document.addEventListener("DOMContentLoaded", function () {
   const API_KEY = "a742b907a44edf2cb751b547e466583e";
@@ -236,15 +252,15 @@ document.addEventListener("DOMContentLoaded", function () {
   };
 
   const stadiums = {
-    jamshil: { name: "jamshil", lat: 37.5131, lon: 127.0726 },
-    suwon: { name: "suwon", lat: 37.2999, lon: 127.0095 },
-    gwangju: { name: "gwangju", lat: 35.1683, lon: 126.8889 },
-    gochug: { name: "gochug", lat: 37.4981, lon: 126.8672 },
-    daejeon: { name: "daejeon", lat: 36.3171, lon: 127.428 },
-    daegu: { name: "daegu", lat: 35.8414, lon: 128.5883 },
-    changwon: { name: "changwon", lat: 35.2224, lon: 128.583 },
-    busan: { name: "busan", lat: 35.1796, lon: 129.0756 },
-    inchun: { name: "inchun", lat: 37.435, lon: 126.698 }
+    jamshil: { name: "잠실", lat: 37.5131, lon: 127.0726 },
+    suwon: { name: "수원", lat: 37.2999, lon: 127.0095 },
+    gwangju: { name: "광주", lat: 35.1683, lon: 126.8889 },
+    gochug: { name: "고척", lat: 37.4981, lon: 126.8672 },
+    daejeon: { name: "대전(신)", lat: 36.3171, lon: 127.428 },
+    daegu: { name: "대구", lat: 35.8414, lon: 128.5883 },
+    changwon: { name: "창원", lat: 35.2224, lon: 128.583 },
+    busan: { name: "사직", lat: 35.1796, lon: 129.0756 },
+    inchun: { name: "인천", lat: 37.435, lon: 126.698 }
   };
 
   function moveFlagTo(stadium) {
@@ -260,6 +276,7 @@ document.addEventListener("DOMContentLoaded", function () {
   window.onStadiumClick = async function (stadiumKey) {
     console.log("클릭됨:", stadiumKey);
     moveFlagTo(stadiumKey);
+    
 
     const stadium = stadiums[stadiumKey];
     if (!stadium) {
@@ -267,6 +284,8 @@ document.addEventListener("DOMContentLoaded", function () {
       
       return;
     }
+    
+    filterStadium(stadium.name);
 
     const weatherSpan = document.getElementById('weather-info');
     weatherSpan.textContent = "날씨 정보 로딩 중...";
@@ -314,12 +333,40 @@ document.addEventListener("DOMContentLoaded", function () {
       weatherSpan.textContent = "날씨 정보를 불러올 수 없음";
       console.error("fetch 에러:", err);
     }
+    
   };
 
   // 초기 깃발 위치와 날씨 표시
   moveFlagTo('jamshil');
   onStadiumClick('jamshil');
 });
+
+function filterStadium(stadium) {
+    const games = document.querySelectorAll("#gamesContainer .game");
+    let anyVisible = false;
+
+    games.forEach(game => {
+        const gameStadium = game.getAttribute("data-stadium");
+        if (stadium === "전체" || gameStadium === stadium) {
+            game.style.display = "block";
+            anyVisible = true;
+        } else {
+            game.style.display = "none";
+        }
+    });
+
+    const noGamesMsg = document.getElementById("noGamesMessage");
+    if (!anyVisible) {
+        noGamesMsg.textContent = stadium + '구장에 경기가 없습니다.';  // 여기서 동적 텍스트 변경
+        noGamesMsg.style.display = "block";
+    } else {
+        noGamesMsg.style.display = "none";
+    }
+}
+
+window.onload = function() {
+    filterStadium('잠실'); // 초기에는 전체 경기 보여주기
+}
 </script>
     
                      <div class="left-controls flex items-center gap-4 mt-2 mb-4" style="justify-content:flex-start; text-align:left;">

@@ -35,7 +35,7 @@ body {
   display: flex;
   width: 90%;
   height: 90%;
-  background-color: rgba(255, 255, 255, 0.6);
+  background-color: rgb(255, 255, 255);
   border-radius: 20px;
   padding: 20px;
   gap: 20px;
