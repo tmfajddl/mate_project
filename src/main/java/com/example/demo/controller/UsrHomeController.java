@@ -57,42 +57,13 @@ public class UsrHomeController {
 	}
 	
 	@RequestMapping("/usr/home/test")
-	  public String showSchedule(@RequestParam(value = "roomId", required = false) Integer roomId, Model model, HttpServletRequest req) {
-	        Rq rq = (Rq) req.getAttribute("rq");
-	        int loginUserId = rq.getLoginedMemberId();
-
-	        List<ChatRoom> chatRooms = chatService.getChatRoomsByUserId(loginUserId);
-
-	        for (ChatRoom room : chatRooms) {
-	            String otherNickname = chatService.getOtherMemberNickname(room.getId(), loginUserId);
-	            String profileImg = chatService.getProfileImg(room.getId(), loginUserId);
-	            room.setOtherMemberNickname(otherNickname);
-	            room.setOtherProfileImg(profileImg);
-	        }
-
-	        model.addAttribute("chatRooms", chatRooms);
-
-	        if (chatRooms.isEmpty()) {
-	            // 참여중인 채팅방이 없으면 빈 화면 처리
-	            model.addAttribute("chatRooms", chatRooms);
-	            model.addAttribute("messages", List.of());
-	            model.addAttribute("selectedRoomId", null);
-	            model.addAttribute("LoginedMemberId", loginUserId);
-	            return "/usr/project/chat";
-	        }
-
-	        if (roomId == null) {
-	            // roomId가 없으면 첫번째 채팅방으로 자동 리다이렉트
-	            roomId = chatRooms.get(0).getId();
-	            return "redirect:/usr/project/chat/room?roomId=" + roomId;
-	        }
-
-	        List<ChatMessage> messages = chatService.getMessagesByRoomId(roomId);
-
-	        model.addAttribute("chatRooms", chatRooms);
-	        model.addAttribute("messages", messages);
-	        model.addAttribute("selectedRoomId", roomId);
-	        model.addAttribute("LoginedMemberId", loginUserId);
+	  public String showSchedule(Model model) throws IOException {
+	    List<List<String>> rankings = kboCrawlerService.getTeamRankings();
+	    model.addAttribute("teamRankings", rankings);
+	    
+	    List<Map<String, String>> top5Players = kboCrawlerService.getTOP5Players();
+	    model.addAttribute("top5Players", top5Players);
+	    System.out.println(top5Players);
 		return "/usr/home/test";
 	}
 

@@ -33,7 +33,8 @@ public class KboCrawlerService {
 	        if (tds.size() > 1) {
 	            String rank = tds.get(0).text().trim();    // 순위 (첫번째 컬럼)
 	            String teamName = tds.get(1).text().trim(); // 팀명 (두번째 컬럼)
-	            datas.add(Arrays.asList(rank, teamName));
+	            String winner = tds.get(6).text().trim(); // 팀명 (두번째 컬럼)
+	            datas.add(Arrays.asList(rank, teamName, winner));
 	        }
 	    }
 	    return datas;
@@ -194,6 +195,43 @@ public class KboCrawlerService {
 
         return datas;
     }
+    
+ // 4) TOP5 선수 정보 크롤링
+    public List<Map<String, String>> getTOP5Players() throws IOException {
+        String url = "https://www.koreabaseball.com/Record/Ranking/Top5.aspx";
+        Document doc = Jsoup.connect(url).get();
+
+        Element table = doc.selectFirst("#contents > div.sub-content");
+        Elements rows = table.select("ol.rankList");
+
+        List<Map<String, String>> players = new ArrayList<>();
+        
+        
+
+        for (Element row : rows) {
+            Elements tds = row.select("li");
+
+            if (tds.size() >= 5) {
+                String first = tds.get(0).text().trim();
+                String second = tds.get(1).text().trim();
+                String third = tds.get(2).text().trim();
+                String fourth = tds.get(3).text().trim();
+                String fifth = tds.get(4).text().trim();
+
+                Map<String, String> playerData = new HashMap<>();
+                playerData.put("first", first);
+                playerData.put("second", second);
+                playerData.put("third",third);
+                playerData.put("fourth", fourth);
+                playerData.put("fifth", fifth);
+
+                players.add(playerData);
+            }
+        }
+
+        return players;
+    }
+
     
     public List<HashMap<String, String>> getBaseballSchedule() throws IOException {
         String url = "https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query=야구";
