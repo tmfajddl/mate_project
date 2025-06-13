@@ -3,11 +3,13 @@ package com.example.demo.controller;
 import java.security.Principal;
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.demo.service.ChatService;
 import com.example.demo.vo.ChatMessage;
@@ -56,7 +58,7 @@ public class ChatController {
 
         if (chatRooms.isEmpty()) {
             // 참여중인 채팅방이 없으면 빈 화면 처리
-            model.addAttribute("chatRooms", chatRooms);
+            model.addAttribute("chatRooms", chatRooms); 
             model.addAttribute("messages", List.of());
             model.addAttribute("selectedRoomId", null);
             model.addAttribute("LoginedMemberId", loginUserId);
@@ -88,5 +90,17 @@ public class ChatController {
         int loginUserId = rq.getLoginedMemberId();
         chatService.sendMessage(roomId, loginUserId, message);
         return "redirect:/usr/project/chat/room?roomId=" + roomId;
+    }
+    @PostMapping("/send")
+    public ResponseEntity<?> sendMessage(@RequestParam int roomId, 
+                                         @RequestParam int senderId,
+                                         @RequestParam String message) {
+        chatService.sendMessage(roomId, senderId, message);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/messages")
+    public List<ChatMessage> getMessages(@RequestParam int roomId) {
+        return chatService.getMessagesByRoomId(roomId);
     }
 }

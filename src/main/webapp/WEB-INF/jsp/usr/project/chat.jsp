@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <%@ include file="../common/head.jspf"%>
 
@@ -21,13 +22,13 @@ body {
 }
 
 .chat-messages {
-  flex-grow: 1;
+  display: flex;
+  flex-direction: column;  /* 수직 정렬 */
   overflow-y: auto;
-  max-height: calc(80vh - 120px); /* 폼, 타이틀 등 공간 제외한 높이 */
+  max-height: calc(80vh - 120px);
+  padding: 10px;
   background-color: #fff;
   border-radius: 10px;
-  padding: 10px;
-  margin-bottom: 12px;
 }
 
   /* 채팅방 목록 */
@@ -52,60 +53,70 @@ body {
 
 
   /* 말풍선 기본 스타일 */
-  .message {
-    max-width: 30%;
-    padding:0 5px;
-    margin-bottom: 10px;
-    border-radius: 20px;
-    position: relative;
-    clear: both;
-    word-wrap: break-word;
-    font-size: 14px;
-    text-align: center;
-  }
+ .message {
+  display: inline-block;
+  padding: 8px 12px;
+  border-radius: 20px;
+  position: relative;
+  word-break: break-word;
+  font-size: 14px;
+  text-align: left;
+  margin-bottom: 25px;
+  max-width: 60%;
+  min-width: 1.5em;
+}
 
-  /* 내가 보낸 메시지 (오른쪽 정렬, 파란색 말풍선) */
-  .message.mine {
-    background-color: #f2d8b1;
-    color: black;
-    margin-left: auto;
-    
-  }
-  .message.mine::after {
-    content: "";
-    position: absolute;
-    right: -10px;
-    top: 50%;
-    transform: translateY(-50%);
-    border-width: 8px 0 8px 10px;
-    border-style: solid;
-    border-color: transparent transparent transparent #f2d8b1;
-  }
+.message.mine {
+  background-color: #f2d8b1;
+  color: black;
+  align-self: flex-end;
+}
 
-  /* 상대방 메시지 (왼쪽 정렬, 회색 말풍선) */
-  .message.other {
-    background-color: #f7ecdc;
-    color: black;
-    margin-right: auto;
-  }
-  .message.other::after {
-    content: "";
-    position: absolute;
-    left: -10px;
-    top: 50%;
-    transform: translateY(-50%);
-    border-width: 8px 10px 8px 0;
-    border-style: solid;
-    border-color: transparent #f7ecdc transparent transparent;
-  }
+.message.other {
+  background-color: #f7ecdc;
+  color: black;
+  align-self: flex-start;
+}
 
-  /* 보낸 시간 작게 */
-  .message .time {
-    font-size: 10px;
-    color: #999;
-    margin-top: 4px;
-    display: block;
-    text-align: right;
+.message.mine::after {
+  content: "";
+  position: absolute;
+  right: -10px;
+  top: 50%;
+  transform: translateY(-50%);
+  border-width: 8px 0 8px 10px;
+  border-style: solid;
+  border-color: transparent transparent transparent #f2d8b1;
+}
+
+/* 시간: 말풍선 왼쪽 아래 (내 메시지) */
+.message.mine .time {
+  position: absolute;
+  bottom: -18px;  /* 말풍선 바로 아래 */
+  left: 10px;     /* 왼쪽 여백 */
+  font-size: 10px;
+  color: #999;
+}
+
+
+.message.other::after {
+  content: "";
+  position: absolute;
+  left: -10px;
+  top: 50%;
+  transform: translateY(-50%);
+  border-width: 8px 10px 8px 0;
+  border-style: solid;
+  border-color: transparent #f7ecdc transparent transparent;
+}
+
+/* 시간: 말풍선 오른쪽 아래 (상대 메시지) */
+.message.other .time {
+  position: absolute;
+  bottom: -18px;  /* 말풍선 바로 아래 */
+  right: 10px;    /* 오른쪽 여백 */
+  font-size: 10px;
+  color: #999;
   }
 
   /* 전송 버튼 */
@@ -120,6 +131,31 @@ body {
   .btn-back:hover {
     background-color: #f2d8b1;
   }
+  .date-separator {
+  text-align: center;
+  margin: 20px 0;
+  position: relative;
+  color: #888;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.date-separator span {
+  background-color: #f7f0e9;
+  padding: 0 10px;
+  position: relative;
+  z-index: 1;
+}
+
+.date-separator::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  border-top: 1px solid #ccc;
+  z-index: 0;
+}
 </style>
 
 <body class="m-0 h-full" style="background-color: #f7f0e9;">
@@ -203,13 +239,22 @@ body {
       <div class="flex-1 chat-messages mb-4">
         <c:choose>
           <c:when test="${not empty messages}">
-            <c:forEach var="msg" items="${messages}">
-              <div class="message ${msg.senderId == LoginedMemberId ? 'mine' : 'other'}">
-                <strong>${msg.senderName}</strong><br/>
-                ${msg.message}
-                <span class="time">${msg.sentDate}</span>
-              </div>
-            </c:forEach>
+<c:set var="prevDate" value="" />
+<c:forEach var="msg" items="${messages}">
+    <c:set var="currentDate" value="${fn:substring(msg.sentDate, 0, 10)}" />
+    <c:if test="${currentDate ne prevDate}">
+        <!-- 날짜 구분선 -->
+        <div class="date-separator">
+            <span>${currentDate}</span>
+        </div>
+        <c:set var="prevDate" value="${currentDate}" />
+    </c:if>
+    <div class="message ${msg.senderId == LoginedMemberId ? 'mine' : 'other'}">
+  <strong>${msg.senderName}</strong><br/>
+  ${msg.message}
+  <span class="time">${fn:substring(msg.sentDate, 11, 16)}</span>
+</div>
+</c:forEach>
           </c:when>
           <c:otherwise>
             <div class="italic text-gray-500 h-full flex items-center justify-center">
@@ -231,5 +276,104 @@ body {
   
 </section>
 
-<%@ include file="../common/foot.jspf"%>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+$(function() {
+  const loginedMemberId = ${LoginedMemberId != null ? LoginedMemberId : 'null'};
+  const selectedRoomId = ${selectedRoomId != null ? selectedRoomId : 'null'};
+
+  // 메시지 전송 폼 submit 이벤트 차단 후 Ajax 처리
+  $('form').on('submit', function(e) {
+    e.preventDefault();
+
+    const $form = $(this);
+    const roomId = $form.find('input[name="roomId"]').val();
+    const message = $form.find('input[name="message"]').val();
+
+    if (!message.trim()) return;
+
+    $.ajax({
+    	  url: $form.attr('action'),
+    	  type: 'POST',
+    	  dataType: 'json', // JSON 파싱 명시
+    	  data: {
+    	    roomId: roomId,
+    	    senderId: loginedMemberId,
+    	    message: message
+    	  },
+    	  success: function(savedMsg) {
+    	    $form.find('input[name="message"]').val('');
+    	    addMessageToContainer(savedMsg);
+    	  },
+    	  error: function() {
+    	    alert('메시지 전송에 실패했습니다.');
+    	  }
+    	});
+
+    	function addMessageToContainer(msg) {
+    	  const $container = $('.chat-messages');
+    	  const lastDateSeparator = $container.find('.date-separator span').last();
+    	  const lastDate = lastDateSeparator.length ? lastDateSeparator.text() : null;
+    	  const msgDate = msg.sentDate.substring(0,10);
+
+    	  if (msgDate !== lastDate) {
+    	    $container.append(`
+    	      <div class="date-separator">
+    	        <span>${msgDate}</span>
+    	      </div>
+    	    `);
+    	  }
+
+    	  const isMine = msg.senderId === loginedMemberId;
+    	  const messageClass = isMine ? 'mine' : 'other';
+
+    	  const $msgDiv = $('<div>').addClass('message ' + messageClass);
+    	  const $strong = $('<strong>').text(msg.senderName);
+    	  const $br = $('<br>');
+    	  // 줄바꿈은 html로 변환
+    	  const $msgText = $('<span>').html(msg.message.replace(/\n/g, '<br>'));
+    	  const $time = $('<span>').addClass('time').text(msg.sentDate.substring(11,16));
+
+    	  $msgDiv.append($strong, $br, $msgText, $time);
+    	  $container.append($msgDiv);
+    	  $container.scrollTop($container[0].scrollHeight);
+    	}
+
+  // 페이지 로드 시 초기 메시지 불러오기
+  if(selectedRoomId != null) {
+    loadMessages(selectedRoomId);
+  }
+});
+</script>
+
+<script>
+  // 페이지 떠나기 전에 스크롤 위치 저장
+  window.addEventListener('beforeunload', () => {
+    sessionStorage.setItem('scrollPosition', window.scrollY);
+  });
+
+  // 페이지 로드 시 저장된 위치로 스크롤 복원
+  window.addEventListener('load', () => {
+    const scrollPos = sessionStorage.getItem('scrollPosition');
+    if (scrollPos) {
+      window.scrollTo(0, parseInt(scrollPos));
+    }
+
+    // 기존 코드 중 채팅 메시지 스크롤 맨 아래 맞추기도 여기 두면 됩니다.
+    const chatMessages = document.querySelector('.chat-messages');
+    if(chatMessages) {
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+  });
+</script>
+
+<script>
+  window.onload = function() {
+    const chatMessages = document.querySelector('.chat-messages');
+    if(chatMessages) {
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+  }
+</script>
 </body>

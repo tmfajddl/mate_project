@@ -30,12 +30,17 @@
         ORDER BY sentDate ASC
     </select>
     
-    <select id="findChatRoomsByUserId" parameterType="int" resultType="com.example.demo.vo.ChatRoom">
-       SELECT * 
-  FROM chat_room 
-  WHERE roomName LIKE CONCAT('%', #{userId}, '%')
-  ORDER BY createdDate DESC
-    </select>
+   <select id="findChatRoomsByUserId" parameterType="int" resultType="com.example.demo.vo.ChatRoom">
+  SELECT cr.*
+  FROM chat_room cr
+  LEFT JOIN (
+      SELECT roomId, MAX(sentDate) AS lastSentDate
+      FROM chat_message
+      GROUP BY roomId
+  ) cm ON cr.id = cm.roomId
+  WHERE cr.roomName LIKE CONCAT('%', #{userId}, '%')
+  ORDER BY cm.lastSentDate DESC
+</select>
     
     <select id="getParticipants" parameterType="int" resultType="com.example.demo.vo.Member">
   SELECT m.id, m.nickname
