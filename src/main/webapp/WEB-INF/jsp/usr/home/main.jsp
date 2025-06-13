@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="../common/head.jspf"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -189,80 +191,118 @@ body {
 </c:choose>
 
   <!-- 뉴스 슬라이더를 상단에 배치 -->
-  <div class="news-slider-container">
+  <c:set var="teamName" value="${rq.loginedTeam}" />
+
+<div class="news-slider-container">
     <button class="slider-button left" aria-label="왼쪽으로 이동">&#10094;</button>
     <div class="news-slider" id="newsSlider">
       <c:forEach var="news" items="${breakingNews}">
-        <a href="${news.linkUrl}" target="_blank" class="news-card" style="background-image: url('${news.imgUrl != null ? news.imgUrl : '/images/default-news.png'}');">
-          <div class="news-title">${news.title}</div>
-        </a>
+        <%-- 제목이나 본문에 teamName 포함되어 있으면 출력 --%>
+        <c:if test="${fn:contains(news.title, teamName) or fn:contains(news.body, teamName)}">
+          <a href="${news.linkUrl}" target="_blank" class="news-card" 
+             style="background-image: url('${news.imgUrl != null ? news.imgUrl : '/images/default-news.png'}');">
+            <div class="news-title">${news.title}</div>
+          </a>
+        </c:if>
       </c:forEach>
     </div>
     <button class="slider-button right" aria-label="오른쪽으로 이동">&#10095;</button>
-  </div>
-  
+</div>
+  <c:set var="loginedTeamFull" value="${rq.loginedTeam}" />
+<c:set var="loginedTeamShort" value="${fn:split(loginedTeamFull, ' ')[0]}" />
  <!-- 선수 등록 / 말소 현황을 가로 배치하는 컨테이너 -->
 <div class="players-container self-start">
   <div class="box-rounded">
     <div class="section-title">등록 선수 현황</div>
-    <table class="player-table">
-      <thead>
+
+<table class="player-table">
+  <thead>
+    <tr>
+      <th>선수명</th>
+      <th>포지션</th>
+      <th>팀</th>
+    </tr>
+  </thead>
+  <tbody>
+    <c:choose>
+      <c:when test="${empty registeredPlayers}">
         <tr>
-          <th>선수명</th>
-          <th>포지션</th>
-          <th>팀</th>
+          <td colspan="3">당일 1군 등록된 선수가 없습니다.</td>
         </tr>
-      </thead>
-      <tbody>
-      <c:choose>
-    <c:when test="${empty registeredPlayers}">
-      <tr>
-        <td colspan="3">당일 1군 등록된 선수가 없습니다.</td>
-      </tr>
-    </c:when>
-    <c:otherwise>
-      <c:forEach var="player" items="${registeredPlayers}">
-        <tr>
-          <td><c:out value="${player.name}" /></td>
-          <td><c:out value="${player.position}" /></td>
-          <td><c:out value="${player.team}" /></td>
-        </tr>
-      </c:forEach>
-    </c:otherwise>
-  </c:choose>
-      </tbody>
-    </table>
+      </c:when>
+      <c:otherwise>
+        <!-- 로그인 팀 선수 먼저 출력 -->
+        <c:forEach var="player" items="${registeredPlayers}">
+          <c:if test="${player.team == loginedTeamShort}">
+            <tr style="background-color:#ffffe0;">
+              <td><c:out value="${player.name}" /></td>
+              <td><c:out value="${player.position}" /></td>
+              <td><c:out value="${player.team}" /></td>
+            </tr>
+          </c:if>
+        </c:forEach>
+
+        <!-- 그 외 선수 출력 -->
+        <c:forEach var="player" items="${registeredPlayers}">
+          <c:if test="${player.team != loginedTeamShort}">
+            <tr>
+              <td><c:out value="${player.name}" /></td>
+              <td><c:out value="${player.position}" /></td>
+              <td><c:out value="${player.team}" /></td>
+            </tr>
+          </c:if>
+        </c:forEach>
+      </c:otherwise>
+    </c:choose>
+  </tbody>
+</table>
   </div>
 
   <div class="box-rounded">
     <div class="section-title">말소 선수 현황</div>
-    <table class="player-table">
-      <thead>
+    <c:set var="teamName" value="${rq.loginedTeam}" />
+
+<table class="player-table">
+  <thead>
+    <tr>
+      <th>선수명</th>
+      <th>포지션</th>
+      <th>팀</th>
+    </tr>
+  </thead>
+  <tbody>
+    <c:choose>
+      <c:when test="${empty canceledPlayers}">
         <tr>
-          <th>선수명</th>
-          <th>포지션</th>
-          <th>팀</th>
+          <td colspan="3">당일 1군 말소된 선수가 없습니다.</td>
         </tr>
-      </thead>
-      <tbody>
-        <c:choose>
-    <c:when test="${empty canceledPlayers}">
-      <tr>
-        <td colspan="3">당일 1군 말소된 선수가 없습니다.</td>
-      </tr>
-    </c:when>
-    <c:otherwise>
-      <c:forEach var="player" items="${canceledPlayers}">
-        <tr>
-          <td><c:out value="${player.name}" /></td>
-          <td><c:out value="${player.position}" /></td>
-          <td><c:out value="${player.team}" /></td>
-        </tr>
-      </c:forEach>
-    </c:otherwise>
-  </c:choose>
-      </tbody>
-    </table>
+      </c:when>
+      <c:otherwise>
+        <!-- 로그인 팀 선수 먼저 출력 -->
+        <c:forEach var="player" items="${canceledPlayers}">
+          <c:if test="${player.team == loginedTeamShort}">
+            <tr style="background-color:#ffffe0;">
+              <td><c:out value="${player.name}" /></td>
+              <td><c:out value="${player.position}" /></td>
+              <td><c:out value="${player.team}" /></td>
+            </tr>
+          </c:if>
+        </c:forEach>
+
+        <!-- 그 외 선수 출력 -->
+        <c:forEach var="player" items="${canceledPlayers}">
+          <c:if test="${player.team != loginedTeamShort}">
+            <tr>
+              <td><c:out value="${player.name}" /></td>
+              <td><c:out value="${player.position}" /></td>
+              <td><c:out value="${player.team}" /></td>
+            </tr>
+          </c:if>
+        </c:forEach>
+      </c:otherwise>
+    </c:choose>
+  </tbody>
+</table>
   </div>
   
 <div class="box-rounded schedule"> 
@@ -270,9 +310,9 @@ body {
   <table class="player-table">
     <thead>
       <tr>
-        <c:forEach var="column" items="${naverBaseballSchedule[0].keySet()}">
-          <th><c:out value="${column}" /></th>
-        </c:forEach>
+          <th>시간</th>
+          <th>경기</th>
+          <th>구장</th>
       </tr>
     </thead>
     <tbody>
@@ -283,12 +323,32 @@ body {
           </tr>
         </c:when>
         <c:otherwise>
+          <!-- 1) 로그인 팀명이 포함된 일정 먼저 출력 -->
           <c:forEach var="row" items="${naverBaseballSchedule}">
-            <tr>
-              <c:forEach var="column" items="${row.keySet()}">
-                <td><c:out value="${row[column]}" /></td>
-              </c:forEach>
-            </tr>
+            <c:if test="${fn:contains(row['왼쪽팀명'], loginedTeamShort) or fn:contains(row['오른쪽팀명'], loginedTeamShort)}">
+              <tr>
+                <td><c:out value="${row['시간']}" /></td>
+                <td>
+                  <c:out value="${row['왼쪽팀명']}" /> (<c:out value="${row['왼쪽상태및투수']}" />) VS 
+                  <c:out value="${row['오른쪽팀명']}" /> (<c:out value="${row['오른쪽상태및투수']}" />)
+                </td>
+                <td><c:out value="${row['구장']}" /></td>
+              </tr>
+            </c:if>
+          </c:forEach>
+
+          <!-- 2) 그 외 일정 출력 -->
+          <c:forEach var="row" items="${naverBaseballSchedule}">
+            <c:if test="${!(fn:contains(row['왼쪽팀명'], loginedTeamShort) or fn:contains(row['오른쪽팀명'], loginedTeamShort))}">
+              <tr>
+                <td><c:out value="${row['시간']}" /></td>
+                <td>
+                  <c:out value="${row['왼쪽팀명']}" /> (<c:out value="${row['왼쪽상태및투수']}" />) VS 
+                  <c:out value="${row['오른쪽팀명']}" /> (<c:out value="${row['오른쪽상태및투수']}" />)
+                </td>
+                <td><c:out value="${row['구장']}" /></td>
+              </tr>
+            </c:if>
           </c:forEach>
         </c:otherwise>
       </c:choose>

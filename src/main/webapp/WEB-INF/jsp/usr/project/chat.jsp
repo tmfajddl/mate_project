@@ -12,13 +12,23 @@ body {
 }
   /* 채팅방 박스: 화면 높이 80% */
   .chat-container {
-    background-color: rgba(255, 255, 255, 0.7); /* 반투명 흰색 */
-    border-radius: 10px;
-    padding: 16px;
-    min-height: 80vh;
-    display: flex;
-    flex-direction: column;
-  }
+  display: flex;
+  flex-direction: column;
+  height: 80vh; /* 화면 높이 80% */
+  background-color: rgba(255, 255, 255, 0.7);
+  border-radius: 10px;
+  padding: 16px;
+}
+
+.chat-messages {
+  flex-grow: 1;
+  overflow-y: auto;
+  max-height: calc(80vh - 120px); /* 폼, 타이틀 등 공간 제외한 높이 */
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 10px;
+  margin-bottom: 12px;
+}
 
   /* 채팅방 목록 */
   .chat-list {
@@ -40,15 +50,6 @@ body {
     font-weight: bold;
   }
 
-  /* 메시지 영역: 스크롤 처리 */
-  .chat-messages {
-    background-color: #fff;
-    border-radius: 10px;
-    padding: 10px;
-    flex-grow: 1;
-    overflow-y: auto;
-    margin-bottom: 12px;
-  }
 
   /* 말풍선 기본 스타일 */
   .message {

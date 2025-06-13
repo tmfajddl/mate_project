@@ -15,13 +15,21 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.demo.dto.GoodsRecommendationResponse;
 import com.example.demo.dto.PlaceRecommendationResponse;
+import com.example.demo.service.ChatService;
 import com.example.demo.service.KboCrawlerService;
 import com.example.demo.service.NaverSearchService;
 import com.example.demo.service.OpenAiService;
+import com.example.demo.vo.ChatMessage;
+import com.example.demo.vo.ChatRoom;
 import com.example.demo.vo.Rq;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
 public class UsrHomeController {
+	
+	@Autowired
+	private ChatService chatService;
 	
 	@Autowired
 	private Rq rq;
@@ -43,15 +51,48 @@ public class UsrHomeController {
 		 List<Map<String, String>> canceledPlayers = kboCrawlerService.getCanceledPlayers();
 		 model.addAttribute("canceledPlayers", canceledPlayers);
 		 
-		 List<HashMap<String, String>> naverBaseballSchedule = kboCrawlerService.getNaverBaseballSchedule();
+		 List<HashMap<String, String>> naverBaseballSchedule = kboCrawlerService.getBaseballSchedule();
 		 model.addAttribute("naverBaseballSchedule", naverBaseballSchedule);
 		return "/usr/home/main";
 	}
 	
 	@RequestMapping("/usr/home/test")
-	  public String showSchedule(Model model) throws IOException {
-		List<HashMap<String, String>> naverBaseballSchedule = kboCrawlerService.getBaseballSchedule();
-		 model.addAttribute("scheduleList", naverBaseballSchedule);
+	  public String showSchedule(@RequestParam(value = "roomId", required = false) Integer roomId, Model model, HttpServletRequest req) {
+	        Rq rq = (Rq) req.getAttribute("rq");
+	        int loginUserId = rq.getLoginedMemberId();
+
+	        List<ChatRoom> chatRooms = chatService.getChatRoomsByUserId(loginUserId);
+
+	        for (ChatRoom room : chatRooms) {
+	            String otherNickname = chatService.getOtherMemberNickname(room.getId(), loginUserId);
+	            String profileImg = chatService.getProfileImg(room.getId(), loginUserId);
+	            room.setOtherMemberNickname(otherNickname);
+	            room.setOtherProfileImg(profileImg);
+	        }
+
+	        model.addAttribute("chatRooms", chatRooms);
+
+	        if (chatRooms.isEmpty()) {
+	            // 참여중인 채팅방이 없으면 빈 화면 처리
+	            model.addAttribute("chatRooms", chatRooms);
+	            model.addAttribute("messages", List.of());
+	            model.addAttribute("selectedRoomId", null);
+	            model.addAttribute("LoginedMemberId", loginUserId);
+	            return "/usr/project/chat";
+	        }
+
+	        if (roomId == null) {
+	            // roomId가 없으면 첫번째 채팅방으로 자동 리다이렉트
+	            roomId = chatRooms.get(0).getId();
+	            return "redirect:/usr/project/chat/room?roomId=" + roomId;
+	        }
+
+	        List<ChatMessage> messages = chatService.getMessagesByRoomId(roomId);
+
+	        model.addAttribute("chatRooms", chatRooms);
+	        model.addAttribute("messages", messages);
+	        model.addAttribute("selectedRoomId", roomId);
+	        model.addAttribute("LoginedMemberId", loginUserId);
 		return "/usr/home/test";
 	}
 
