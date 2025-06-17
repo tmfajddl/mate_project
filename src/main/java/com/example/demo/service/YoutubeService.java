@@ -61,8 +61,8 @@ public class YoutubeService {
         return titles;
     }
 
-    public List<String> getVideoIds(String CHANNEL_ID, int maxResults) {
-        List<String> ids = new ArrayList<>();
+    public List<Map<String, String>> getVideoIdTitleList(String CHANNEL_ID, int maxResults) {
+        List<Map<String, String>> videoList = new ArrayList<>();
         try {
             String urlStr = "https://www.googleapis.com/youtube/v3/search"
                     + "?key=" + API_KEY
@@ -91,20 +91,27 @@ public class YoutubeService {
 
             for (int i = 0; i < items.length(); i++) {
                 JSONObject item = items.getJSONObject(i);
-                // 영상 ID는 items[i].id.videoId 에 있음
                 JSONObject idObj = item.getJSONObject("id");
                 if (idObj.has("videoId")) {
-                    ids.add(idObj.getString("videoId"));
+                    String videoId = idObj.getString("videoId");
+                    String title = item.getJSONObject("snippet").getString("title");
+
+                    Map<String, String> video = new HashMap<>();
+                    video.put("id", videoId);
+                    video.put("title", title);
+                    video.put("url", "https://www.youtube.com/watch?v=" + videoId); // (옵션) 바로가기 URL
+
+                    videoList.add(video);
                 }
             }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return ids;
+        return videoList;
     }
-    public List<String> getPlaylistVideoIds() {
-        List<String> videoIds = new ArrayList<>();
+    public List<Map<String, String>> getPlaylistVideoIdTitleList() {
+        List<Map<String, String>> videoList = new ArrayList<>();
         try {
             String urlStr = "https://www.googleapis.com/youtube/v3/playlistItems"
                     + "?part=snippet"
@@ -130,7 +137,6 @@ public class YoutubeService {
             for (int i = 0; i < items.length(); i++) {
                 JSONObject snippet = items.getJSONObject(i).getJSONObject("snippet");
 
-                // 삭제 또는 비공개 영상은 제외
                 String title = snippet.optString("title", "");
                 if ("Deleted video".equalsIgnoreCase(title) || "Private video".equalsIgnoreCase(title)) {
                     continue;
@@ -138,14 +144,22 @@ public class YoutubeService {
 
                 JSONObject resourceId = snippet.getJSONObject("resourceId");
                 if (resourceId.has("videoId")) {
-                    videoIds.add(resourceId.getString("videoId"));
+                    String videoId = resourceId.getString("videoId");
+
+                    Map<String, String> video = new HashMap<>();
+                    video.put("id", videoId);
+                    video.put("title", title);
+                    video.put("url", "https://www.youtube.com/watch?v=" + videoId); // (옵션) 바로가기 URL
+
+                    videoList.add(video);
                 }
             }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return videoIds;
+
+        return videoList;
     }
     
     

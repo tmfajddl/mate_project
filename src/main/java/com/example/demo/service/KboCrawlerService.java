@@ -1,10 +1,17 @@
 package com.example.demo.service;
 
 import org.jsoup.Jsoup;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 import org.springframework.stereotype.Service;
+
+import io.github.bonigarcia.wdm.WebDriverManager;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -231,109 +238,69 @@ public class KboCrawlerService {
 
         return players;
     }
+    public List<HashMap<String, String>> getBaseballScheduleWithSelenium() {
+        WebDriverManager.chromedriver().setup(); 
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--headless"); // 브라우저 안 뜨게 설정
+        options.addArguments("--disable-gpu"); // GPU 비활성화 (Windows 안정성)
+        options.addArguments("--no-sandbox");  // 리눅스 권한 문제 해결용
+        options.addArguments("--disable-dev-shm-usage"); // 메모리 문제 방지
 
-    
-    public List<HashMap<String, String>> getBaseballSchedule() throws IOException {
-        String url = "https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query=야구";
-        Document doc = Jsoup.connect(url).get();
+        WebDriver driver = new ChromeDriver(options); // 옵션 적용
 
-        Element table = doc.selectFirst("#myschedule_1 > table");
         List<HashMap<String, String>> datas = new ArrayList<>();
 
-        if (table == null) {
-            return datas; // 빈 리스트 반환
-        }
+        try {
+            driver.get("https://www.koreabaseball.com/Default.aspx?vote=true");
+            Thread.sleep(3000); // 페이지 로딩 대기
 
-        // 팀명 리스트 (필요에 따라 조절)
-        List<String> teamNames = Arrays.asList("두산", "한화", "LG", "삼성", "롯데", "키움", "KT", "NC", "SSG", "KIA");
+            List<WebElement> gameElements = driver.findElements(By.cssSelector("ul.game-list-n > li.game-cont"));
+            System.out.println("게임 요소 개수: " + gameElements.size());
 
-        // 헤더
-        Elements ths = table.select("thead tr th");
-        List<String> columns = new ArrayList<>();
-        for (int i = 0; i < Math.min(3, ths.size()); i++) {
-            columns.add(ths.get(i).text().trim());
-        }
-        if (columns.isEmpty()) {
-            columns.add("시간");
-            columns.add("경기정보");
-            columns.add("구장");
-        }
+            for (WebElement game : gameElements) {
+                HashMap<String, String> row = new HashMap<>();
 
-        // 바디
-        Elements trs = table.select("tbody tr");
-        for (Element tr : trs) {
-            Elements tds = tr.select("td");
-            if (tds.size() < 3) continue; // 3개 칸이 안되면 스킵
+                // 시간, 구장
+                List<WebElement> topLis = game.findElements(By.cssSelector("div.top > ul > li"));
+                row.put("시간", topLis.size() > 2 ? topLis.get(2).getText().trim() : "");
+                row.put("구장", topLis.size() > 0 ? topLis.get(0).getText().trim() : "");
 
-            HashMap<String, String> row = new HashMap<>();
+                // 원정팀
+                WebElement awayTeam = game.findElement(By.cssSelector("div.team.away"));
+                String awayTeamName = awayTeam.findElement(By.tagName("img")).getAttribute("alt").trim();
+                String awayPitcher = awayTeam.findElement(By.cssSelector("div.today-pitcher > p")).getText().trim();
 
-            // 시간 (첫번째 칸)
-            row.put("시간", tds.get(0).text().trim());
+                // 홈팀
+                WebElement homeTeam = game.findElement(By.cssSelector("div.team.home"));
+                String homeTeamName = homeTeam.findElement(By.tagName("img")).getAttribute("alt").trim();
+                String homePitcher = homeTeam.findElement(By.cssSelector("div.today-pitcher > p")).getText().trim();
 
-            // 경기정보 (두번째 칸) 예: "두산잭로그패 2 : 3 한화승주현상"
-            String gameInfo = tds.get(1).text().trim();
-
-            // 점수 추출
-            Pattern scorePattern = Pattern.compile("(\\d+)\\s*:\\s*(\\d+)");
-            Matcher m = scorePattern.matcher(gameInfo);
-
-            if (m.find()) {
-                int start = m.start();
-                int end = m.end();
-
-                String leftPart = gameInfo.substring(0, start).trim();   // 왼쪽 팀 + 상태+투수
-                String rightPart = gameInfo.substring(end).trim();        // 오른쪽 팀 + 상태+투수
-                String score = gameInfo.substring(start, end).trim();     // 점수 (ex: 2 : 3)
-
-             // 왼쪽 팀명 분리
-                String leftTeam = "";
-                String leftStatusPitcher = "";
-                for (String team : teamNames) {
-                    if (leftPart.startsWith(team)) {
-                        leftTeam = team;
-                        leftStatusPitcher = leftPart.substring(team.length());
-                        break;
-                    }
+                if (awayPitcher.startsWith("선")) {
+                    awayPitcher = awayPitcher.substring(1).trim();
                 }
-                // 왼쪽 선발 선수 마지막 글자 제거
-                if (leftStatusPitcher.length() > 0) {
-                    leftStatusPitcher = leftStatusPitcher.substring(0, leftStatusPitcher.length() - 1);
+                if (homePitcher.startsWith("선")) {
+                    homePitcher = homePitcher.substring(1).trim();
                 }
+                
+                // 스코어 정보는 없기 때문에 빈값 또는 "-"
+                row.put("왼쪽팀명", awayTeamName);
+                row.put("왼쪽상태및투수", awayPitcher);
+                row.put("스코어", "-");
+                row.put("오른쪽팀명", homeTeamName);
+                row.put("오른쪽상태및투수", homePitcher);
 
-                // 오른쪽 팀명 분리
-                String rightTeam = "";
-                String rightStatusPitcher = "";
-                for (String team : teamNames) {
-                    if (rightPart.startsWith(team)) {
-                        rightTeam = team;
-                        rightStatusPitcher = rightPart.substring(team.length());
-                        break;
-                    }
-                }
-                // 오른쪽 선발 선수 첫 글자 제거
-                if (rightStatusPitcher.length() > 0) {
-                    rightStatusPitcher = rightStatusPitcher.substring(1);
-                }
-
-                // 결과를 별도로 저장
-                row.put("왼쪽팀명", leftTeam);
-                row.put("왼쪽상태및투수", leftStatusPitcher);
-                row.put("스코어", score);
-                row.put("오른쪽팀명", rightTeam);
-                row.put("오른쪽상태및투수", rightStatusPitcher);
-            } else {
-                // 점수 패턴 못찾으면 그냥 원본 경기정보 저장
-                row.put("경기정보", gameInfo);
+                datas.add(row);
             }
 
-            // 구장 (세번째 칸)
-            row.put("구장", tds.get(2).text().trim());
-
-            datas.add(row);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            driver.quit();
         }
 
         return datas;
     }
+
 }
 
 

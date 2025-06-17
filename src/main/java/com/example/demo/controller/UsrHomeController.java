@@ -56,32 +56,15 @@ public class UsrHomeController {
 		 List<Map<String, String>> canceledPlayers = kboCrawlerService.getCanceledPlayers();
 		 model.addAttribute("canceledPlayers", canceledPlayers);
 		 
-		 List<HashMap<String, String>> naverBaseballSchedule = kboCrawlerService.getBaseballSchedule();
+		 List<HashMap<String, String>> naverBaseballSchedule = kboCrawlerService.getBaseballScheduleWithSelenium();
 		 model.addAttribute("naverBaseballSchedule", naverBaseballSchedule);
 		return "/usr/home/main";
 	}
 	
 	@RequestMapping("/usr/home/test")
 	public String showSchedule(HttpServletRequest request, Model model) throws IOException {
-	    // 세션에서 로그인 팀 정보 가져오기 (필요에 따라 변경)
-	    String loginedTeam = rq.getLoginedTeam();
-	    if (loginedTeam == null) {
-	        loginedTeam = "기본값"; // 필요 시 기본값 지정
-	    }
-
-	    String channelId = youtubeService.getChannelIdByTeam(loginedTeam);
-	    List<String> videoIds = youtubeService.getVideoIds(channelId, 10);
-
-	    // 필요하면 팀별 플레이리스트 아이디 매핑 후 호출
-	    List<String> videoIds2 = youtubeService.getPlaylistVideoIds();
-	    
-	    List<Map<String, String>> videoIds3 = youtubeService.getFilteredVideosByTeam(loginedTeam);
-
-	    model.addAttribute("videoIds", videoIds);
-	    model.addAttribute("videoIds2", videoIds2);
-	    model.addAttribute("videoIds3", videoIds3);
-	    
-
+            List<HashMap<String, String>> games = kboCrawlerService.getBaseballScheduleWithSelenium();
+            model.addAttribute("games", games);
 	    return "/usr/home/test";
 	}
 
@@ -93,7 +76,7 @@ public class UsrHomeController {
 	
 	@RequestMapping("/usr/project/information")
 	public String showMain4(Model model) throws IOException {
-		 List<HashMap<String, String>> naverBaseballSchedules = kboCrawlerService.getBaseballSchedule();
+		 List<HashMap<String, String>> naverBaseballSchedules = kboCrawlerService.getBaseballScheduleWithSelenium();
 		 model.addAttribute("scheduleList", naverBaseballSchedules);
 		return "/usr/project/information";
 	}
@@ -198,5 +181,29 @@ public class UsrHomeController {
 	    model.addAttribute("top5Players", top5Players);
 	    System.out.println(top5Players);
 		return "/usr/project/ranking";
+	}
+	
+	@RequestMapping("/usr/project/play")
+	public String play(HttpServletRequest request, Model model) throws IOException {
+	    // 세션에서 로그인 팀 정보 가져오기 (필요에 따라 변경)
+	    String loginedTeam = rq.getLoginedTeam();
+	    if (loginedTeam == null) {
+	        loginedTeam = "기본값"; // 필요 시 기본값 지정
+	    }
+
+	    String channelId = youtubeService.getChannelIdByTeam(loginedTeam);
+	    List<Map<String, String>> videoIds = youtubeService.getVideoIdTitleList(channelId, 10);
+
+	    // 필요하면 팀별 플레이리스트 아이디 매핑 후 호출
+	    List<Map<String, String>> videoIds2 = youtubeService.getPlaylistVideoIdTitleList();
+	    
+	    List<Map<String, String>> videoIds3 = youtubeService.getFilteredVideosByTeam(loginedTeam);
+
+	    model.addAttribute("videoIds", videoIds);
+	    model.addAttribute("videoIds2", videoIds2);
+	    model.addAttribute("videoIds3", videoIds3);
+	    
+
+	    return "/usr/project/play";
 	}
 }

@@ -120,9 +120,9 @@
     <version>1.15.4</version>
 </dependency>
 <dependency>
-    <groupId>org.seleniumhq.selenium</groupId>
-    <artifactId>selenium-java</artifactId>
-    <version>4.20.0</version> <!-- 버전 최신 확인 -->
+  <groupId>org.seleniumhq.selenium</groupId>
+  <artifactId>selenium-java</artifactId>
+  <version>4.21.0</version>
 </dependency>
 <dependency>
     <groupId>io.github.bonigarcia</groupId>
@@ -154,6 +154,17 @@
     <version>4.15.0</version>
 </dependency>
 
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-websocket</artifactId>
+</dependency>
+
+    <!-- WebDriver Manager (드라이버 자동 관리용 - 추천) -->
+    <dependency>
+        <groupId>io.github.bonigarcia</groupId>
+        <artifactId>webdrivermanager</artifactId>
+        <version>5.8.0</version>
+    </dependency>
 
 	</dependencies>
 

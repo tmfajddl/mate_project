@@ -59,6 +59,7 @@ body {
             <li><a href="${pageContext.request.contextPath}/usr/project/information2">최신 뉴스</a></li>
             <li><a href="${pageContext.request.contextPath}/usr/project/information3">선수들이 자주 찾는 맛집</a></li>
             <li><a href="${pageContext.request.contextPath}/usr/project/ranking">팀 순위 / TOP5</a></li>
+            <li><a href="${pageContext.request.contextPath}/usr/project/play">경기 영상 / 일상</a></li>
           </ul>
         </div>
       </li>
