@@ -82,14 +82,12 @@ public class ChatController {
     }
     
     @PostMapping("/usr/project/chat/send")
-    public String sendMessage(@RequestParam("roomId") int roomId,
-                               @RequestParam("message") String message,
-                               HttpServletRequest req) {
-    	
-    	Rq rq = (Rq) req.getAttribute("rq");
-        int loginUserId = rq.getLoginedMemberId();
-        chatService.sendMessage(roomId, loginUserId, message);
-        return "redirect:/usr/project/chat/room?roomId=" + roomId;
+    @ResponseBody
+    public ResponseEntity<ChatMessage> sendMessageAjax(@RequestParam int roomId, 
+                                                       @RequestParam int senderId,
+                                                       @RequestParam String message) {
+        ChatMessage savedMessage = chatService.sendMessage(roomId, senderId, message);
+        return ResponseEntity.ok(savedMessage);
     }
     @PostMapping("/send")
     public ResponseEntity<?> sendMessage(@RequestParam int roomId, 

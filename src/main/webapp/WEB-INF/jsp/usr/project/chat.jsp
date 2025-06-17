@@ -285,64 +285,68 @@ $(function() {
 
   // 메시지 전송 폼 submit 이벤트 차단 후 Ajax 처리
   $('form').on('submit', function(e) {
-    e.preventDefault();
+    e.preventDefault();  // 기본 폼 제출 동작 막기
 
     const $form = $(this);
     const roomId = $form.find('input[name="roomId"]').val();
     const message = $form.find('input[name="message"]').val();
 
-    if (!message.trim()) return;
+    if (!message.trim()) return; // 빈 메시지 무시
 
     $.ajax({
-    	  url: $form.attr('action'),
-    	  type: 'POST',
-    	  dataType: 'json', // JSON 파싱 명시
-    	  data: {
-    	    roomId: roomId,
-    	    senderId: loginedMemberId,
-    	    message: message
-    	  },
-    	  success: function(savedMsg) {
-    	    $form.find('input[name="message"]').val('');
-    	    addMessageToContainer(savedMsg);
-    	  },
-    	  error: function() {
-    	    alert('메시지 전송에 실패했습니다.');
-    	  }
-    	});
+      url: $form.attr('action'),
+      type: 'POST',
+      dataType: 'json',  // JSON으로 응답 받을 것임
+      data: {
+        roomId: roomId,
+        senderId: loginedMemberId,
+        message: message
+      },
+      success: function(savedMsg) {
+        // 입력창 초기화
+        $form.find('input[name="message"]').val('');
 
-    	function addMessageToContainer(msg) {
-    	  const $container = $('.chat-messages');
-    	  const lastDateSeparator = $container.find('.date-separator span').last();
-    	  const lastDate = lastDateSeparator.length ? lastDateSeparator.text() : null;
-    	  const msgDate = msg.sentDate.substring(0,10);
+        // 메시지 추가 함수 호출
+        addMessageToContainer(savedMsg);
+      },
+      error: function() {
+        alert('메시지 전송에 실패했습니다.');
+      }
+    });
 
-    	  if (msgDate !== lastDate) {
-    	    $container.append(`
-    	      <div class="date-separator">
-    	        <span>${msgDate}</span>
-    	      </div>
-    	    `);
-    	  }
+    // 기본 제출 막음 (더블 체크)
+    return false;
+  });
 
-    	  const isMine = msg.senderId === loginedMemberId;
-    	  const messageClass = isMine ? 'mine' : 'other';
+  // 메시지 추가 함수
+  function addMessageToContainer(msg) {
+    const $container = $('.chat-messages');
+    const lastDateSeparator = $container.find('.date-separator span').last();
+    const lastDate = lastDateSeparator.length ? lastDateSeparator.text() : null;
+    const msgDate = msg.sentDate.substring(0,10);
 
-    	  const $msgDiv = $('<div>').addClass('message ' + messageClass);
-    	  const $strong = $('<strong>').text(msg.senderName);
-    	  const $br = $('<br>');
-    	  // 줄바꿈은 html로 변환
-    	  const $msgText = $('<span>').html(msg.message.replace(/\n/g, '<br>'));
-    	  const $time = $('<span>').addClass('time').text(msg.sentDate.substring(11,16));
+    if (msgDate !== lastDate) {
+      $container.append(`
+        <div class="date-separator">
+          <span>${msgDate}</span>
+        </div>
+      `);
+    }
 
-    	  $msgDiv.append($strong, $br, $msgText, $time);
-    	  $container.append($msgDiv);
-    	  $container.scrollTop($container[0].scrollHeight);
-    	}
+    const isMine = msg.senderId === loginedMemberId;
+    const messageClass = isMine ? 'mine' : 'other';
 
-  // 페이지 로드 시 초기 메시지 불러오기
-  if(selectedRoomId != null) {
-    loadMessages(selectedRoomId);
+    const $msgDiv = $('<div>').addClass('message ' + messageClass);
+    const $strong = $('<strong>').text(msg.senderName);
+    const $br = $('<br>');
+    const $msgText = $('<span>').html(msg.message.replace(/\n/g, '<br>'));
+    const $time = $('<span>').addClass('time').text(msg.sentDate.substring(11,16));
+
+    $msgDiv.append($strong, $br, $msgText, $time);
+    $container.append($msgDiv);
+
+    // 스크롤 맨 아래로 내리기
+    $container.scrollTop($container[0].scrollHeight);
   }
 });
 </script>

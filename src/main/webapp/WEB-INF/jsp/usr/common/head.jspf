@@ -58,6 +58,7 @@ body {
             <li><a href="${pageContext.request.contextPath}/usr/project/information">구장 별 날씨</a></li>
             <li><a href="${pageContext.request.contextPath}/usr/project/information2">최신 뉴스</a></li>
             <li><a href="${pageContext.request.contextPath}/usr/project/information3">선수들이 자주 찾는 맛집</a></li>
+            <li><a href="${pageContext.request.contextPath}/usr/project/ranking">팀 순위 / TOP5</a></li>
           </ul>
         </div>
       </li>

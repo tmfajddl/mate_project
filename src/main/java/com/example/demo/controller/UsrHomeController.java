@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.apache.catalina.filters.ExpiresFilter.XServletOutputStream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,6 +20,7 @@ import com.example.demo.service.ChatService;
 import com.example.demo.service.KboCrawlerService;
 import com.example.demo.service.NaverSearchService;
 import com.example.demo.service.OpenAiService;
+import com.example.demo.service.YoutubeService;
 import com.example.demo.vo.ChatMessage;
 import com.example.demo.vo.ChatRoom;
 import com.example.demo.vo.Rq;
@@ -30,6 +32,9 @@ public class UsrHomeController {
 	
 	@Autowired
 	private ChatService chatService;
+	
+    @Autowired
+    private YoutubeService youtubeService;
 	
 	@Autowired
 	private Rq rq;
@@ -57,14 +62,27 @@ public class UsrHomeController {
 	}
 	
 	@RequestMapping("/usr/home/test")
-	  public String showSchedule(Model model) throws IOException {
-	    List<List<String>> rankings = kboCrawlerService.getTeamRankings();
-	    model.addAttribute("teamRankings", rankings);
+	public String showSchedule(HttpServletRequest request, Model model) throws IOException {
+	    // 세션에서 로그인 팀 정보 가져오기 (필요에 따라 변경)
+	    String loginedTeam = rq.getLoginedTeam();
+	    if (loginedTeam == null) {
+	        loginedTeam = "기본값"; // 필요 시 기본값 지정
+	    }
+
+	    String channelId = youtubeService.getChannelIdByTeam(loginedTeam);
+	    List<String> videoIds = youtubeService.getVideoIds(channelId, 10);
+
+	    // 필요하면 팀별 플레이리스트 아이디 매핑 후 호출
+	    List<String> videoIds2 = youtubeService.getPlaylistVideoIds();
 	    
-	    List<Map<String, String>> top5Players = kboCrawlerService.getTOP5Players();
-	    model.addAttribute("top5Players", top5Players);
-	    System.out.println(top5Players);
-		return "/usr/home/test";
+	    List<Map<String, String>> videoIds3 = youtubeService.getFilteredVideosByTeam(loginedTeam);
+
+	    model.addAttribute("videoIds", videoIds);
+	    model.addAttribute("videoIds2", videoIds2);
+	    model.addAttribute("videoIds3", videoIds3);
+	    
+
+	    return "/usr/home/test";
 	}
 
 	@RequestMapping("/")
@@ -169,5 +187,16 @@ public class UsrHomeController {
 	@RequestMapping("/usr/project/chat")
 	public String showMain9() {
 		return "/usr/project/chat";
+	}
+	
+	@RequestMapping("/usr/project/ranking")
+	  public String ranking(Model model) throws IOException {
+	    List<List<String>> rankings = kboCrawlerService.getTeamRankings();
+	    model.addAttribute("teamRankings", rankings);
+	    
+	    List<Map<String, String>> top5Players = kboCrawlerService.getTOP5Players();
+	    model.addAttribute("top5Players", top5Players);
+	    System.out.println(top5Players);
+		return "/usr/project/ranking";
 	}
 }

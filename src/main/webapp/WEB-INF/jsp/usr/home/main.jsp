@@ -96,6 +96,9 @@
   transform: scale(0.8);
   
 }
+section {
+  min-height: 100vh;
+}
 
   .box-rounded {
     background-color: #fff7e6;
@@ -135,6 +138,7 @@
 
 body {
   font-family: 'Ownglyph_ParkDaHyun', sans-serif;
+  
 }
   
   
@@ -317,11 +321,13 @@ body {
     </thead>
     <tbody>
       <c:choose>
-        <c:when test="${empty naverBaseballSchedule}">
-          <tr>
-            <td colspan="4">오늘 야구 일정이 없습니다.</td>
-          </tr>
-        </c:when>
+        <c:when test="${empty naverBaseballSchedule 
+    or empty naverBaseballSchedule[0]['왼쪽팀명'] 
+    or empty naverBaseballSchedule[0]['오른쪽팀명']}">
+  <tr>
+    <td colspan="4">오늘 야구 일정이 없습니다.</td>
+  </tr>
+</c:when>
         <c:otherwise>
           <!-- 1) 로그인 팀명이 포함된 일정 먼저 출력 -->
           <c:forEach var="row" items="${naverBaseballSchedule}">
@@ -370,9 +376,6 @@ body {
   </div>
 </div>
 
-
-</section>
-
 <script>
   const slider = document.getElementById('newsSlider');
   const btnLeft = document.querySelector('.slider-button.left');
@@ -387,6 +390,6 @@ body {
     slider.scrollBy({ left: scrollAmount, behavior: 'smooth' });
   });
 </script>
-
+</section>
 </body>
 </html>

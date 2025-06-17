@@ -42,7 +42,7 @@ public class ChatService {
         return room;
     }
     
-    public void sendMessage(int roomId, int senderId, String message) {
+    public ChatMessage sendMessage(int roomId, int senderId, String message) {
         ChatMessage chatMessage = new ChatMessage();
         chatMessage.setRoomId(roomId);
         chatMessage.setSenderId(senderId);
@@ -50,6 +50,8 @@ public class ChatService {
         chatMessage.setSentDate(LocalDateTime.now());
 
         chatRepository.insertMessage(chatMessage);
+
+        return chatMessage; // 저장한 메시지 객체 반환
     }
 
     public List<ChatMessage> getMessagesForRoom(int roomId) {
