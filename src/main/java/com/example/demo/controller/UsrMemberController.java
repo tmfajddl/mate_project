@@ -176,8 +176,17 @@ public class UsrMemberController {
 	        return Ut.jsHistoryBack("F-1", Ut.f("%d번 회원은 없습니다", loginedId));
 	    }
 
-	    if (!loginPw.equals(loginPw2)) {
-	        return Ut.jsHistoryBack("F-1", "비밀번호가 일치하지 않습니다");
+	    // 기존 비밀번호 유지용
+	    String encodedPw = member.getLoginPw();
+
+	    // 새 비밀번호를 입력한 경우에만 변경
+	    if (!Ut.isEmpty(loginPw) || !Ut.isEmpty(loginPw2)) {
+	        if (!loginPw.equals(loginPw2)) {
+	            return Ut.jsHistoryBack("F-1", "비밀번호가 일치하지 않습니다");
+	        }
+	        if (!Ut.isEmpty(loginPw)) {
+	            encodedPw = Ut.sha256(loginPw);
+	        }
 	    }
 
 	    ResultData userCanModifyRd = memberService.userCanModify(loginedId, member);
@@ -213,8 +222,8 @@ public class UsrMemberController {
 	        }
 	    }
 
-	    // 회원 정보 수정
-	    memberService.modifyMember(loginedId, Ut.sha256(loginPw), nickname, cellphoneNum, email, introduce, profileImg);
+	    // 회원 정보 수정 시 반드시 encodedPw 사용 (null이나 빈값 방지)
+	    memberService.modifyMember(loginedId, encodedPw, nickname, cellphoneNum, email, introduce, profileImg);
 
 	    return Ut.jsReplaceNoAlert(userCanModifyRd.getResultCode(), userCanModifyRd.getMsg(), "../home/main");
 	}

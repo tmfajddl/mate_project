@@ -49,23 +49,29 @@ body {
 <script>
   // 비밀번호 확인 AJAX
   function checkPasswordMatch() {
-    const pw = document.querySelector('input[name="loginPw"]').value;
-    const pw2 = document.querySelector('input[name="loginPw2"]').value;
+  const pw1 = document.querySelector('input[name="loginPw"]');
+  const pw2 = document.querySelector('input[name="loginPw2"]');
+  const result = document.getElementById('pwMatchResult');
 
-    if (pw === "" || pw2 === "") {
-      document.getElementById('pwMatchResult').innerText = "";
-      return;
-    }
-
-    // AJAX 요청 (비밀번호 확인은 클라이언트에서 할 수 있음)
-    if (pw === pw2) {
-      document.getElementById('pwMatchResult').innerText = "비밀번호가 일치합니다.";
-      document.getElementById('pwMatchResult').style.color = "green";
-    } else {
-      document.getElementById('pwMatchResult').innerText = "비밀번호가 일치하지 않습니다.";
-      document.getElementById('pwMatchResult').style.color = "red";
-    }
+  if (!pw1 || !pw2) {
+    result.innerText = '';
+    return;
   }
+
+  if (pw1.value === '' && pw2.value === '') {
+    result.innerText = '';  // 입력이 비어있으면 경고 메시지 없음
+    return;
+  }
+
+  if (pw1.value === pw2.value) {
+    result.innerText = '비밀번호가 일치합니다.';
+    result.style.color = 'green';
+  } else {
+    result.innerText = '비밀번호가 일치하지 않습니다.';
+    result.style.color = 'red';
+  }
+}
+
 </script>
 
 <body class="m-0 h-full" style="background-color: #f7f0e9;">
@@ -149,15 +155,43 @@ body {
   }
   
   function togglePasswordFields() {
-    const passwordFields = document.getElementById("passwordFields");
-    // 토글 (숨김 <-> 표시)
-    if (passwordFields.style.display === "none") {
-      passwordFields.style.display = "block";
-    } else {
-      passwordFields.style.display = "none";
-    }
-  }
+	  const passwordFields = document.getElementById("passwordFields");
 
+	  if (passwordFields.style.display === "none" || passwordFields.style.display === "") {
+	    passwordFields.style.display = "block";
+
+	    // input 필드가 없으면 추가
+	    if (!document.querySelector('input[name="loginPw"]')) {
+	      const pw1 = document.createElement("input");
+	      pw1.className = "input input-sm w-full mb-2";
+	      pw1.name = "loginPw";
+	      pw1.type = "password";
+	      pw1.placeholder = "새 비밀번호";
+	      pw1.onkeyup = checkPasswordMatch;
+
+	      const pw2 = document.createElement("input");
+	      pw2.className = "input input-sm w-full";
+	      pw2.name = "loginPw2";
+	      pw2.type = "password";
+	      pw2.placeholder = "새 비밀번호 확인";
+	      pw2.onkeyup = checkPasswordMatch;
+
+	      passwordFields.appendChild(pw1);
+	      passwordFields.appendChild(pw2);
+	    }
+
+	  } else {
+	    passwordFields.style.display = "none";
+
+	    // 숨길 경우 입력 필드 제거
+	    const pw1 = document.querySelector('input[name="loginPw"]');
+	    const pw2 = document.querySelector('input[name="loginPw2"]');
+	    if (pw1) pw1.remove();
+	    if (pw2) pw2.remove();
+
+	    document.getElementById('pwMatchResult').innerText = '';
+	  }
+	}
 </script>
     
     <div class="text-center mb-4" style="overflow-x: auto; max-width: 100%;">
@@ -197,12 +231,10 @@ body {
     <!-- 새 비밀번호 변경 버튼 -->
     <button type="button" class="btn-back" onclick="togglePasswordFields()">변경</button>
 
-    <!-- 비밀번호 입력창 (처음엔 숨김) -->
+    <!-- 비밀번호 입력창 -->
     <div id="passwordFields" style="display: none; margin-top: 10px;">
-  <input class="input input-sm w-full mb-2" name="loginPw" type="password" autocomplete="off" placeholder="새 비밀번호" onkeyup="checkPasswordMatch()" />
-  <input class="input input-sm w-full" name="loginPw2" type="password" autocomplete="off" placeholder="새 비밀번호 확인" onkeyup="checkPasswordMatch()" />
-  <div id="pwMatchResult" style="margin-top: 5px; font-size: 0.9em;"></div>
-</div>
+      <div id="pwMatchResult" style="margin-top: 5px; font-size: 0.9em;"></div>
+    </div>
   </td>
 </tr>
       <tr>

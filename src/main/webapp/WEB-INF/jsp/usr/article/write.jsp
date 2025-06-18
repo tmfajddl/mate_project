@@ -197,13 +197,15 @@
             </td>
           </tr>
           <tr>
-            <th>내용</th>
-            <td>
-              <div class="toast-ui-editor">
-								<script type="text/x-template"></script>
-							</div>
-            </td>
-          </tr>
+  <th>내용</th>
+  <td>
+    <div class="toast-ui-editor">
+      <script type="text/x-template">
+        
+      </script>
+    </div>
+  </td>
+</tr>
         </tbody>
       </table>
 
