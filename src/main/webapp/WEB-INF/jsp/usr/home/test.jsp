@@ -1,85 +1,66 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
-<head>
-    <title>WebSocket 채팅 테스트</title>
-    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
-    <style>
-        #chat-box {
-            border: 1px solid #ccc;
-            height: 300px;
-            overflow-y: scroll;
-            padding: 10px;
-            margin-bottom: 10px;
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <script src="https://js.tosspayments.com/v1/payment-widget"></script>
+  </head>
+  <body>
+    <!-- 할인 쿠폰 -->
+    <div>
+      <input type="checkbox" id="coupon-box" />
+      <label for="coupon-box"> 5,000원 쿠폰 적용 </label>
+    </div>
+    <!-- 결제 UI, 이용약관 UI 영역 -->
+    <div id="payment-method"></div>
+    <div id="agreement"></div>
+    <!-- 결제하기 버튼 -->
+    <button id="payment-button">결제하기</button>
+
+    <script>
+      const coupon = document.getElementById("coupon-box");
+      const button = document.getElementById("payment-button");
+      const amount = 50000;
+
+      // 구매자의 고유 아이디를 불러와서 customerKey로 설정하세요.
+      // 이메일・전화번호와 같이 유추가 가능한 값은 안전하지 않습니다.
+      const widgetClientKey = "test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm";
+      const customerKey = "yyraj_FR59sZvOmqo1rHl";
+      const paymentWidget = PaymentWidget(widgetClientKey, customerKey); // 회원 결제
+      // const paymentWidget = PaymentWidget(widgetClientKey, PaymentWidget.ANONYMOUS) // 비회원 결제
+
+      const paymentMethodWidget = paymentWidget.renderPaymentMethods(
+        "#payment-method",
+        { value: amount },
+        { variantKey: "DEFAULT" }
+      );
+
+      paymentWidget.renderAgreement(
+        "#agreement",
+        { variantKey: "AGREEMENT" }
+      );
+
+      coupon.addEventListener("change", function () {
+        if (coupon.checked) {
+          paymentMethodWidget.updateAmount(amount - 5000);
+        } else {
+          paymentMethodWidget.updateAmount(amount);
         }
-        .my-message {
-            color: blue;
-        }
-        .other-message {
-            color: green;
-        }
-    </style>
-</head>
-<body>
-<h2>WebSocket 채팅 테스트</h2>
+      });
 
-<!-- 채팅 메시지 표시 영역 -->
-<div id="chat-box"></div>
-
-<!-- 입력 폼 -->
-<input type="text" id="message-input" placeholder="메시지를 입력하세요">
-<button onclick="sendMessage()">보내기</button>
-
-<script>
-    let stompClient = null;
-    const roomId = 1;          // 테스트용 채팅방 ID
-    const senderId = 123;      // 테스트용 사용자 ID
-    const senderName = "테스트유저"; // 테스트용 이름
-
-    function connect() {
-        const socket = new SockJS('/ws-chat');
-        stompClient = Stomp.over(socket);
-
-        stompClient.connect({}, function (frame) {
-            console.log('Connected: ' + frame);
-
-            stompClient.subscribe('/topic/chat/' + roomId, function (message) {
-                const chatMessage = JSON.parse(message.body);
-                showMessage(chatMessage);
-            });
+      button.addEventListener("click", function () {
+        // 결제를 요청하기 전에 orderId, amount를 서버에 저장하세요.
+        // 결제 과정에서 악의적으로 결제 금액이 바뀌는 것을 확인하는 용도입니다.
+        paymentWidget.requestPayment({
+          orderId: "NYnAcWP2Cc9B8ZU9pzZM9",
+          orderName: "토스 티셔츠 외 2건",
+          successUrl: window.location.origin + "/success",
+          failUrl: window.location.origin + "/fail",
+          customerEmail: "customer123@gmail.com",
+          customerName: "김토스",
+          customerMobilePhone: "01012341234",
         });
-    }
-
-    function sendMessage() {
-        const input = document.getElementById('message-input');
-        const message = input.value;
-
-        if (!message.trim()) return;
-
-        stompClient.send("/app/chat.sendMessage", {}, JSON.stringify({
-            roomId: roomId,
-            senderId: senderId,
-            message: message
-        }));
-
-        input.value = '';
-    }
-
-    function showMessage(chatMessage) {
-        const chatBox = document.getElementById('chat-box');
-        const msgDiv = document.createElement('div');
-
-        const isMine = chatMessage.senderId === senderId;
-        msgDiv.className = isMine ? "my-message" : "other-message";
-        msgDiv.textContent = `[${chatMessage.senderName || "익명"}] ${chatMessage.message}`;
-
-        chatBox.appendChild(msgDiv);
-        chatBox.scrollTop = chatBox.scrollHeight;
-    }
-
-    // 연결 시작
-    connect();
-</script>
-
-</body>
+      });
+    </script>
+  </body>
 </html>

@@ -13,6 +13,7 @@
 body {
   font-family: 'Ownglyph_ParkDaHyun', sans-serif;
 }
+
   /* 채팅방 박스: 화면 높이 80% */
   .chat-container {
   display: flex;
@@ -158,9 +159,22 @@ body {
   border-top: 1px solid #ccc;
   z-index: 0;
 }
+
+.unread-count {
+  background-color: #e74c3c; /* 빨간색 */
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 2px 6px;
+  border-radius: 12px;
+  margin-left: auto; /* 오른쪽 끝으로 밀기 */
+  min-width: 20px;
+  text-align: center;
+  line-height: 1.2;
+}
 </style>
 
-<body class="m-0 h-full" style="background-color: #f7f0e9;">
+<body class="m-0" style="background-color: #f7f0e9;">
 
   <c:choose>
     <c:when test="${rq.loginedTeam == null}">
@@ -221,14 +235,20 @@ body {
     <div class="w-1/3 chat-list">
       <div class="text-xl font-bold mb-2">채팅방 목록</div>
       <c:forEach var="room" items="${chatRooms}">
-       <div class="chat-item flex items-center gap-2 ${room.id == selectedRoomId ? 'active' : ''}"
+  <div class="chat-item flex items-center gap-2 ${room.id == selectedRoomId ? 'active' : ''}"
+     data-room-id="${room.id}"
      onclick="location.href='/usr/project/chat/room?roomId=${room.id}'">
- <img src="${room.otherProfileImg != null ? room.otherProfileImg : '/images/ball.jpg'}"
-     alt="profile"
-     class="w-8 h-8 rounded-full border border-gray-300 object-cover" />
-  <span>${room.otherMemberNickname}</span>
-</div>
-      </c:forEach>
+    <img src="${room.otherProfileImg != null ? room.otherProfileImg : '/images/ball.jpg'}"
+         alt="profile"
+         class="w-8 h-8 rounded-full border border-gray-300 object-cover" />
+    <span>${room.otherMemberNickname}</span>
+    
+    <!-- 안 읽은 메시지 수 표시 -->
+      <span class="unread-count" style="${room.unreadCount == 0 ? 'display:none;' : ''}">
+  ${room.unreadCount}
+</span>
+  </div>
+</c:forEach>
       <c:if test="${empty chatRooms}">
         <div class="italic text-gray-500">참여 중인 채팅방이 없습니다</div>
       </c:if>
@@ -280,41 +300,70 @@ body {
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-></script>
-
 <script>
-  // JSP에서 contextPath와 로그인 정보 받아오기
   const contextPath = "${pageContext.request.contextPath}";
   const loginedMemberId = "${LoginedMemberId}";
   const selectedRoomId = "${selectedRoomId}";
 
+  // 사용자의 전체 채팅방 목록을 JS 배열로 넘김
+  const chatRooms = [
+    <c:forEach var="room" items="${chatRooms}" varStatus="i">
+      ${i.index > 0 ? ',' : ''}{ id: '${room.id}' }
+    </c:forEach>
+  ];
+</script>
+
+<script>
+  console.log("contextPath:", contextPath);
+  console.log("loginedMemberId:", loginedMemberId);
+  console.log("selectedRoomId:", selectedRoomId);
+
   let socket;
 
-  // WebSocket 연결
-  if (loginedMemberId && selectedRoomId) {
+  if (loginedMemberId) {
     const protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-    const safeContextPath = contextPath;  // 예: "/usr/project/chat"
-
-    // SockJS + STOMP 연결
-    const sock = new SockJS(safeContextPath + '/ws-chat');
+    const sock = new SockJS(contextPath + '/ws-chat');
     const stompClient = Stomp.over(sock);
 
-    stompClient.connect({}, function(frame) {
-      console.log('Connected: ' + frame);
-      stompClient.subscribe('/topic/chat/' + selectedRoomId, function(message) {
-        const msg = JSON.parse(message.body);
-        addMessageToContainer(msg);
+    stompClient.connect({}, function (frame) {
+
+      // ✅ 모든 채팅방에 대해 구독
+      chatRooms.forEach(room => {
+        stompClient.subscribe('/topic/chat/' + room.id, function (message) {
+          const msg = JSON.parse(message.body);
+          
+          moveChatRoomToTop(msg.roomId);
+
+          if (String(msg.roomId) === String(selectedRoomId)) {
+            addMessageToContainer(msg);
+          } else {
+            increaseUnreadCount(msg.roomId);
+          }
+        });
       });
+
+      // ✅ 선택된 채팅방 읽음 처리
+      if (selectedRoomId) {
+        $.post(contextPath + '/usr/project/chat/markAsRead', {
+          roomId: selectedRoomId,
+          memberId: loginedMemberId
+        }).done(() => {
+          const $roomItem = $('.chat-item[data-room-id="' + selectedRoomId + '"]');
+          const $unreadSpan = $roomItem.find('.unread-count');
+          if ($unreadSpan.length) {
+            $unreadSpan.text('0').hide();
+          }
+        });
+      }
     });
 
     socket = sock;
   }
 
-  $(function() {
-    // 메시지 전송 폼 submit 이벤트 차단 후 Ajax 처리
-    $('form').on('submit', function(e) {
+  // 메시지 전송 처리
+  $(function () {
+    $('form').on('submit', function (e) {
       e.preventDefault();
-
       const $form = $(this);
       const roomId = $form.find('input[name="roomId"]').val();
       const message = $form.find('input[name="message"]').val();
@@ -330,75 +379,80 @@ body {
           senderId: loginedMemberId,
           message: message
         },
-        success: function(savedMsg) {
+        success: function () {
           $form.find('input[name="message"]').val('');
-          addMessageToContainer(savedMsg);
-        },
-        error: function() {
-          alert('메시지 전송에 실패했습니다.');
         }
       });
-
-      return false;
     });
 
-    // 메시지 추가 함수 (외부에서 사용 가능하도록 선언)
-    window.addMessageToContainer = function(msg) {
+    // 메시지 DOM에 추가
+    window.addMessageToContainer = function (msg) {
       const $container = $('.chat-messages');
-      const lastDateSeparator = $container.find('.date-separator span').last();
-      const lastDate = lastDateSeparator.length ? lastDateSeparator.text() : null;
+      const lastDate = $container.find('.date-separator span').last().text();
       const msgDate = msg.sentDate.substring(0, 10);
 
       if (msgDate !== lastDate) {
-        $container.append(`
-          <div class="date-separator">
-            <span>${msgDate}</span>
-          </div>
-        `);
+        $container.append(`<div class="date-separator"><span>${msgDate}</span></div>`);
       }
 
       const isMine = String(msg.senderId) === String(loginedMemberId);
-
       const messageClass = isMine ? 'mine' : 'other';
-
       const $msgDiv = $('<div>').addClass('message ' + messageClass);
-      const $strong = $('<strong>').text(msg.senderName);
-      const $br = $('<br>');
-      const $msgText = $('<span>').html(msg.message.replace(/\n/g, '<br>'));
-      const $time = $('<span>').addClass('time').text(msg.sentDate.substring(11,16));
-
-      $msgDiv.append($strong, $br, $msgText, $time);
+      $msgDiv.append(
+        $('<strong>').text(msg.senderName),
+        $('<br>'),
+        $('<span>').html(msg.message.replace(/\n/g, '<br>')),
+        $('<span>').addClass('time').text(msg.sentDate.substring(11, 16))
+      );
       $container.append($msgDiv);
-
-      // 스크롤 맨 아래로 내리기
       $container.scrollTop($container[0].scrollHeight);
     };
 
-    // 페이지 로드시 기존 메시지 스크롤 아래로 내리기
+    // 안읽음 카운트 증가
+    window.increaseUnreadCount = function (roomId) {
+      const $roomItem = $('.chat-item[data-room-id="' + roomId + '"]');
+      let $countSpan = $roomItem.find('.unread-count');
+
+      if ($countSpan.length) {
+        let current = parseInt($countSpan.text()) || 0;
+        $countSpan.text(current + 1).show();
+      } else {
+        $countSpan = $('<span class="unread-count">1</span>');
+        $roomItem.append($countSpan);
+      }
+    };
+
+    // 스크롤 초기화
     const chatMessages = document.querySelector('.chat-messages');
     if (chatMessages) {
       chatMessages.scrollTop = chatMessages.scrollHeight;
     }
   });
+  
+  function moveChatRoomToTop(roomId) {
+	  const $roomItem = $('.chat-item[data-room-id="' + roomId + '"]');
+	  const $chatList = $('.chat-list');
 
-  // 페이지 떠나기 전에 스크롤 위치 저장
-  window.addEventListener('beforeunload', () => {
-    sessionStorage.setItem('scrollPosition', window.scrollY);
-  });
+	  if ($roomItem.length && $chatList.length) {
+	    // 제목을 제외한 첫 번째 .chat-item 앞에 삽입
+	    const $firstItem = $chatList.find('.chat-item').first();
 
-  // 페이지 로드 시 저장된 위치로 스크롤 복원
-  window.addEventListener('load', () => {
-    const scrollPos = sessionStorage.getItem('scrollPosition');
-    if (scrollPos) {
-      window.scrollTo(0, parseInt(scrollPos));
-    }
-  });
+	    if ($firstItem.length) {
+	      $roomItem.detach().insertBefore($firstItem);
+	    } else {
+	      // .chat-item이 없으면 그냥 마지막에 추가
+	      $chatList.append($roomItem);
+	    }
+	  } else {
+	  }
+	}
 </script>
 
 <script>
   window.onload = function() {
     const chatMessages = document.querySelector('.chat-messages');
     if (chatMessages) {
+      console.log("window.onload: scroll chat messages to bottom");
       chatMessages.scrollTop = chatMessages.scrollHeight;
     }
   }

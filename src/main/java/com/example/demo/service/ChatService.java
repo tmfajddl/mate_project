@@ -3,6 +3,7 @@ package com.example.demo.service;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.repository.ChatRepository;
@@ -85,6 +86,14 @@ public class ChatService {
         }
         return null;
     }
+    public int countUnreadMessages(@Param("roomId") int roomId, @Param("memberId") int memberId) {
+        return chatRepository.countUnreadMessages(roomId,memberId);
+    }
+
+	public void markMessagesAsRead(Integer roomId, int loginUserId) {
+		chatRepository.markMessagesAsRead(roomId,loginUserId);
+		
+	}
     
     
 }

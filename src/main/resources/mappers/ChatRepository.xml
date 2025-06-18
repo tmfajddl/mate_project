@@ -62,4 +62,20 @@
   )
 </select>
 
+<select id="countUnreadMessages" resultType="int" parameterType="map">
+  SELECT COUNT(*)
+  FROM chat_message
+  WHERE roomId = #{roomId}
+    AND senderId != #{memberId}
+    AND is_read = 0
+</select>
+
+<update id="markMessagesAsRead" parameterType="map">
+  UPDATE chat_message
+  SET is_read = 1
+  WHERE roomId = #{roomId}
+    AND senderId != #{memberId}
+    AND is_read = 0
+</update>
+
 </mapper>

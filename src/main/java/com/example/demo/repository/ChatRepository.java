@@ -25,4 +25,8 @@ public interface ChatRepository {
 	public List<Member> getParticipants(int roomId);
 
 	public List<Member> getProfileImg(int roomId);
+
+	public int countUnreadMessages(int roomId, int memberId);
+
+	public void markMessagesAsRead(Integer roomId, int memberId);
 }

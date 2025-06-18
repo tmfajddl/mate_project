@@ -19,4 +19,5 @@ public class ChatRoom {
     private int createdBy;    // member.id
     private String otherMemberNickname;
     private String otherProfileImg;
+    private int unreadCount;
 }

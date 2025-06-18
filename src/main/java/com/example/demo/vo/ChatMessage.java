@@ -24,4 +24,5 @@ public class ChatMessage {
 
     private String senderName;
     private String senderProfileImg;
+    private boolean isRead;
 }

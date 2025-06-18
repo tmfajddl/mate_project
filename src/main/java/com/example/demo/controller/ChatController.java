@@ -53,14 +53,15 @@ public class ChatController {
         for (ChatRoom room : chatRooms) {
             String otherNickname = chatService.getOtherMemberNickname(room.getId(), loginUserId);
             String profileImg = chatService.getProfileImg(room.getId(), loginUserId);
+            int unreadCount = chatService.countUnreadMessages(room.getId(), loginUserId);
             room.setOtherMemberNickname(otherNickname);
             room.setOtherProfileImg(profileImg);
+            room.setUnreadCount(unreadCount);  // ChatRoom에 필드 추가 필요
         }
 
         model.addAttribute("chatRooms", chatRooms);
 
         if (chatRooms.isEmpty()) {
-            // 참여중인 채팅방이 없으면 빈 화면 처리
             model.addAttribute("chatRooms", chatRooms); 
             model.addAttribute("messages", List.of());
             model.addAttribute("selectedRoomId", null);
@@ -69,10 +70,12 @@ public class ChatController {
         }
 
         if (roomId == null) {
-            // roomId가 없으면 첫번째 채팅방으로 자동 리다이렉트
             roomId = chatRooms.get(0).getId();
             return "redirect:/usr/project/chat/room?roomId=" + roomId;
         }
+
+        // --- 여기서 읽음 처리 추가 ---
+        chatService.markMessagesAsRead(roomId, loginUserId);
 
         List<ChatMessage> messages = chatService.getMessagesByRoomId(roomId);
 
@@ -107,6 +110,13 @@ public class ChatController {
     @GetMapping("/messages")
     public List<ChatMessage> getMessages(@RequestParam int roomId) {
         return chatService.getMessagesByRoomId(roomId);
+    }
+    @PostMapping("/usr/project/chat/markAsRead")
+    @ResponseBody
+    public ResponseEntity<?> markMessagesAsRead(@RequestParam int roomId, @RequestParam int memberId) {
+        // 메시지 읽음 처리 로직
+        chatService.markMessagesAsRead(roomId, memberId);
+        return ResponseEntity.ok().build();
     }
     
 }
