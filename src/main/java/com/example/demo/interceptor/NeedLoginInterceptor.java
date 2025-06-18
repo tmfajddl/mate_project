@@ -23,10 +23,10 @@ public class NeedLoginInterceptor implements HandlerInterceptor {
 
 	        if(afterLoginUri == null) {
 	            // afterLoginUri가 없으면 그냥 로그인 페이지로 이동
-	            rq.printReplace("F-A", "로그인 후 이용해주세요", "../member/login");
+	            rq.printReplace("F-A", "로그인 후 이용해주세요", "/usr/member/login");
 	        } else {
 	            // afterLoginUri가 있으면 로그인 후 돌아갈 주소로 전달
-	            rq.printReplace("F-A", "로그인 후 이용해주세요", "../member/login?afterLoginUri=" + afterLoginUri);
+	            rq.printReplace("F-A", "로그인 후 이용해주세요", "/usr/member/login?afterLoginUri=" + afterLoginUri);
 	        }
 	        return false;
 	    }

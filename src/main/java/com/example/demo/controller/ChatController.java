@@ -4,6 +4,7 @@ import java.security.Principal;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,14 +23,16 @@ import jakarta.servlet.http.HttpServletRequest;
 public class ChatController {
 
     private final ChatService chatService;
+    private final SimpMessagingTemplate messagingTemplate;
 
-    public ChatController(ChatService chatService) {
+
+    public ChatController(ChatService chatService, SimpMessagingTemplate messagingTemplate) {
         this.chatService = chatService;
+        this.messagingTemplate = messagingTemplate;
     }
 
     @GetMapping("/usr/project/chat/start")
     public String startChat(HttpServletRequest req, @RequestParam("otherId") int otherId) {
-        // 로그인한 회원 아이디 조회 (예: 세션에서 꺼내거나 principal에서)
     	Rq rq = (Rq) req.getAttribute("rq");
         int loginUserId = rq.getLoginedMemberId();
 
@@ -87,6 +90,10 @@ public class ChatController {
                                                        @RequestParam int senderId,
                                                        @RequestParam String message) {
         ChatMessage savedMessage = chatService.sendMessage(roomId, senderId, message);
+
+        // 메시지 저장 후 구독자에게 실시간 전송
+        messagingTemplate.convertAndSend("/topic/chat/" + roomId, savedMessage);
+
         return ResponseEntity.ok(savedMessage);
     }
     @PostMapping("/send")
@@ -101,4 +108,5 @@ public class ChatController {
     public List<ChatMessage> getMessages(@RequestParam int roomId) {
         return chatService.getMessagesByRoomId(roomId);
     }
+    
 }

@@ -15,10 +15,13 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 @Builder
 public class ChatMessage {
     private int id;
-    private int roomId;    // chat_room.id
-    private int senderId;  // member.id
+    private int roomId;        // chat_room.id
+    private int senderId;      // member.id
     private String message;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime sentDate;
+
     private String senderName;
     private String senderProfileImg;
 }

@@ -55,10 +55,10 @@ public class UsrMemberController {
 		Rq rq = (Rq) req.getAttribute("rq");
 
 		if (Ut.isEmptyOrNull(loginId)) {
-			return Ut.jsHistoryBack("F-1", "아이디를 입력해");
+			return Ut.jsHistoryBack("F-1", "아이디를 입력하세요");
 		}
 		if (Ut.isEmptyOrNull(loginPw)) {
-			return Ut.jsHistoryBack("F-2", "비밀번호를 입력해");
+			return Ut.jsHistoryBack("F-2", "비밀번호를 입력하세요");
 		}
 
 		Member member = memberService.getMemberByLoginId(loginId);

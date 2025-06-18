@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
 
 <%@ include file="../common/head.jspf"%>
 
@@ -278,80 +280,107 @@ body {
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
+></script>
+
 <script>
-$(function() {
-  const loginedMemberId = ${LoginedMemberId != null ? LoginedMemberId : 'null'};
-  const selectedRoomId = ${selectedRoomId != null ? selectedRoomId : 'null'};
+  // JSP에서 contextPath와 로그인 정보 받아오기
+  const contextPath = "${pageContext.request.contextPath}";
+  const loginedMemberId = "${LoginedMemberId}";
+  const selectedRoomId = "${selectedRoomId}";
 
-  // 메시지 전송 폼 submit 이벤트 차단 후 Ajax 처리
-  $('form').on('submit', function(e) {
-    e.preventDefault();  // 기본 폼 제출 동작 막기
+  let socket;
 
-    const $form = $(this);
-    const roomId = $form.find('input[name="roomId"]').val();
-    const message = $form.find('input[name="message"]').val();
+  // WebSocket 연결
+  if (loginedMemberId && selectedRoomId) {
+    const protocol = location.protocol === 'https:' ? 'wss' : 'ws';
+    const safeContextPath = contextPath;  // 예: "/usr/project/chat"
 
-    if (!message.trim()) return; // 빈 메시지 무시
+    // SockJS + STOMP 연결
+    const sock = new SockJS(safeContextPath + '/ws-chat');
+    const stompClient = Stomp.over(sock);
 
-    $.ajax({
-      url: $form.attr('action'),
-      type: 'POST',
-      dataType: 'json',  // JSON으로 응답 받을 것임
-      data: {
-        roomId: roomId,
-        senderId: loginedMemberId,
-        message: message
-      },
-      success: function(savedMsg) {
-        // 입력창 초기화
-        $form.find('input[name="message"]').val('');
-
-        // 메시지 추가 함수 호출
-        addMessageToContainer(savedMsg);
-      },
-      error: function() {
-        alert('메시지 전송에 실패했습니다.');
-      }
+    stompClient.connect({}, function(frame) {
+      console.log('Connected: ' + frame);
+      stompClient.subscribe('/topic/chat/' + selectedRoomId, function(message) {
+        const msg = JSON.parse(message.body);
+        addMessageToContainer(msg);
+      });
     });
 
-    // 기본 제출 막음 (더블 체크)
-    return false;
+    socket = sock;
+  }
+
+  $(function() {
+    // 메시지 전송 폼 submit 이벤트 차단 후 Ajax 처리
+    $('form').on('submit', function(e) {
+      e.preventDefault();
+
+      const $form = $(this);
+      const roomId = $form.find('input[name="roomId"]').val();
+      const message = $form.find('input[name="message"]').val();
+
+      if (!message.trim()) return;
+
+      $.ajax({
+        url: $form.attr('action'),
+        type: 'POST',
+        dataType: 'json',
+        data: {
+          roomId: roomId,
+          senderId: loginedMemberId,
+          message: message
+        },
+        success: function(savedMsg) {
+          $form.find('input[name="message"]').val('');
+          addMessageToContainer(savedMsg);
+        },
+        error: function() {
+          alert('메시지 전송에 실패했습니다.');
+        }
+      });
+
+      return false;
+    });
+
+    // 메시지 추가 함수 (외부에서 사용 가능하도록 선언)
+    window.addMessageToContainer = function(msg) {
+      const $container = $('.chat-messages');
+      const lastDateSeparator = $container.find('.date-separator span').last();
+      const lastDate = lastDateSeparator.length ? lastDateSeparator.text() : null;
+      const msgDate = msg.sentDate.substring(0, 10);
+
+      if (msgDate !== lastDate) {
+        $container.append(`
+          <div class="date-separator">
+            <span>${msgDate}</span>
+          </div>
+        `);
+      }
+
+      const isMine = String(msg.senderId) === String(loginedMemberId);
+
+      const messageClass = isMine ? 'mine' : 'other';
+
+      const $msgDiv = $('<div>').addClass('message ' + messageClass);
+      const $strong = $('<strong>').text(msg.senderName);
+      const $br = $('<br>');
+      const $msgText = $('<span>').html(msg.message.replace(/\n/g, '<br>'));
+      const $time = $('<span>').addClass('time').text(msg.sentDate.substring(11,16));
+
+      $msgDiv.append($strong, $br, $msgText, $time);
+      $container.append($msgDiv);
+
+      // 스크롤 맨 아래로 내리기
+      $container.scrollTop($container[0].scrollHeight);
+    };
+
+    // 페이지 로드시 기존 메시지 스크롤 아래로 내리기
+    const chatMessages = document.querySelector('.chat-messages');
+    if (chatMessages) {
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
   });
 
-  // 메시지 추가 함수
-  function addMessageToContainer(msg) {
-    const $container = $('.chat-messages');
-    const lastDateSeparator = $container.find('.date-separator span').last();
-    const lastDate = lastDateSeparator.length ? lastDateSeparator.text() : null;
-    const msgDate = msg.sentDate.substring(0,10);
-
-    if (msgDate !== lastDate) {
-      $container.append(`
-        <div class="date-separator">
-          <span>${msgDate}</span>
-        </div>
-      `);
-    }
-
-    const isMine = msg.senderId === loginedMemberId;
-    const messageClass = isMine ? 'mine' : 'other';
-
-    const $msgDiv = $('<div>').addClass('message ' + messageClass);
-    const $strong = $('<strong>').text(msg.senderName);
-    const $br = $('<br>');
-    const $msgText = $('<span>').html(msg.message.replace(/\n/g, '<br>'));
-    const $time = $('<span>').addClass('time').text(msg.sentDate.substring(11,16));
-
-    $msgDiv.append($strong, $br, $msgText, $time);
-    $container.append($msgDiv);
-
-    // 스크롤 맨 아래로 내리기
-    $container.scrollTop($container[0].scrollHeight);
-  }
-});
-</script>
-
-<script>
   // 페이지 떠나기 전에 스크롤 위치 저장
   window.addEventListener('beforeunload', () => {
     sessionStorage.setItem('scrollPosition', window.scrollY);
@@ -363,19 +392,13 @@ $(function() {
     if (scrollPos) {
       window.scrollTo(0, parseInt(scrollPos));
     }
-
-    // 기존 코드 중 채팅 메시지 스크롤 맨 아래 맞추기도 여기 두면 됩니다.
-    const chatMessages = document.querySelector('.chat-messages');
-    if(chatMessages) {
-      chatMessages.scrollTop = chatMessages.scrollHeight;
-    }
   });
 </script>
 
 <script>
   window.onload = function() {
     const chatMessages = document.querySelector('.chat-messages');
-    if(chatMessages) {
+    if (chatMessages) {
       chatMessages.scrollTop = chatMessages.scrollHeight;
     }
   }
