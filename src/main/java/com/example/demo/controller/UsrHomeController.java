@@ -167,9 +167,9 @@ public class UsrHomeController {
 	    return goods;
 	}
 	
-	@RequestMapping("/usr/project/chat")
+	@RequestMapping("/usr/project/test")
 	public String showMain9() {
-		return "/usr/project/chat";
+		return "/usr/project/test";
 	}
 	
 	@RequestMapping("/usr/project/ranking")

@@ -167,6 +167,7 @@ body {
 	      pw1.name = "loginPw";
 	      pw1.type = "password";
 	      pw1.placeholder = "새 비밀번호";
+	      pw1.autocomplete = "new-password";  // 추가
 	      pw1.onkeyup = checkPasswordMatch;
 
 	      const pw2 = document.createElement("input");
@@ -174,6 +175,7 @@ body {
 	      pw2.name = "loginPw2";
 	      pw2.type = "password";
 	      pw2.placeholder = "새 비밀번호 확인";
+	      pw2.autocomplete = "new-password";  // 추가
 	      pw2.onkeyup = checkPasswordMatch;
 
 	      passwordFields.appendChild(pw1);

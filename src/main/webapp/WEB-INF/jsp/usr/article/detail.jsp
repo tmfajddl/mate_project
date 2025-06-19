@@ -114,9 +114,9 @@ background-color: #f2d8b1;
       </div>
 
       <!-- 본문 내용 (50% 높이, 스크롤) -->
-      <div class="flex-1 bg-white rounded-lg shadow p-4 overflow-auto" style="color: black; max-height: 50vh;">
-        ${article.body}
-      </div>
+<div class="flex-1 bg-white rounded-lg shadow p-4 overflow-auto" style="color: black; max-height: 50vh;">
+  <c:out value="${article.body}" escapeXml="false" />
+</div>
 
       <!-- 좋아요/싫어요 아이콘만 -->
       <div class="text-center mt-4 space-x-4 text-2xl">
@@ -159,7 +159,7 @@ background-color: #f2d8b1;
       </c:if>
 
       <!-- 댓글 목록 -->
-<div>
+<div style="background-color:white; border-radius: 5px;">
   <c:forEach var="comment" items="${comments}">
     <div class="comment-row flex items-start space-x-2 relative">
       <!-- 왼쪽: 프로필 이미지 -->
@@ -193,7 +193,7 @@ background-color: #f2d8b1;
       <c:if test="${comment.memberId == LoginedMemberId}">
         <div class="flex space-x-1 ml-2">
           <a class="btn-back btn btn-ghost btn-xs" href="../comment/doDelete?id=${comment.id}">삭제</a>
-          <a id="editBtn-${comment.id}" class="btn-back btn btn-ghost btn-xs" href="javascript:void(0);">수정</a>
+          <a style="margin-right: 10px;" id="editBtn-${comment.id}" class="btn-back btn btn-ghost btn-xs" href="javascript:void(0);">수정</a>
         </div>
       </c:if>
     </div>

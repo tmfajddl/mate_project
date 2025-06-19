@@ -14,14 +14,13 @@
 
 		const editor = $(form).find('.toast-ui-editor').data(
 				'data-toast-editor');
-		const markdown = editor.getMarkdown().trim();
+		const html = editor.getHTML().trim();
 
-		if (markdown.length == 0) {
+		if (html.length == 0) {
 			alert('내용 써');
 			return;
 		}
-
-		form.body.value = markdown;
+		form.body.value = html;
 		form.submit();
 	}
 </script>
@@ -115,6 +114,8 @@
       margin-top: 10px;
       text-align: left;
     }
+    
+    
   </style>
 </head>
 
@@ -172,7 +173,7 @@
   <div class="overlay"></div>
  
     <div style="width: 80%; margin: 20px auto 0 auto;">
-  <h2 style="font-size: 3em; font-weight: bold; color: black; text-align: center;">글쓰기</h2>
+  <h2 style="font-size: 3em; font-weight: bold; color: black; text-align: center; margin-top: 10%;">글쓰기</h2>
 </div>
   <!-- 흰색 박스: 폼 + 뒤로가기 버튼 -->
   <div class="content-box">

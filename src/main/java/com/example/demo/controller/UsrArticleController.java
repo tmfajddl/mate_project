@@ -273,7 +273,8 @@ public class UsrArticleController {
 	
 	@PostMapping("/usr/project/article/uploadImage")
 	@ResponseBody
-	public Map<String, Object> uploadImage(@RequestParam("image") MultipartFile imageFile) {
+	public Map<String, Object> uploadImage(HttpServletRequest request,
+	                                       @RequestParam("image") MultipartFile imageFile) {
 	    Map<String, Object> response = new HashMap<>();
 
 	    if (imageFile.isEmpty()) {
@@ -283,21 +284,23 @@ public class UsrArticleController {
 	    }
 
 	    try {
-	        // 서버 저장 경로 예시 (실제 경로 환경에 맞게 변경)
-	        String uploadDir = "/path/to/upload/images/";
+	        // 실제 저장 경로 (예: /static/upload/)
+	        String uploadDirPath = request.getServletContext().getRealPath("/upload/");
+	        File uploadDir = new File(uploadDirPath);
+	        if (!uploadDir.exists()) {
+	            uploadDir.mkdirs();
+	        }
 
-	        // 파일 이름 유니크하게 생성
 	        String filename = UUID.randomUUID().toString() + "_" + imageFile.getOriginalFilename();
-
-	        File dest = new File(uploadDir + filename);
+	        File dest = new File(uploadDir, filename);
 	        imageFile.transferTo(dest);
 
-	        // 웹에서 접근 가능한 URL
-	        String imageUrl = "/upload/images/" + filename;
+	        // 클라이언트에서 접근할 경로
+	        String imageUrl = request.getContextPath() + "/upload/" + filename;
 
 	        response.put("success", true);
-	        response.put("imageUrl", imageUrl);
-	    } catch (Exception e) {
+	        response.put("url", imageUrl); // Toast UI는 이 key가 필요함
+	    } catch (IOException e) {
 	        response.put("success", false);
 	        response.put("message", "이미지 저장 실패: " + e.getMessage());
 	    }
