@@ -1,10 +1,93 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ include file="../common/head.jspf"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>야구 포지션 한눈에 보기</title>
+  <style>
+    .btn-back {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: black;
+      padding: 4px 10px;
+      border-radius: 5px;
+      background-color: #f7ecdc;
+    }
+    .btn-back:hover {
+      background-color: #f2d8b1;
+    }
+section {
+  min-height: 100vh;
+}
+
+
+@font-face {
+    font-family: 'Ownglyph_ParkDaHyun';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2411-3@1.0/Ownglyph_ParkDaHyun.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+  font-family: 'Ownglyph_ParkDaHyun', sans-serif;
+  
+}
+  
+  
+    
+  </style>
+</head>
+<body class="m-0 h-full" style="background-color: #f7f0e9;">
+
+<c:choose>
+    <c:when test="${rq.loginedTeam == null}">
+        <section class=" bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center text-black"
+                 style="background-image: url('/images/bg12.png'); cursor: url('/images/cursor0.png') 25 25, auto;">
+    </c:when>
+    <c:when test="${rq.loginedTeam eq '한화 이글스'}">
+        <section class="bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center text-black"
+                 style="background-image: url('/images/bg21.png'); cursor: url('/images/cursor2.png') 25 25, auto;">
+    </c:when>
+    <c:when test="${rq.loginedTeam eq '두산 베어스'}">
+        <section class="bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center text-black"
+                 style="background-image: url('/images/bg22.png'); cursor: url('/images/cursor3.png') 25 25, auto;">
+    </c:when>
+    <c:when test="${rq.loginedTeam eq '롯데 자이언츠'}">
+        <section class="bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center text-black"
+                 style="background-image: url('/images/bg23.png'); cursor: url('/images/cursor4.png') 25 25, auto;">
+    </c:when>
+    <c:when test="${rq.loginedTeam eq 'LG 트윈스'}">
+        <section class="bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center text-black"
+                 style="background-image: url('/images/bg24.png'); cursor: url('/images/cursor5.png') 25 25, auto;">
+    </c:when>
+    <c:when test="${rq.loginedTeam eq '삼성 라이온즈'}">
+        <section class="bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center text-black"
+                 style="background-image: url('/images/bg25.png'); cursor: url('/images/cursor6.png') 25 25, auto;">
+    </c:when>
+    <c:when test="${rq.loginedTeam eq '키움 히어로즈'}">
+        <section class="bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center text-black"
+                 style="background-image: url('/images/bg26.png'); cursor: url('/images/cursor7.png') 25 25, auto;">
+    </c:when>
+    <c:when test="${rq.loginedTeam eq 'SSG 랜더스'}">
+        <section class="bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center text-black"
+                 style="background-image: url('/images/bg27.png'); cursor: url('/images/cursor1.png') 25 25, auto;">
+    </c:when>
+    <c:when test="${rq.loginedTeam eq 'NC 다이노스'}">
+        <section class="bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center text-black"
+         style="background-image: url('/images/bg28.png'); cursor: url('/images/cursor8.png') 25 25, auto;">
+    </c:when>
+    <c:when test="${rq.loginedTeam eq 'KT 위즈'}">
+        <section class="bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center text-black"
+                 style="background-image: url('/images/bg29.png'); cursor: url('/images/cursor9.png') 25 25, auto;">
+    </c:when>
+    <c:when test="${rq.loginedTeam eq 'KIA 타이거즈'}">
+        <section class="bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center text-white"
+                 style="background-image: url('/images/bg30.png'); cursor: url('/images/cursor10.png') 25 25, auto;">
+    </c:when>
+</c:choose>
 
   <!-- Tailwind CSS & Swiper -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -12,9 +95,9 @@
   <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
 </head>
 <body class="bg-gray-50 min-h-screen flex flex-col items-center p-4">
-  <h1 class="text-3xl font-bold mb-6">야구 포지션 한눈에 보기</h1>
+  <h1 style="margin-top: 50px;" class="text-3xl font-bold mb-6">야구 포지션 한눈에 보기</h1>
 
-  <div class="flex flex-col md:flex-row w-full max-w-screen-xl mx-auto gap-6 justify-center">
+    <div class="flex flex-col md:flex-row w-full max-w-screen-xl mx-auto gap-6 justify-center">
     <!-- 구장 + 버튼 -->
     <div class="relative" style="width: 40vw; min-width: 320px;">
       <img src="/images/base.jpg" alt="야구장" class="w-full h-auto rounded-lg shadow" />
@@ -29,7 +112,7 @@
         style="top: 50%; left: 60%; transform: translate(-50%, -50%)" title="2루수"></button>
       <button id="pos-3b" class="absolute bg-blue-200 w-8 h-8 rounded-full border-2 border-white"
         style="top: 64%; left: 35%; transform: translate(-50%, -50%)" title="3루수"></button>
-      <button id="pos-ss" class="absolute bg-yellow-500 w-8 h-8 rounded-full border-2 border-white"
+      <button id="pos-ss" class="absolute bg-yellow-700 w-8 h-8 rounded-full border-2 border-white"
         style="top: 50%; left: 40%; transform: translate(-50%, -50%)" title="유격수"></button>
       <button id="pos-lf" class="absolute bg-purple-500 w-8 h-8 rounded-full border-2 border-white"
         style="top: 35%; left: 25%; transform: translate(-50%, -50%)" title="좌익수"></button>
@@ -223,5 +306,6 @@ document.querySelectorAll("button[id^='pos-']").forEach(button => {
   });
 });
 </script>
+</section>
 </body>
 </html>

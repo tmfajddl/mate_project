@@ -172,6 +172,11 @@ public class UsrHomeController {
 		return "/usr/project/test";
 	}
 	
+	@RequestMapping("/usr/project/position")
+	public String position() {
+		return "/usr/project/position";
+	}
+	
 	@RequestMapping("/usr/project/ranking")
 	  public String ranking(Model model) throws IOException {
 	    List<List<String>> rankings = kboCrawlerService.getTeamRankings();
