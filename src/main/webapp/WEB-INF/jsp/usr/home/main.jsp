@@ -43,6 +43,7 @@
     }
 
     .news-card {
+    width: calc(100%/2);
       min-width: 300px;
       height: 100%;
       flex-shrink: 0;
@@ -377,18 +378,30 @@ body {
 </div>
 
 <script>
-  const slider = document.getElementById('newsSlider');
-  const btnLeft = document.querySelector('.slider-button.left');
-  const btnRight = document.querySelector('.slider-button.right');
-  const scrollAmount = 320;
+const slider = document.getElementById('newsSlider');
+const btnLeft = document.querySelector('.slider-button.left');
+const btnRight = document.querySelector('.slider-button.right');
 
-  btnLeft.addEventListener('click', () => {
-    slider.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
-  });
+function getCardWidth() {
+  const card = slider.querySelector('.news-card');
+  if (!card) return 320; // 기본값
 
-  btnRight.addEventListener('click', () => {
-    slider.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-  });
+  const style = window.getComputedStyle(card);
+  const width = card.offsetWidth;
+  const marginRight = parseInt(style.marginRight) || 0;
+
+  return width + marginRight;
+}
+
+btnLeft.addEventListener('click', () => {
+  const scrollAmount = getCardWidth();
+  slider.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+});
+
+btnRight.addEventListener('click', () => {
+  const scrollAmount = getCardWidth();
+  slider.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+});
 </script>
 </section>
 </body>

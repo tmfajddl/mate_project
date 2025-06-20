@@ -95,10 +95,12 @@ body {
   <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
 </head>
 <body class="bg-gray-50 min-h-screen flex flex-col items-center p-4">
-  <h1 style="margin-top: 50px;" class="text-3xl font-bold mb-6">야구 포지션 한눈에 보기</h1>
+  <h1 style="margin-top: 50px;" class="text-3xl font-bold mb-6">야구 포지션</h1>
 
-    <div class="flex flex-col md:flex-row w-full max-w-screen-xl mx-auto gap-6 justify-center">
-    <!-- 구장 + 버튼 -->
+     <div class="flex flex-col items-center w-full max-w-screen-xl mx-auto gap-10">
+      <!-- 구장 + 설명 -->
+  <div class="flex flex-col md:flex-row w-full gap-6 justify-center">
+    <!-- 구장 이미지와 포지션 버튼 -->
     <div class="relative" style="width: 40vw; min-width: 320px;">
       <img src="/images/base.jpg" alt="야구장" class="w-full h-auto rounded-lg shadow" />
 
@@ -120,27 +122,320 @@ body {
         style="top: 25%; left: 50%; transform: translate(-50%, -50%)" title="중견수"></button>
       <button id="pos-rf" class="absolute bg-red-200 w-8 h-8 rounded-full border-2 border-white"
         style="top: 35%; left: 80%; transform: translate(-50%, -50%)" title="우익수"></button>
-    </div>
+     </div>
 
     <!-- 설명 영역 -->
     <div class="bg-white rounded-lg shadow p-6 min-h-[320px] flex flex-col justify-center items-center text-center"
-     style="width: 40vw; min-width: 320px;">
+      style="width: 40vw; min-width: 320px;">
+      <h2 id="pos-title" class="text-2xl font-semibold mb-4 text-center text-gray-700">포지션을 선택하세요</h2>
+      <p id="pos-desc" class="text-gray-600 text-center px-2">야구장에서 각 포지션 버튼을 눌러 기본 역할을 확인해보세요.</p>
 
-  <h2 id="pos-title" class="text-2xl font-semibold mb-4 text-center text-gray-700">포지션을 선택하세요</h2>
-  <p id="pos-desc" class="text-gray-600 text-center px-2">
-    야구장에서 각 포지션 버튼을 눌러 기본 역할을 확인해보세요.
-  </p>
-
-  <h3 class="text-xl font-semibold mt-6 text-center text-gray-600">대표 선수</h3>
-  <div class="swiper playerSwiper mt-4 w-full">
-    <div class="swiper-wrapper" id="player-slide-wrapper" style="min-height: 150px;">
-      <!-- 동적 슬라이드 삽입 -->
+      <h3 class="text-xl font-semibold mt-6 text-center text-gray-600">대표 선수</h3>
+      <div class="swiper playerSwiper mt-4 w-full">
+        <div class="swiper-wrapper" id="player-slide-wrapper" style="min-height: 150px;"></div>
+        <div class="swiper-pagination"></div>
+      </div>
     </div>
-    <!-- 페이지 네비게이션, 필요 시 -->
-    <div class="swiper-pagination"></div>
+  </div>
+  
+  
+ <div class="quiz-container flex max-w-6xl mx-auto mb-6 gap-6">
+
+  <!-- 왼쪽: 동영상 -->
+  <div class="quiz-container flex flex-col max-w-6xl mx-auto mb-6 gap-6">
+   <h2 class="text-xl font-bold">아구 룰</h2>
+    <iframe
+      width="100%"
+      height="240"
+      src="https://www.youtube.com/embed/QIhve9_Ef5s"
+      title="YouTube video player"
+      frameborder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen
+      class="rounded"
+    ></iframe>
+  </div>
+
+  <!-- 가운데: 이미지/움짤 -->
+  <div id="quiz-image" class="w-1/3 flex items-center justify-center bg-gray-50 rounded-xl shadow p-4">
+    <img src="default-image.jpg" alt="퀴즈 상황 이미지" class="max-h-48 rounded" />
+  </div>
+
+  <!-- 오른쪽: 퀴즈 카드 슬라이더 -->
+  <div class="swiper quizSwiper w-1/3">
+    <div class="swiper-wrapper">
+  
+  <!-- 카드 6: ABS -->
+<div class="swiper-slide">
+  <div class="card w-full h-64 bg-white rounded-xl shadow-lg p-6 flex flex-col items-center justify-center relative cursor-pointer" onclick="flipCard(this)">
+    <div class="card-front absolute w-full h-full flex flex-col items-center justify-center backface-hidden">
+      <h2 class="text-xl font-bold mb-4">⚾ 스트라이크와 볼을 심판 대신 누가 판정할까요?</h2>
+      <p class="text-sm text-gray-500">(카드를 클릭해보세요!)</p>
+    </div>
+    <div class="card-back absolute w-full h-full flex flex-col items-center justify-center rotate-y-180 hidden">
+      <h2 class="text-xl font-bold text-green-600 mb-2">👉 ABS (자동 판정 시스템)</h2>
+      <p class="text-gray-600">센서와 시스템이 공 위치를 감지해 스트라이크/볼을 자동으로 판정해요</p>
+    </div>
   </div>
 </div>
 
+<!-- 카드 7: 스트라이크 -->
+<div class="swiper-slide">
+  <div class="card w-full h-64 bg-white rounded-xl shadow-lg p-6 flex flex-col items-center justify-center relative cursor-pointer" onclick="flipCard(this)">
+    <div class="card-front absolute w-full h-full flex flex-col items-center justify-center backface-hidden">
+      <h2 class="text-xl font-bold mb-4">⚾ 스트라이크 존을 통과한 공! 뭐라고 할까요?</h2>
+      <p class="text-sm text-gray-500">(카드를 클릭해보세요!)</p>
+    </div>
+    <div class="card-back absolute w-full h-full flex flex-col items-center justify-center rotate-y-180 hidden">
+      <h2 class="text-xl font-bold text-green-600 mb-2">👉 스트라이크</h2>
+      <p class="text-gray-600">공이 스트라이크 존을 통과하거나, 타자가 헛스윙하면 스트라이크!</p>
+    </div>
+  </div>
+</div>
+
+<!-- 카드 8: 볼 -->
+<div class="swiper-slide">
+  <div class="card w-full h-64 bg-white rounded-xl shadow-lg p-6 flex flex-col items-center justify-center relative cursor-pointer" onclick="flipCard(this)">
+    <div class="card-front absolute w-full h-full flex flex-col items-center justify-center backface-hidden">
+      <h2 class="text-xl font-bold mb-4">⚾ 타자가 치지 않았고, 공이 스트존을 벗어났어요!</h2>
+      <p class="text-sm text-gray-500">(카드를 클릭해보세요!)</p>
+    </div>
+    <div class="card-back absolute w-full h-full flex flex-col items-center justify-center rotate-y-180 hidden">
+      <h2 class="text-xl font-bold text-green-600 mb-2">👉 볼</h2>
+      <p class="text-gray-600">스트라이크 존을 벗어난 공이에요. 4개 모이면 볼넷이 됩니다.</p>
+    </div>
+  </div>
+</div>
+
+<!-- 카드 3: 삼진아웃 -->
+<div class="swiper-slide">
+  <div class="card w-full h-64 bg-white rounded-xl shadow-lg p-6 flex flex-col items-center justify-center relative cursor-pointer" onclick="flipCard(this)">
+    <div class="card-front absolute w-full h-full flex flex-col items-center justify-center backface-hidden">
+      <h2 class="text-xl font-bold mb-4">⚾ 스트라이크를 세 번 당한 타자! 어떻게 될까요?</h2>
+      <p class="text-sm text-gray-500">(카드를 클릭해보세요!)</p>
+    </div>
+    <div class="card-back absolute w-full h-full flex flex-col items-center justify-center rotate-y-180 hidden">
+      <h2 class="text-xl font-bold text-green-600 mb-2">👉 삼진아웃</h2>
+      <p class="text-gray-600">스트라이크 3번이면 타자는 아웃! 스윙을 하든 말든 세 번이면 끝이에요.</p>
+    </div>
+  </div>
+</div>
+
+<!-- 카드 2: 플라이볼 -->
+<div class="swiper-slide">
+  <div class="card w-full h-64 bg-white rounded-xl shadow-lg p-6 flex flex-col items-center justify-center relative cursor-pointer" onclick="flipCard(this)">
+    <div class="card-front absolute w-full h-full flex flex-col items-center justify-center backface-hidden">
+      <h2 class="text-xl font-bold mb-4">⚾ 공이 높이 떠서 바운드 없이 야수가 바로 잡았어요. 이건?</h2>
+      <p class="text-sm text-gray-500">(카드를 클릭해보세요!)</p>
+    </div>
+    <div class="card-back absolute w-full h-full flex flex-col items-center justify-center rotate-y-180 hidden">
+      <h2 class="text-xl font-bold text-green-600 mb-2">👉 플라이볼 (Fly Ball)</h2>
+      <p class="text-gray-600">타구가 공중으로 높이 뜨고 야수에게 바로 잡히는 경우예요. 아웃될 가능성이 높아요.</p>
+    </div>
+  </div>
+</div>
+
+<!-- 카드 4: 땅볼 -->
+<div class="swiper-slide">
+  <div class="card w-full h-64 bg-white rounded-xl shadow-lg p-6 flex flex-col items-center justify-center relative cursor-pointer" onclick="flipCard(this)">
+    <div class="card-front absolute w-full h-full flex flex-col items-center justify-center backface-hidden">
+      <h2 class="text-xl font-bold mb-4">⚾ 타구가 땅을 굴러가요! 어떤 타구일까요?</h2>
+      <p class="text-sm text-gray-500">(카드를 클릭해보세요!)</p>
+    </div>
+    <div class="card-back absolute w-full h-full flex flex-col items-center justify-center rotate-y-180 hidden">
+      <h2 class="text-xl font-bold text-green-600 mb-2">👉 땅볼 (Ground Ball)</h2>
+      <p class="text-gray-600">공이 땅바닥을 구르며 굴러가는 타구예요. 내야수가 잡기 좋아요.</p>
+    </div>
+  </div>
+</div>
+
+<!-- 카드 5: 볼넷 -->
+<div class="swiper-slide">
+  <div class="card w-full h-64 bg-white rounded-xl shadow-lg p-6 flex flex-col items-center justify-center relative cursor-pointer" onclick="flipCard(this)">
+    <div class="card-front absolute w-full h-full flex flex-col items-center justify-center backface-hidden">
+      <h2 class="text-xl font-bold mb-4">⚾ 스트라이크 존을 벗어난 공이 4개! 타자는?</h2>
+      <p class="text-sm text-gray-500">(카드를 클릭해보세요!)</p>
+    </div>
+    <div class="card-back absolute w-full h-full flex flex-col items-center justify-center rotate-y-180 hidden">
+      <h2 class="text-xl font-bold text-green-600 mb-2">👉 볼넷 (Base on Balls)</h2>
+      <p class="text-gray-600">스트라이크 존을 벗어난 공이 4개면 1루로 걸어나갈 수 있어요.</p>
+    </div>
+  </div>
+</div>
+
+<!-- 카드 9: 홈런 -->
+<div class="swiper-slide">
+  <div class="card w-full h-64 bg-white rounded-xl shadow-lg p-6 flex flex-col items-center justify-center relative cursor-pointer" onclick="flipCard(this)">
+    <div class="card-front absolute w-full h-full flex flex-col items-center justify-center backface-hidden">
+      <h2 class="text-xl font-bold mb-4">⚾ 공이 외야 담장을 넘었어요! 이건?</h2>
+      <p class="text-sm text-gray-500">(카드를 클릭해보세요!)</p>
+    </div>
+    <div class="card-back absolute w-full h-full flex flex-col items-center justify-center rotate-y-180 hidden">
+      <h2 class="text-xl font-bold text-green-600 mb-2">👉 홈런 (Home Run)</h2>
+      <p class="text-gray-600">공이 외야 펜스를 넘기면 홈런! 모든 주자도 함께 점수 획득!</p>
+    </div>
+  </div>
+</div>
+
+<!-- 카드 10: 도루 -->
+<div class="swiper-slide">
+  <div class="card w-full h-64 bg-white rounded-xl shadow-lg p-6 flex flex-col items-center justify-center relative cursor-pointer" onclick="flipCard(this)">
+    <div class="card-front absolute w-full h-full flex flex-col items-center justify-center backface-hidden">
+      <h2 class="text-xl font-bold mb-4">⚾ 타자가 치기 전 주자가 몰래 뛰었어요!</h2>
+      <p class="text-sm text-gray-500">(카드를 클릭해보세요!)</p>
+    </div>
+    <div class="card-back absolute w-full h-full flex flex-col items-center justify-center rotate-y-180 hidden">
+      <h2 class="text-xl font-bold text-green-600 mb-2">👉 도루 (Stolen Base)</h2>
+      <p class="text-gray-600">주자가 타자 없이 다음 루로 달려 세이프가 되면 도루 성공이에요.</p>
+    </div>
+  </div>
+</div>
+
+    <!-- 카드 1: 주루사 -->
+<div class="swiper-slide">
+  <div class="card w-full h-64 bg-white rounded-xl shadow-lg p-6 flex flex-col items-center justify-center relative cursor-pointer" onclick="flipCard(this)">
+    <div class="card-front absolute w-full h-full flex flex-col items-center justify-center backface-hidden">
+      <h2 class="text-xl font-bold mb-4">⚾ 주자가 도루나 진루하다가 아웃! 이 상황은?</h2>
+      <p class="text-sm text-gray-500">(카드를 클릭해보세요!)</p>
+    </div>
+    <div class="card-back absolute w-full h-full flex flex-col items-center justify-center rotate-y-180 hidden">
+      <h2 class="text-xl font-bold text-green-600 mb-2">👉 주루사</h2>
+      <p class="text-gray-600">주자가 도루나 진루 중에 수비수에게 잡혀서 아웃되는 걸 주루사라고 해요.</p>
+    </div>
+  </div>
+</div>
+
+<!-- 카드 11: 더블플레이 -->
+<div class="swiper-slide">
+  <div class="card w-full h-64 bg-white rounded-xl shadow-lg p-6 flex flex-col items-center justify-center relative cursor-pointer" onclick="flipCard(this)">
+    <div class="card-front absolute w-full h-full flex flex-col items-center justify-center backface-hidden">
+      <h2 class="text-xl font-bold mb-4">⚾ 한 선수가 공을 쳤는데 두명의 선수가 아웃된 상황은 무엇일까요?</h2>
+      <p class="text-sm text-gray-500">(카드를 클릭해보세요!)</p>
+    </div>
+    <div class="card-back absolute w-full h-full flex flex-col items-center justify-center rotate-y-180 hidden">
+      <h2 class="text-xl font-bold text-green-600 mb-2">👉 더블플레이 (Double Play), 병살</h2>
+      <p class="text-gray-600">수비수가 두 명의 주자를 연속으로 아웃시키는 플레이예요!<br/>수비하는 팀에게는 더블플레이, 공격팀 입장에서는 병살이라고 불립니다.</p>
+    </div>
+  </div>
+</div>
+
+<!-- 카드 12: 번트 -->
+<div class="swiper-slide">
+  <div class="card w-full h-64 bg-white rounded-xl shadow-lg p-6 flex flex-col items-center justify-center relative cursor-pointer" onclick="flipCard(this)">
+    <div class="card-front absolute w-full h-full flex flex-col items-center justify-center backface-hidden">
+      <h2 class="text-xl font-bold mb-4">⚾ 타자가 배트를 살짝 대서 공을 굴렸어요!</h2>
+      <p class="text-sm text-gray-500">(카드를 클릭해보세요!)</p>
+    </div>
+    <div class="card-back absolute w-full h-full flex flex-col items-center justify-center rotate-y-180 hidden">
+      <h2 class="text-xl font-bold text-green-600 mb-2">👉 번트 (Bunt)</h2>
+      <p class="text-gray-600">스윙하지 않고 배트를 가만히 대서 공을 굴리는 작전이에요. 주자 진루에 효과적이에요!</p>
+    </div>
+  </div>
+</div>
+
+<!-- 카드 13: 강공전환 -->
+<div class="swiper-slide">
+  <div class="card w-full h-64 bg-white rounded-xl shadow-lg p-6 flex flex-col items-center justify-center relative cursor-pointer" onclick="flipCard(this)">
+    <div class="card-front absolute w-full h-full flex flex-col items-center justify-center backface-hidden">
+      <h2 class="text-xl font-bold mb-4">⚾ 번트할 줄 알았는데 갑자기 크게 스윙했어요!</h2>
+      <p class="text-sm text-gray-500">(카드를 클릭해보세요!)</p>
+    </div>
+    <div class="card-back absolute w-full h-full flex flex-col items-center justify-center rotate-y-180 hidden">
+      <h2 class="text-xl font-bold text-green-600 mb-2">👉 강공 전환</h2>
+      <p class="text-gray-600">번트하려는 척하다가 갑자기 강하게 스윙하는 전술이에요. 수비를 속이기 위한 작전이죠.</p>
+    </div>
+  </div>
+</div>
+
+<!-- 카드 14: 사구 -->
+<div class="swiper-slide">
+  <div class="card w-full h-64 bg-white rounded-xl shadow-lg p-6 flex flex-col items-center justify-center relative cursor-pointer" onclick="flipCard(this)">
+    <div class="card-front absolute w-full h-full flex flex-col items-center justify-center backface-hidden">
+      <h2 class="text-xl font-bold mb-4">⚾ 투구가 타자 몸에 맞았어요! 이 상황은?</h2>
+      <p class="text-sm text-gray-500">(카드를 클릭해보세요!)</p>
+    </div>
+    <div class="card-back absolute w-full h-full flex flex-col items-center justify-center rotate-y-180 hidden">
+      <h2 class="text-xl font-bold text-green-600 mb-2">👉 사구 (Hit by Pitch)</h2>
+      <p class="text-gray-600">투구가 타자의 몸에 맞으면 타자는 1루로 걸어나가요. 주로 피하는 게 중요해요!</p>
+    </div>
+  </div>
+</div>
+
+    </div>
+    <div class="swiper-pagination quiz-pagination mt-4"></div>
+  </div>
+
+</div>
+
+
+</div>
+
+<script>
+
+const playerSwiper = new Swiper('.playerSwiper', {
+	  slidesPerView: 3,
+	  spaceBetween: 20,
+	  loop: true,
+	  autoplay: { delay: 3000 },
+	  pagination: {
+	    el: '.swiper-pagination', 
+	    clickable: true
+	  }
+	});
+
+	const quizImages = {
+	  0: '/images/abs.png',
+	  1: '/images/strike.gif',
+	  2: '/images/ball.gif',
+	  3: '/images/strikeout.gif',
+	  4: '/images/flyball.gif',
+	  5: '/images/groundball.gif',
+	  6: '/images/walk.gif',
+	  7: '/images/homerun.gif',
+	  8: '/images/stealbase.gif',
+	  9: '/images/tagout.gif',
+	  10: '/images/doubleplay.gif',
+	  11: '/images/bunt.gif',
+	  12: '/images/powerhit.gif',
+	  13: '/images/bodyhit.gif',
+	};
+
+	const quizSwiper = new Swiper('.quizSwiper', {
+		  slidesPerView: 1,
+		  spaceBetween: 20,
+		  pagination: {
+		    el: '.quiz-pagination', 
+		    clickable: true
+		  },
+		  on: {
+		    slideChange: function() {
+		      const idx = this.realIndex;
+		      const imageEl = document.querySelector('#quiz-image img');
+		      if(imageEl) {
+		        imageEl.src = quizImages[idx] || 'images/default.jpg';
+		      }
+		    }
+		  }
+		});
+
+		// 처음 로드 시 첫 슬라이드에 맞게 이미지 세팅
+		window.addEventListener('load', () => {
+		  const firstIndex = quizSwiper.realIndex || 0;
+		  const imageEl = document.querySelector('#quiz-image img');
+		  if(imageEl) {
+		    imageEl.src = quizImages[firstIndex] || 'images/default.jpg';
+		  }
+		});
+
+	// 카드 앞/뒷면 전환
+	function flipCard(cardEl) {
+	  const front = cardEl.querySelector('.card-front');
+	  const back = cardEl.querySelector('.card-back');
+	  front.classList.toggle('hidden');
+	  back.classList.toggle('hidden');
+	}
+
+</script>
   <!-- JavaScript -->
 <script>
   const descriptions = {

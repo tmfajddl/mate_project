@@ -54,12 +54,11 @@ body {
       <c:if test="${!rq.isLogined()}">
               <li>
         <div class="dropdown dropdown-hover">
-          <div tabindex="0" role="button">야구 입문</div>
+          <div tabindex="0" role="button">입문</div>
           <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow" 
               style="background-color: #f7ecdc;">
             <li><a href="${pageContext.request.contextPath}/usr/project/test">팀 정하기</a></li>
-            <li><a href="${pageContext.request.contextPath}/usr/project/position">야구 상식</a></li>
-            <li><a href="${pageContext.request.contextPath}/usr/project/goods">야구 룰</a></li>
+            <li><a href="${pageContext.request.contextPath}/usr/project/position">포지션/룰</a></li>
           </ul>
         </div>
       </li>
