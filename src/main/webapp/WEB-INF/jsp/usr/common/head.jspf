@@ -63,6 +63,18 @@ body {
         </div>
       </li>
             </c:if>
+            <li>
+        <div class="dropdown dropdown-hover">
+          <div tabindex="0" role="button">분석</div>
+          <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow" 
+              style="background-color: #f7ecdc;">
+            <li><a href="${pageContext.request.contextPath}/usr/project/ranking">순위</a></li>
+            <li><a href="${pageContext.request.contextPath}/usr/project/play">영상</a></li>
+            <li><a href="${pageContext.request.contextPath}/usr/project/player">선수 분석</a></li>
+          </ul>
+        </div>
+      </li>
+             
 
       <li>
         <div class="dropdown dropdown-hover">
@@ -72,8 +84,6 @@ body {
             <li><a href="${pageContext.request.contextPath}/usr/project/information">구장 별 날씨</a></li>
             <li><a href="${pageContext.request.contextPath}/usr/project/information2">최신 뉴스</a></li>
             <li><a href="${pageContext.request.contextPath}/usr/project/information3">선수들이 자주 찾는 맛집</a></li>
-            <li><a href="${pageContext.request.contextPath}/usr/project/ranking">팀 순위 / TOP5</a></li>
-            <li><a href="${pageContext.request.contextPath}/usr/project/play">경기 영상 / 일상</a></li>
           </ul>
         </div>
       </li>

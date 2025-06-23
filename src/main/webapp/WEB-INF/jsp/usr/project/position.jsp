@@ -89,6 +89,7 @@ body {
     </c:when>
 </c:choose>
 
+
   <!-- Tailwind CSS & Swiper -->
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
@@ -142,7 +143,7 @@ body {
  <div class="quiz-container flex max-w-6xl mx-auto mb-6 gap-6">
 
   <!-- 왼쪽: 동영상 -->
-  <div class="quiz-container flex flex-col max-w-6xl mx-auto mb-6 gap-6">
+  <div class="quiz-container rounded-xl shadow-lg p-6 bg-white flex flex-col max-w-6xl mx-auto mb-6 gap-6">
    <h2 class="text-xl font-bold">아구 룰</h2>
     <iframe
       width="100%"

@@ -1,6 +1,8 @@
 package com.example.demo.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +12,7 @@ import org.apache.catalina.filters.ExpiresFilter.XServletOutputStream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -24,8 +27,11 @@ import com.example.demo.service.YoutubeService;
 import com.example.demo.vo.ChatMessage;
 import com.example.demo.vo.ChatRoom;
 import com.example.demo.vo.Rq;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class UsrHomeController {
@@ -62,9 +68,69 @@ public class UsrHomeController {
 	}
 	
 	@RequestMapping("/usr/home/test")
-	public String showSchedule(HttpServletRequest request, Model model) throws IOException {
-            List<HashMap<String, String>> games = kboCrawlerService.getBaseballScheduleWithSelenium();
-            model.addAttribute("games", games);
+	public String showSchedule(
+	        @RequestParam(value = "teamIndex", defaultValue = "1") int teamIndex,
+	        @RequestParam(value = "type", defaultValue = "타자") String type,
+	        @RequestParam(value = "page", defaultValue = "1") int page,
+	        HttpSession session,
+	        Model model) throws JsonProcessingException {
+
+		String playerKey = "players_team_" + teamIndex;
+		String teamMapKey = "team_names";
+
+		List<Map<String, String>> playerLists = (List<Map<String, String>>) session.getAttribute(playerKey);
+		Map<String, Integer> teamNames = (Map<String, Integer>) session.getAttribute(teamMapKey);
+
+		if (playerLists == null) {
+		    playerLists = kboCrawlerService.crawlPlayersByTeamIndex(teamIndex);
+		    session.setAttribute(playerKey, playerLists);
+		}
+
+		if (teamNames == null) {
+		    teamNames = kboCrawlerService.getTeamNameAndIndexMap();
+		    session.setAttribute(teamMapKey, teamNames);
+		}
+
+	    // 필터링
+	    List<Map<String, String>> filteredPlayers = playerLists.stream()
+	            .filter(p -> "투수".equals(type) ? "투수".equals(p.get("position")) : !"투수".equals(p.get("position")))
+	            .collect(Collectors.toList());
+
+	    // 페이징
+	    int pageSize = 20;
+	    int total = filteredPlayers.size();
+	    int totalPages = (int) Math.ceil((double) total / pageSize);
+	    page = Math.max(1, Math.min(page, totalPages));
+
+	    int fromIndex = (page - 1) * pageSize;
+	    int toIndex = Math.min(fromIndex + pageSize, total);
+	    List<Map<String, String>> pagedPlayers = new ArrayList<>();
+	    if (fromIndex < total) {
+	        pagedPlayers = filteredPlayers.subList(fromIndex, toIndex);
+	    }
+
+	    // 블록 페이징 (9개)
+	    int blockSize = 10;
+	    int currentBlock = (page - 1) / blockSize;
+	    int startPage = currentBlock * blockSize + 1;
+	    int endPage = Math.min(startPage + blockSize - 1, totalPages);
+
+	    
+	    // 모델 등록
+	    
+	    ObjectMapper objectMapper = new ObjectMapper();
+	    String allPlayersJson = objectMapper.writeValueAsString(filteredPlayers); // 전체 필터링된 리스트
+
+	    model.addAttribute("teamNames", teamNames);
+	    model.addAttribute("allPlayersJson", allPlayersJson);
+	    model.addAttribute("players", pagedPlayers);
+	    model.addAttribute("teamIndex", teamIndex);
+	    model.addAttribute("type", type);
+	    model.addAttribute("page", page);
+	    model.addAttribute("totalPages", totalPages);
+	    model.addAttribute("startPage", startPage);
+	    model.addAttribute("endPage", endPage);
+
 	    return "/usr/home/test";
 	}
 
@@ -211,4 +277,83 @@ public class UsrHomeController {
 
 	    return "/usr/project/play";
 	}
+	
+	@GetMapping("/usr/player/stats")
+	@ResponseBody
+	public List<Map<String, String>> getPlayerStats(@RequestParam String playerId, @RequestParam String type) {
+	    if ("타자".equals(type)) {
+	        return kboCrawlerService.crawlHitterPlayers(playerId);
+	    } else {
+	        return kboCrawlerService.crawlPitcherPlayers(playerId);
+	    }
+	}
+	
+	@RequestMapping("/usr/project/player")
+	public String playerInfo(
+	        @RequestParam(value = "teamIndex", defaultValue = "1") int teamIndex,
+	        @RequestParam(value = "type", defaultValue = "타자") String type,
+	        @RequestParam(value = "page", defaultValue = "1") int page,
+	        HttpSession session,
+	        Model model) throws JsonProcessingException {
+
+		String playerKey = "players_team_" + teamIndex;
+		String teamMapKey = "team_names";
+
+		List<Map<String, String>> playerLists = (List<Map<String, String>>) session.getAttribute(playerKey);
+		Map<String, Integer> teamNames = (Map<String, Integer>) session.getAttribute(teamMapKey);
+
+		if (playerLists == null) {
+		    playerLists = kboCrawlerService.crawlPlayersByTeamIndex(teamIndex);
+		    session.setAttribute(playerKey, playerLists);
+		}
+
+		if (teamNames == null) {
+		    teamNames = kboCrawlerService.getTeamNameAndIndexMap();
+		    session.setAttribute(teamMapKey, teamNames);
+		}
+
+	    // 필터링
+	    List<Map<String, String>> filteredPlayers = playerLists.stream()
+	            .filter(p -> "투수".equals(type) ? "투수".equals(p.get("position")) : !"투수".equals(p.get("position")))
+	            .collect(Collectors.toList());
+
+	    // 페이징
+	    int pageSize = 10;
+	    int total = filteredPlayers.size();
+	    int totalPages = (int) Math.ceil((double) total / pageSize);
+	    page = Math.max(1, Math.min(page, totalPages));
+
+	    int fromIndex = (page - 1) * pageSize;
+	    int toIndex = Math.min(fromIndex + pageSize, total);
+	    List<Map<String, String>> pagedPlayers = new ArrayList<>();
+	    if (fromIndex < total) {
+	        pagedPlayers = filteredPlayers.subList(fromIndex, toIndex);
+	    }
+
+	    // 블록 페이징 (9개)
+	    int blockSize = 10;
+	    int currentBlock = (page - 1) / blockSize;
+	    int startPage = currentBlock * blockSize + 1;
+	    int endPage = Math.min(startPage + blockSize - 1, totalPages);
+
+	    
+	    // 모델 등록
+	    
+	    ObjectMapper objectMapper = new ObjectMapper();
+	    String allPlayersJson = objectMapper.writeValueAsString(filteredPlayers); // 전체 필터링된 리스트
+
+	    model.addAttribute("teamNames", teamNames);
+	    model.addAttribute("allPlayersJson", allPlayersJson);
+	    model.addAttribute("players", pagedPlayers);
+	    model.addAttribute("teamIndex", teamIndex);
+	    model.addAttribute("type", type);
+	    model.addAttribute("page", page);
+	    model.addAttribute("totalPages", totalPages);
+	    model.addAttribute("startPage", startPage);
+	    model.addAttribute("endPage", endPage);
+
+	    return "/usr/project/player";
+	}
+	
+	
 }

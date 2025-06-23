@@ -4,10 +4,12 @@ import org.jsoup.Jsoup;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.support.ui.Select;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +19,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -299,6 +302,292 @@ public class KboCrawlerService {
         }
 
         return datas;
+    }
+    
+    public List<Map<String, String>> crawlHitterPlayers(String playerId2) {
+        List<Map<String, String>> resultList = new ArrayList<>();
+
+            try {
+                String url = "https://www.koreabaseball.com/Record/Player/HitterDetail/Total.aspx?playerId=" + playerId2;
+                Document doc = Jsoup.connect(url).userAgent("Mozilla").get();
+
+                // 이름 추출 (예: h3)
+                String name = doc.selectFirst("#cphContents_cphContents_cphContents_playerProfile_lblName").text(); // 태그는 실제 구조에 맞게 조정
+
+                // 기록 테이블
+                Element table = doc.selectFirst("#contents > div.sub-content > div.player_records > div > table");
+
+                if (table != null) {
+                    Elements rows = table.select("tbody > tr");
+
+                    for (Element row : rows) {
+                        Elements tds = row.select("td");
+                        if (tds.size() >= 6) {
+                            Map<String, String> playerMap = new HashMap<>();
+                            playerMap.put("name", name);
+                            playerMap.put("year", tds.get(0).text());
+                            playerMap.put("team", tds.get(1).text());
+                            playerMap.put("avg", tds.get(2).text());
+                            playerMap.put("h", tds.get(7).text());
+                            playerMap.put("slg", tds.get(19).text());
+                            playerMap.put("obp", tds.get(20).text());
+
+                            resultList.add(playerMap);
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                System.out.println("크롤링 실패: playerId = " + playerId2);
+                e.printStackTrace();
+            }
+
+
+        System.out.println(resultList);
+        return resultList;
+    }
+    
+    public List<Map<String, String>> crawlPitcherPlayers(String playerId2) {
+        List<Map<String, String>> resultList = new ArrayList<>();
+
+            try {
+                String url = "https://www.koreabaseball.com/Record/Player/PitcherDetail/Total.aspx?playerId=" + playerId2;
+                Document doc = Jsoup.connect(url).userAgent("Mozilla").get();
+
+                // 이름 추출 (예: h3)
+                String name = doc.selectFirst("#cphContents_cphContents_cphContents_playerProfile_lblName").text(); // 태그는 실제 구조에 맞게 조정
+
+                // 기록 테이블
+                Element table = doc.selectFirst("#contents > div.sub-content > div.player_records > div > table");
+
+                if (table != null) {
+                    Elements rows = table.select("tbody > tr");
+
+                    for (Element row : rows) {
+                        Elements tds = row.select("td");
+                        if (tds.size() >= 3) {
+                            Map<String, String> playerMap = new HashMap<>();
+                            playerMap.put("name", name);
+                            playerMap.put("year", tds.get(0).text());
+                            playerMap.put("team", tds.get(1).text());
+                            playerMap.put("era", tds.get(2).text());
+                            playerMap.put("wpct", tds.get(10).text());
+                            playerMap.put("h", tds.get(14).text());
+                            playerMap.put("so", tds.get(18).text());
+
+                            resultList.add(playerMap);
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                System.out.println("크롤링 실패: playerId = " + playerId2);
+                e.printStackTrace();
+            }
+
+        System.out.println(resultList);
+        return resultList;
+    }
+    
+    public List<Map<String, String>> crawlMultiplePlayersNumber() {
+        WebDriverManager.chromedriver().setup();
+        WebDriver driver = new ChromeDriver();
+        List<Map<String, String>> players = new ArrayList<>();
+
+        try {
+            driver.get("https://www.koreabaseball.com/Player/Search.aspx");
+            Thread.sleep(2000); // 초기 페이지 로딩 대기
+
+            Select teamDropdown = new Select(driver.findElement(By.id("cphContents_cphContents_cphContents_ddlTeam")));
+            List<WebElement> teamOptions = teamDropdown.getOptions();
+
+            // 팀별 반복 (1부터 시작, '선택' 제외)
+            for (int i = 1; i < teamOptions.size(); i++) {
+                teamDropdown.selectByIndex(i);
+                Thread.sleep(2000); // 팀 선택 후 로딩 대기
+
+                // 페이지 번호 버튼에서 최대 페이지 번호 찾기
+                int maxPage = 1;
+                List<WebElement> pageButtons = driver.findElements(By.cssSelector("#cphContents_cphContents_cphContents_udpRecord > div.inquiry > div > a"));
+                for (WebElement btn : pageButtons) {
+                    String text = btn.getText().trim();
+                    try {
+                        int pageNum = Integer.parseInt(text);
+                        if (pageNum > maxPage) maxPage = pageNum;
+                    } catch (NumberFormatException ignored) {}
+                }
+
+                // 1페이지부터 maxPage까지 반복
+                for (int page = 1; page <= maxPage; page++) {
+                    if (page > 1) {
+                        // 기존 __doPostBack 호출 대신 페이지 버튼 클릭으로 변경
+                        pageButtons = driver.findElements(By.cssSelector("#cphContents_cphContents_cphContents_udpRecord > div.inquiry > div > a"));
+                        boolean clicked = false;
+                        for (WebElement btn : pageButtons) {
+                            if (btn.getText().trim().equals(String.valueOf(page))) {
+                                btn.click();
+                                clicked = true;
+                                break;
+                            }
+                        }
+                        if (!clicked) {
+                            System.out.println("페이지 버튼 " + page + " 클릭 실패");
+                            break;
+                        }
+
+                        Thread.sleep(2000); // 페이지 로딩 대기
+                    }
+
+                    // 선수 목록 tbody 다시 찾기
+                    WebElement tbody = driver.findElement(By.cssSelector("#cphContents_cphContents_cphContents_udpRecord > div.inquiry > table > tbody"));
+                    List<WebElement> rows = tbody.findElements(By.tagName("tr"));
+
+                    for (WebElement row : rows) {
+                        List<WebElement> tds = row.findElements(By.tagName("td"));
+                        if (tds.size() >= 4) {
+                            String backNumber = tds.get(0).getText().trim();
+                            String name = tds.get(1).getText().trim();
+                            WebElement aTag = tds.get(1).findElement(By.tagName("a"));
+                            String href = aTag.getAttribute("href");
+
+                            String playerId = "";
+                            int idx = href.indexOf("playerId=");
+                            if (idx != -1) {
+                                playerId = href.substring(idx + "playerId=".length());
+                            }
+
+                            String team = tds.get(2).getText().trim();
+                            String position = tds.get(3).getText().trim();
+
+                            Map<String, String> playerData = new HashMap<>();
+                            playerData.put("backNumber", backNumber);
+                            playerData.put("name", name);
+                            playerData.put("playerId", playerId);
+                            playerData.put("team", team);
+                            playerData.put("position", position);
+
+                            players.add(playerData);
+                        }
+                    }
+                }
+
+                // 다음 팀 선택을 위해 드롭다운 재할당
+                teamDropdown = new Select(driver.findElement(By.id("cphContents_cphContents_cphContents_ddlTeam")));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            driver.quit();
+        }
+
+        return players;
+    }
+    
+    public List<Map<String, String>> crawlPlayersByTeamIndex(int teamIndex) {
+        WebDriverManager.chromedriver().setup();
+
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--headless"); // 브라우저 창 안 뜨게 함
+        options.addArguments("--disable-gpu");
+        options.addArguments("--window-size=1920,1080");
+
+        WebDriver driver = new ChromeDriver(options);
+        List<Map<String, String>> players = new ArrayList<>();
+
+        try {
+            driver.get("https://www.koreabaseball.com/Player/Search.aspx");
+            Thread.sleep(1000);
+
+            Select teamDropdown = new Select(driver.findElement(By.id("cphContents_cphContents_cphContents_ddlTeam")));
+            teamDropdown.selectByIndex(teamIndex);
+            Thread.sleep(2000);
+
+            int maxPage = 1;
+            List<WebElement> pageButtons = driver.findElements(By.cssSelector("#cphContents_cphContents_cphContents_udpRecord > div.inquiry > div > a"));
+            for (WebElement btn : pageButtons) {
+                try {
+                    int pageNum = Integer.parseInt(btn.getText().trim());
+                    maxPage = Math.max(maxPage, pageNum);
+                } catch (NumberFormatException ignored) {}
+            }
+
+            for (int page = 1; page <= maxPage; page++) {
+                if (page > 1) {
+                    pageButtons = driver.findElements(By.cssSelector("#cphContents_cphContents_cphContents_udpRecord > div.inquiry > div > a"));
+                    boolean clicked = false;
+                    for (WebElement btn : pageButtons) {
+                        if (btn.getText().trim().equals(String.valueOf(page))) {
+                            btn.click();
+                            clicked = true;
+                            break;
+                        }
+                    }
+                    if (!clicked) break;
+                    Thread.sleep(2000);
+                }
+
+                WebElement tbody = driver.findElement(By.cssSelector("#cphContents_cphContents_cphContents_udpRecord > div.inquiry > table > tbody"));
+                List<WebElement> rows = tbody.findElements(By.tagName("tr"));
+
+                for (WebElement row : rows) {
+                    List<WebElement> tds = row.findElements(By.tagName("td"));
+                    if (tds.size() >= 4) {
+                        String backNumber = tds.get(0).getText().trim();
+                        String name = tds.get(1).getText().trim();
+                        WebElement aTag = tds.get(1).findElement(By.tagName("a"));
+                        String href = aTag.getAttribute("href");
+                        String playerId = href.contains("playerId=") ? href.split("playerId=")[1] : "";
+                        String team = tds.get(2).getText().trim();
+                        String position = tds.get(3).getText().trim();
+
+                        Map<String, String> player = new HashMap<>();
+                        player.put("backNumber", backNumber);
+                        player.put("name", name);
+                        player.put("playerId", playerId);
+                        player.put("team", team);
+                        player.put("position", position);
+                        players.add(player);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            driver.quit();
+        }
+
+        return players;
+    }
+    
+    public Map<String, Integer> getTeamNameAndIndexMap() {
+        WebDriverManager.chromedriver().setup();
+
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--headless");  // 헤드리스 모드 (브라우저 창 안 뜸)
+        options.addArguments("--disable-gpu"); // 윈도우 환경에서 필요할 수 있음
+        options.addArguments("--window-size=1920,1080"); // 해상도 지정 (필요시)
+
+        WebDriver driver = new ChromeDriver(options);
+        Map<String, Integer> teamMap = new LinkedHashMap<>();
+
+        try {
+            driver.get("https://www.koreabaseball.com/Player/Search.aspx");
+            Thread.sleep(2000);
+
+            WebElement teamDropdownElement = driver.findElement(By.id("cphContents_cphContents_cphContents_ddlTeam"));
+            Select teamDropdown = new Select(teamDropdownElement);
+
+            List<WebElement> optionsList = teamDropdown.getOptions();
+            for (int i = 1; i < optionsList.size(); i++) {
+                String teamName = optionsList.get(i).getText().trim();
+                teamMap.put(teamName, i);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            driver.quit();
+        }
+
+        return teamMap;
     }
 
 }
