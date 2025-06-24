@@ -144,7 +144,7 @@ background-color: #f2d8b1;
       <!-- 메인 컨텐츠 -->
       <div class="content-container text-black">
 <div style="width: 80%; margin: 20px 0 0 0;">
-  <h2 style="font-size: 3em; font-weight: bold; color: #918c84; text-align: left;">${board.name}</h2>
+  <h2 style="font-size: 3em; font-weight: bold; color: black; text-align: left;">${board.name}</h2>
 </div>
         <%-- 페이지 정보 --%>
         <%
@@ -155,7 +155,6 @@ background-color: #f2d8b1;
 
         <!-- 검색창 -->
         <form class="search_bar flex gap-2 items-center" action="../article/search" name="search_bar">
-          <label for="search">검색</label>
           <select name="search" id="search" class="text-black flex-1">
             <option selected value="1">제목</option>
             <option value="2">내용</option>

@@ -9,6 +9,22 @@
 body {
   font-family: 'Ownglyph_ParkDaHyun', sans-serif;
 }
+        /* 배경 흐림 오버레이 */
+        section {
+            min-height: 100vh;
+            position: relative;
+            z-index: 0;
+        }
+        .section-overlay {
+            position: absolute;
+            inset: 0;
+            background-color: rgba(255, 255, 255, 0.4);
+            z-index: 1;
+        }
+        section > *:not(.section-overlay) {
+            position: relative;
+            z-index: 2;
+        }
   option {
     background-color: #f7ecdc;
   }
@@ -122,8 +138,10 @@ body {
                  style="background-image: url('/images/bg30.png'); cursor: url('/images/cursor10.png') 25 25, auto;">
     </c:when>
 </c:choose>
-
-<div class="text-center text-2xl font-bold mb-4">회원정보 수정</div>
+<div class="section-overlay"></div>
+<div style="width: 80%; margin: 20px auto 0 auto;">
+  <h2 style="font-size: 3em; font-weight: bold; color: black; text-align: left; margin-left: 20%;">회원 정보 수정</h2>
+</div>
     <div style="width: 50%; border-radius: 10px; background-color: rgb(242, 247, 247); padding: 15px; border: 3px dashed red;">
       
       <!-- 수정: enctype="multipart/form-data" 추가 -->

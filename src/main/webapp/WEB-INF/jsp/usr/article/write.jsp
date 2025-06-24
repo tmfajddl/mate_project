@@ -33,14 +33,21 @@
   body {
   font-family: 'Ownglyph_ParkDaHyun', sans-serif;
 }
-    /* 연한 하늘색 오버레이 */
-    .overlay {
-      background-color: rgba(247, 246, 245, 0.6);
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      z-index: 0;
-    }
+    section {
+            min-height: 100vh;
+            position: relative;
+            z-index: 0;
+        }
+        .section-overlay {
+            position: absolute;
+            inset: 0;
+            background-color: rgba(255, 255, 255, 0.4);
+            z-index: 1;
+        }
+        section > *:not(.section-overlay) {
+            position: relative;
+            z-index: 2;
+        }
 
     /* 흰색 배경 박스, 둥근 모서리, 그림자, 앞으로 올라오기 */
     .content-box {
@@ -170,7 +177,7 @@
 </c:choose>
 
   <!-- 연한 하늘색 오버레이 -->
-  <div class="overlay"></div>
+  <div class="section-overlay"></div>
  
     <div style="width: 80%; margin: 20px auto 0 auto;">
   <h2 style="font-size: 3em; font-weight: bold; color: black; text-align: center; margin-top: 10%;">글쓰기</h2>

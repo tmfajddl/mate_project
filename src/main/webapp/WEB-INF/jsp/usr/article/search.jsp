@@ -153,7 +153,7 @@
     <!-- 메인 컨텐츠 -->
     <div class="content-container text-black">
     <div style="width: 80%; margin: 20px 0 0 0;">
-  <h2 style="font-size: 3em; font-weight: bold; color: #918c84; text-align: left;">${board.name}</h2>
+  <h2 style="font-size: 3em; font-weight: bold; color: black; text-align: left;">${board.name}</h2>
 </div>
       
       <!-- 검색창 -->

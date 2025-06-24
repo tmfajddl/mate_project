@@ -96,7 +96,7 @@ background-color: #f2d8b1;
                  style="background-image: url('/images/bg30.png'); cursor: url('/images/cursor10.png') 25 25, auto;">
     </c:when>
 </c:choose>
-      <div class="text-center text-2xl font-bold mb-4">비밀번호 확인</div>
+
     <!-- 내용 박스 -->
     <div style="width: 30%; border-radius: 10px; background-color: rgb(242, 247, 247); padding: 15px; border: 3px dashed red;">
       <form action="../member/doCheckPw" method="POST">

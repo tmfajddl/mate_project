@@ -35,7 +35,7 @@ background-color: #f2d8b1;
 
   /* input 통일 스타일 */
   input.input {
-    width: 90%;
+    width: 80%;
     box-sizing: border-box;
     padding: 6px 10px;
     border: 1px solid #ddd;
@@ -104,7 +104,7 @@ background-color: #f2d8b1;
   
 
   <!-- 2-Column 레이아웃 -->
-  <div class="relative flex w-full max-w-6xl">
+  <div class="relative flex w-full max-w-6xl" style = padding:30px;>
 
     <!-- 왼쪽: 게시글 정보 -->
     <div class="w-1/2 p-4 flex flex-col">
@@ -115,7 +115,7 @@ background-color: #f2d8b1;
       </div>
 
       <!-- 본문 내용 (50% 높이, 스크롤) -->
-<div class="flex-1 bg-white rounded-lg shadow p-4 overflow-auto" style="color: black; max-height: 50vh;">
+<div class="flex-1 bg-white rounded-lg shadow p-4 overflow-auto" style="color: black; max-height: 100vh;">
   <c:out value="${article.body}" escapeXml="false" />
 </div>
 
@@ -148,7 +148,7 @@ background-color: #f2d8b1;
     </div>
 
     <!-- 오른쪽: 댓글 영역 -->
-    <div class="w-1/2 p-4">
+    <div class="w-1/2 p-4" style="padding:30px;">
     <div class="text-2xl font-bold mb-1">댓글 목록</div>
       <!-- 댓글 작성 -->
       <c:if test="${LoginedMemberId != 0}">
@@ -160,7 +160,7 @@ background-color: #f2d8b1;
       </c:if>
 
       <!-- 댓글 목록 -->
-<div style="background-color:white; border-radius: 5px;">
+<div style="background-color:white; border-radius: 5px; padding:10px;">
   <c:forEach var="comment" items="${comments}">
     <div class="comment-row flex items-start space-x-2 relative">
       <!-- 왼쪽: 프로필 이미지 -->

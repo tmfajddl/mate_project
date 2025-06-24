@@ -12,6 +12,25 @@
 body {
   font-family: 'Ownglyph_ParkDaHyun', sans-serif;
 }
+
+  section {
+  min-height: 100vh;
+  position: relative;
+    z-index: 0;
+}
+.section-overlay {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(255, 255, 255, 0.5); /* 불투명도 조절 가능 */
+  z-index: 1;
+}
+
+
+/* section 안 콘텐츠는 오버레이보다 위에 있도록 */
+section > *:not(.section-overlay) {
+  position: relative;
+  z-index: 1;
+}
   .main {
     border-radius: 10px;
     width: 80%;
@@ -161,10 +180,11 @@ body {
     </c:when>
 </c:choose>
 
+<div class="section-overlay"></div> 
 
 <div style="width: 80%; margin: 20px auto 0 auto;">
-  <h2 style="font-size: 3em; font-weight: bold; color: #918c84; text-align: left;">추천 친구 목록</h2>
-  <h2 style="font-size: 1em; font-weight: bold; color: #918c84; text-align: left;">취향이 비슷한 친구들을 추천 드려요!</h2>
+  <h2 style="font-size: 3em; font-weight: bold; color: black; text-align: left;">추천 친구 목록</h2>
+  <h2 style="font-size: 1em; font-weight: bold; color: black; text-align: left;">취향이 비슷한 친구들을 추천 드려요!</h2>
 </div>
     <div class="main">
       <c:choose>

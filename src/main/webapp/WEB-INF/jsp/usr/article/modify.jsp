@@ -8,16 +8,22 @@
 body {
   font-family: 'Ownglyph_ParkDaHyun', sans-serif;
 }
-  /* 배경에 연한 하늘색 반투명 오버레이 */
-  .overlay {
-    background-color: rgba(247, 246, 245, 0.6); /* 연한 하늘색 */
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 0;
-  }
+        /* 배경 흐림 오버레이 */
+        section {
+            min-height: 100vh;
+            position: relative;
+            z-index: 0;
+        }
+        .section-overlay {
+            position: absolute;
+            inset: 0;
+            background-color: rgba(255, 255, 255, 0.4);
+            z-index: 1;
+        }
+        section > *:not(.section-overlay) {
+            position: relative;
+            z-index: 2;
+        }
 
   /* 내용 컨테이너 */
   .content-container {
@@ -133,7 +139,7 @@ body {
 </c:choose>
 
     <!-- 오버레이: 모든 배경 위에 고정 -->
-    <div class="overlay"></div>
+    <div class="section-overlay"></div>
     
         <div style="width: 80%; margin: 20px auto 0 auto;">
   <h2 style="font-size: 3em; font-weight: bold; color: black; text-align: center;">${article.title} 게시글 수정하기</h2>

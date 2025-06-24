@@ -31,8 +31,8 @@
     /* 지도 위 버튼 스타일 */
     .stadium-btn {
       position: absolute;
-      width: 10px;
-      height: 10px;
+      width: 15px;
+      height: 15px;
       border-radius: 50%; /* 동그라미 */
       background-color: #007BFF;
       cursor: pointer;
@@ -81,7 +81,23 @@
   }
   section {
   min-height: 100vh;
+  position: relative;
+    z-index: 0;
 }
+.section-overlay {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(255, 255, 255, 0.5); /* 불투명도 조절 가능 */
+  z-index: 1;
+}
+
+
+/* section 안 콘텐츠는 오버레이보다 위에 있도록 */
+section > *:not(.section-overlay) {
+  position: relative;
+  z-index: 1;
+}
+
   </style>
 </head>
 <body class="m-0" style="background-color: #f7f0e9;">
@@ -133,15 +149,15 @@
                  style="background-image: url('/images/bg30.png'); cursor: url('/images/cursor10.png') 25 25, auto;">
     </c:when>
 </c:choose>
+<div class="section-overlay"></div>
 
-
-<div style="width: 80%; margin: 20px auto 0 auto;">
-  <h2 style="font-size: 3em; font-weight: bold; color: #918c84; text-align: left; margin-left: 1%;">구장 별 날씨</h2>
+<div style="width: 70%; margin: 50px auto 0 auto;">
+  <h2 style="font-size: 3em; font-weight: bold; color: black; text-align: left; margin-left: 1%;">구장 별 날씨</h2>
 </div>
   <!-- 날씨 정보 표시 영역 -->
   <div id="weather-info"></div>
 
-<div class="ps flex flex-col justify-center p-6 text-sm leading-relaxed overflow-y-auto" style="position:absolute; top:400px; left: 100px; width: 300px; background: rgb(255,255,255); border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1);text-align: center;">
+<div class="ps flex flex-col justify-center p-6 text-sm leading-relaxed overflow-y-auto" style="position:absolute; top:400px; left: 300px; width: 300px; background: rgb(255,255,255); border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1);text-align: center;">
   <div id="gamesContainer">
     <%-- 전체 경기 초기 렌더링: 모두 보여줌 --%>
     <c:forEach var="row" items="${scheduleList}">
@@ -175,7 +191,7 @@
     <button class="stadium-btn" style="left: 200px; top: 130px;" onclick="onStadiumClick('inchun')" title="인천SSG랜더스필드">인</button>
   </div>
   
-  <div id="checklist" class="ps flex flex-col justify-center p-6 text-sm leading-relaxed overflow-y-auto" style="display:none; position:absolute; top:200px; right: 100px; width: 300px; background: rgb(255,255,255); border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+  <div id="checklist" class="ps flex flex-col justify-center p-6 text-sm leading-relaxed overflow-y-auto" style="display:none; position:absolute; top:200px; right: 300px; width: 300px; background: rgb(255,255,255); border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
   <div>
     🎒 준비물 체크리스트<br />
     1. 우비 or 우산<br />
@@ -196,7 +212,7 @@
   </div>
 </div>
 
-<div id="checklist2" class="ps flex flex-col justify-center p-6 text-sm leading-relaxed overflow-y-auto" style="display:none; position:absolute; top:200px; right: 100px; width: 300px; background: rgb(255,255,255); border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+<div id="checklist2" class="ps flex flex-col justify-center p-6 text-sm leading-relaxed overflow-y-auto" style="display:none; position:absolute; top:200px; right: 300px; width: 300px; background: rgb(255,255,255); border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
   <div>
     🎒 준비물 체크리스트<br />
           1. 얇은 겉옷 (바람막이/가디건)<br />
@@ -214,7 +230,7 @@
   </div>
 </div>
 
-<div id="checklist3" class="ps flex flex-col justify-center p-6 text-sm leading-relaxed overflow-y-auto" style="display:none; position:absolute; top:200px; right: 100px; width: 300px; background: rgb(255,255,255); border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+<div id="checklist3" class="ps flex flex-col justify-center p-6 text-sm leading-relaxed overflow-y-auto" style="display:none; position:absolute; top:200px; right: 300px; width: 300px; background: rgb(255,255,255); border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
   <div>
     🎒 준비물 체크리스트<br />
           1. 모자 or 캡모자<br />
@@ -310,7 +326,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const desc = data.weather[0].description;
       const rain = data.rain && data.rain["1h"] ? data.rain["1h"] : 0;
 
-      weatherSpan.textContent = '🌡'+temp+'°C / '+desc+' / 강수량: '+rain+'mm';
+      weatherSpan.textContent = '온도🌡 '+temp+'°C 날씨: ' +desc+' 강수량: '+rain+'mm';
       
       if (desc.includes("비") || desc.includes("눈") || desc.includes("우박")) {
     	    checklist.style.display = "block";

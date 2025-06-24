@@ -6,39 +6,61 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <style>
-    .btn-back {
-      background: none;
-      border: none;
-      cursor: pointer;
-      color: black;
-      padding: 4px 10px;
-      border-radius: 5px;
-      background-color: #f7ecdc;
+    <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      background: #f9f9f9;
     }
-    .btn-back:hover {
-      background-color: #f2d8b1;
+
+    h1 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 30px;
     }
-section {
-  min-height: 100vh;
-}
 
+    .card-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
 
-@font-face {
-    font-family: 'Ownglyph_ParkDaHyun';
-    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2411-3@1.0/Ownglyph_ParkDaHyun.woff2') format('woff2');
-    font-weight: normal;
-    font-style: normal;
-}
+    .card {
+      background-color: #fff;
+      border-radius: 16px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+      padding: 20px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
 
-body {
-  font-family: 'Ownglyph_ParkDaHyun', sans-serif;
-  
-}
-  
-  
-    
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 12px;
+      margin-bottom: 15px;
+    }
+
+    .card h3 {
+      font-size: 1.0rem;
+      margin: 0 0 8px;
+      color: #222;
+    }
+
+    .card p {
+      font-size: 0.7rem;
+      color: #555;
+    }
   </style>
+</head>
+<body>
 </head>
 <body class="m-0 h-full" style="background-color: #f7f0e9;">
 
@@ -96,7 +118,6 @@ body {
   <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
 </head>
 <body class="bg-gray-50 min-h-screen flex flex-col items-center p-4">
-  <h1 style="margin-top: 50px;" class="text-3xl font-bold mb-6">야구 포지션</h1>
 
      <div class="flex flex-col items-center w-full max-w-screen-xl mx-auto gap-10">
       <!-- 구장 + 설명 -->
@@ -105,23 +126,23 @@ body {
     <div class="relative" style="width: 40vw; min-width: 320px;">
       <img src="/images/base.jpg" alt="야구장" class="w-full h-auto rounded-lg shadow" />
 
-      <button id="pos-p" class="absolute bg-yellow-500 w-8 h-8 rounded-full border-2 border-white"
+      <button id="pos-p" class="absolute bg-blue-500 w-8 h-8 rounded-full border-2 border-white"
         style="top: 63%; left: 50%; transform: translate(-50%, -50%)" title="투수"></button>
       <button id="pos-c" class="absolute bg-blue-500 w-8 h-8 rounded-full border-2 border-white"
         style="top: 78%; left: 50%; transform: translate(-50%, -50%)" title="포수"></button>
-      <button id="pos-1b" class="absolute bg-green-500 w-8 h-8 rounded-full border-2 border-white"
+      <button id="pos-1b" class="absolute bg-blue-500 w-8 h-8 rounded-full border-2 border-white"
         style="top: 64%; left: 65%; transform: translate(-50%, -50%)" title="1루수"></button>
-      <button id="pos-2b" class="absolute bg-red-500 w-8 h-8 rounded-full border-2 border-white"
+      <button id="pos-2b" class="absolute bg-blue-500 w-8 h-8 rounded-full border-2 border-white"
         style="top: 50%; left: 60%; transform: translate(-50%, -50%)" title="2루수"></button>
-      <button id="pos-3b" class="absolute bg-blue-200 w-8 h-8 rounded-full border-2 border-white"
+      <button id="pos-3b" class="absolute bg-blue-500 w-8 h-8 rounded-full border-2 border-white"
         style="top: 64%; left: 35%; transform: translate(-50%, -50%)" title="3루수"></button>
-      <button id="pos-ss" class="absolute bg-yellow-700 w-8 h-8 rounded-full border-2 border-white"
+      <button id="pos-ss" class="absolute bg-blue-500 w-8 h-8 rounded-full border-2 border-white"
         style="top: 50%; left: 40%; transform: translate(-50%, -50%)" title="유격수"></button>
-      <button id="pos-lf" class="absolute bg-purple-500 w-8 h-8 rounded-full border-2 border-white"
+      <button id="pos-lf" class="absolute bg-blue-500 w-8 h-8 rounded-full border-2 border-white"
         style="top: 35%; left: 25%; transform: translate(-50%, -50%)" title="좌익수"></button>
-      <button id="pos-cf" class="absolute bg-pink-600 w-8 h-8 rounded-full border-2 border-white"
+      <button id="pos-cf" class="absolute bg-blue-500 w-8 h-8 rounded-full border-2 border-white"
         style="top: 25%; left: 50%; transform: translate(-50%, -50%)" title="중견수"></button>
-      <button id="pos-rf" class="absolute bg-red-200 w-8 h-8 rounded-full border-2 border-white"
+      <button id="pos-rf" class="absolute bg-blue-500 w-8 h-8 rounded-full border-2 border-white"
         style="top: 35%; left: 80%; transform: translate(-50%, -50%)" title="우익수"></button>
      </div>
 
@@ -133,8 +154,8 @@ body {
 
       <h3 class="text-xl font-semibold mt-6 text-center text-gray-600">대표 선수</h3>
       <div class="swiper playerSwiper mt-4 w-full">
-        <div class="swiper-wrapper" id="player-slide-wrapper" style="min-height: 150px;"></div>
-        <div class="swiper-pagination"></div>
+        <div class="swiper-wrapper" id="player-slide-wrapper" style="min-height: 150px; padding: 15px;"></div>
+
       </div>
     </div>
   </div>
@@ -143,8 +164,8 @@ body {
  <div class="quiz-container flex max-w-6xl mx-auto mb-6 gap-6">
 
   <!-- 왼쪽: 동영상 -->
-  <div class="quiz-container rounded-xl shadow-lg p-6 bg-white flex flex-col max-w-6xl mx-auto mb-6 gap-6">
-   <h2 class="text-xl font-bold">아구 룰</h2>
+  <div class="quiz-container rounded-xl shadow-lg p-6 bg-white flex flex-col max-w-6xl mx-auto mb-6 gap-6"  style ="height:300px;">
+   <h2 class="text-m font-bold">야구의 룰을 알아보아요!</h2>
     <iframe
       width="100%"
       height="240"
@@ -158,7 +179,7 @@ body {
   </div>
 
   <!-- 가운데: 이미지/움짤 -->
-  <div id="quiz-image" class="w-1/3 flex items-center justify-center bg-gray-50 rounded-xl shadow p-4">
+  <div id="quiz-image" class="w-1/3 flex items-center justify-center bg-gray-50 rounded-xl shadow p-4" style ="height:300px;">
     <img src="default-image.jpg" alt="퀴즈 상황 이미지" class="max-h-48 rounded" />
   </div>
 
@@ -167,13 +188,13 @@ body {
     <div class="swiper-wrapper">
   
   <!-- 카드 6: ABS -->
-<div class="swiper-slide">
-  <div class="card w-full h-64 bg-white rounded-xl shadow-lg p-6 flex flex-col items-center justify-center relative cursor-pointer" onclick="flipCard(this)">
-    <div class="card-front absolute w-full h-full flex flex-col items-center justify-center backface-hidden">
-      <h2 class="text-xl font-bold mb-4">⚾ 스트라이크와 볼을 심판 대신 누가 판정할까요?</h2>
+<div class="swiper-slide" >
+  <div style ="height:300px; padding: 10px;" class="card w-full h-64 bg-white rounded-xl shadow-lg p-6 flex flex-col items-center justify-center relative cursor-pointer" onclick="flipCard(this)">
+    <div  style ="padding: 10px;"class="text-center card-front absolute w-full h-full flex flex-col items-center justify-center backface-hidden">
+      <h2 class="text-xl font-bold mb-4">⚾ 스트라이크와 볼을 판정해주는 기계의 이름은 무엇일까요?</h2>
       <p class="text-sm text-gray-500">(카드를 클릭해보세요!)</p>
     </div>
-    <div class="card-back absolute w-full h-full flex flex-col items-center justify-center rotate-y-180 hidden">
+    <div style ="padding: 10px;" class="text-center card-back absolute w-full h-full flex flex-col items-center justify-center rotate-y-180 hidden">
       <h2 class="text-xl font-bold text-green-600 mb-2">👉 ABS (자동 판정 시스템)</h2>
       <p class="text-gray-600">센서와 시스템이 공 위치를 감지해 스트라이크/볼을 자동으로 판정해요</p>
     </div>
@@ -182,13 +203,13 @@ body {
 
 <!-- 카드 7: 스트라이크 -->
 <div class="swiper-slide">
-  <div class="card w-full h-64 bg-white rounded-xl shadow-lg p-6 flex flex-col items-center justify-center relative cursor-pointer" onclick="flipCard(this)">
-    <div class="card-front absolute w-full h-full flex flex-col items-center justify-center backface-hidden">
-      <h2 class="text-xl font-bold mb-4">⚾ 스트라이크 존을 통과한 공! 뭐라고 할까요?</h2>
+  <div style ="height:300px; padding: 10px;" class="card w-full h-64 bg-white rounded-xl shadow-lg p-6 flex flex-col items-center justify-center relative cursor-pointer" onclick="flipCard(this)">
+    <div  style ="padding: 10px;"class="text-center card-front absolute w-full h-full flex flex-col items-center justify-center backface-hidden">
+      <h2 class="text-xl font-bold mb-4">⚾ 타자가 배트를 휘둘렀는데 공이 맞지 않았어요. <br> 이런상황을 뭐라고 할까요?</h2>
       <p class="text-sm text-gray-500">(카드를 클릭해보세요!)</p>
     </div>
-    <div class="card-back absolute w-full h-full flex flex-col items-center justify-center rotate-y-180 hidden">
-      <h2 class="text-xl font-bold text-green-600 mb-2">👉 스트라이크</h2>
+    <div style ="padding: 10px;" class="text-center card-back absolute w-full h-full flex flex-col items-center justify-center rotate-y-180 hidden">
+      <h2 class="text-xl font-bold text-green-600 mb-2">👉스트라이크(헛스윙)</h2>
       <p class="text-gray-600">공이 스트라이크 존을 통과하거나, 타자가 헛스윙하면 스트라이크!</p>
     </div>
   </div>
@@ -196,12 +217,12 @@ body {
 
 <!-- 카드 8: 볼 -->
 <div class="swiper-slide">
-  <div class="card w-full h-64 bg-white rounded-xl shadow-lg p-6 flex flex-col items-center justify-center relative cursor-pointer" onclick="flipCard(this)">
-    <div class="card-front absolute w-full h-full flex flex-col items-center justify-center backface-hidden">
-      <h2 class="text-xl font-bold mb-4">⚾ 타자가 치지 않았고, 공이 스트존을 벗어났어요!</h2>
+  <div style ="height:300px; padding: 10px;" class="card w-full h-64 bg-white rounded-xl shadow-lg p-6 flex flex-col items-center justify-center relative cursor-pointer" onclick="flipCard(this)">
+    <div  style ="padding: 10px;"class="text-center card-front absolute w-full h-full flex flex-col items-center justify-center backface-hidden">
+      <h2 class="text-xl font-bold mb-4">⚾ 타자가 배트를 휘두르지 않있고, 공이 스트존을 벗어난 상황을 뭐라고 할까요?</h2>
       <p class="text-sm text-gray-500">(카드를 클릭해보세요!)</p>
     </div>
-    <div class="card-back absolute w-full h-full flex flex-col items-center justify-center rotate-y-180 hidden">
+    <div style ="padding: 10px;" class="text-center card-back absolute w-full h-full flex flex-col items-center justify-center rotate-y-180 hidden">
       <h2 class="text-xl font-bold text-green-600 mb-2">👉 볼</h2>
       <p class="text-gray-600">스트라이크 존을 벗어난 공이에요. 4개 모이면 볼넷이 됩니다.</p>
     </div>
@@ -210,12 +231,12 @@ body {
 
 <!-- 카드 3: 삼진아웃 -->
 <div class="swiper-slide">
-  <div class="card w-full h-64 bg-white rounded-xl shadow-lg p-6 flex flex-col items-center justify-center relative cursor-pointer" onclick="flipCard(this)">
-    <div class="card-front absolute w-full h-full flex flex-col items-center justify-center backface-hidden">
-      <h2 class="text-xl font-bold mb-4">⚾ 스트라이크를 세 번 당한 타자! 어떻게 될까요?</h2>
+  <div style ="height:300px; padding: 10px;" class="text-center card w-full h-64 bg-white rounded-xl shadow-lg p-6 flex flex-col items-center justify-center relative cursor-pointer" onclick="flipCard(this)">
+    <div  style ="padding: 10px;"class="card-front absolute w-full h-full flex flex-col items-center justify-center backface-hidden">
+      <h2 class="text-xl font-bold mb-4">⚾ 스트라이크를 세 번 당한 타자! <br> 어떻게 될까요?</h2>
       <p class="text-sm text-gray-500">(카드를 클릭해보세요!)</p>
     </div>
-    <div class="card-back absolute w-full h-full flex flex-col items-center justify-center rotate-y-180 hidden">
+    <div style ="padding: 10px;" class="text-center card-back absolute w-full h-full flex flex-col items-center justify-center rotate-y-180 hidden">
       <h2 class="text-xl font-bold text-green-600 mb-2">👉 삼진아웃</h2>
       <p class="text-gray-600">스트라이크 3번이면 타자는 아웃! 스윙을 하든 말든 세 번이면 끝이에요.</p>
     </div>
@@ -224,12 +245,12 @@ body {
 
 <!-- 카드 2: 플라이볼 -->
 <div class="swiper-slide">
-  <div class="card w-full h-64 bg-white rounded-xl shadow-lg p-6 flex flex-col items-center justify-center relative cursor-pointer" onclick="flipCard(this)">
-    <div class="card-front absolute w-full h-full flex flex-col items-center justify-center backface-hidden">
-      <h2 class="text-xl font-bold mb-4">⚾ 공이 높이 떠서 바운드 없이 야수가 바로 잡았어요. 이건?</h2>
+ <div style ="height:300px; padding: 10px;" class="text-center card w-full h-64 bg-white rounded-xl shadow-lg p-6 flex flex-col items-center justify-center relative cursor-pointer" onclick="flipCard(this)">
+    <div  style ="padding: 10px;"class="card-front absolute w-full h-full flex flex-col items-center justify-center backface-hidden">
+      <h2 class="text-xl font-bold mb-4">⚾ 공이 높이 떠서 바운드 없이 야수가 바로 잡은 상황은 뭐라고 할까요?</h2>
       <p class="text-sm text-gray-500">(카드를 클릭해보세요!)</p>
     </div>
-    <div class="card-back absolute w-full h-full flex flex-col items-center justify-center rotate-y-180 hidden">
+    <div style ="padding: 10px;" class="text-center card-back absolute w-full h-full flex flex-col items-center justify-center rotate-y-180 hidden">
       <h2 class="text-xl font-bold text-green-600 mb-2">👉 플라이볼 (Fly Ball)</h2>
       <p class="text-gray-600">타구가 공중으로 높이 뜨고 야수에게 바로 잡히는 경우예요. 아웃될 가능성이 높아요.</p>
     </div>
@@ -238,12 +259,12 @@ body {
 
 <!-- 카드 4: 땅볼 -->
 <div class="swiper-slide">
-  <div class="card w-full h-64 bg-white rounded-xl shadow-lg p-6 flex flex-col items-center justify-center relative cursor-pointer" onclick="flipCard(this)">
-    <div class="card-front absolute w-full h-full flex flex-col items-center justify-center backface-hidden">
-      <h2 class="text-xl font-bold mb-4">⚾ 타구가 땅을 굴러가요! 어떤 타구일까요?</h2>
+ <div style ="height:300px; padding: 10px;" class="card w-full h-64 bg-white rounded-xl shadow-lg p-6 flex flex-col items-center justify-center relative cursor-pointer" onclick="flipCard(this)">
+    <div  style ="padding: 10px;"class="text-center card-front absolute w-full h-full flex flex-col items-center justify-center backface-hidden">
+      <h2 class="text-xl font-bold mb-4">⚾ 타구가 배트를 맞고 낮게 땅으로 굴러가요! <br> 어떤 타구일까요?</h2>
       <p class="text-sm text-gray-500">(카드를 클릭해보세요!)</p>
     </div>
-    <div class="card-back absolute w-full h-full flex flex-col items-center justify-center rotate-y-180 hidden">
+    <div style ="padding: 10px;" class="text-center card-back absolute w-full h-full flex flex-col items-center justify-center rotate-y-180 hidden">
       <h2 class="text-xl font-bold text-green-600 mb-2">👉 땅볼 (Ground Ball)</h2>
       <p class="text-gray-600">공이 땅바닥을 구르며 굴러가는 타구예요. 내야수가 잡기 좋아요.</p>
     </div>
@@ -252,12 +273,12 @@ body {
 
 <!-- 카드 5: 볼넷 -->
 <div class="swiper-slide">
-  <div class="card w-full h-64 bg-white rounded-xl shadow-lg p-6 flex flex-col items-center justify-center relative cursor-pointer" onclick="flipCard(this)">
-    <div class="card-front absolute w-full h-full flex flex-col items-center justify-center backface-hidden">
-      <h2 class="text-xl font-bold mb-4">⚾ 스트라이크 존을 벗어난 공이 4개! 타자는?</h2>
+  <div style ="height:300px; padding: 10px;" class="card w-full h-64 bg-white rounded-xl shadow-lg p-6 flex flex-col items-center justify-center relative cursor-pointer" onclick="flipCard(this)">
+    <div  style ="padding: 10px;"class="text-center card-front absolute w-full h-full flex flex-col items-center justify-center backface-hidden">
+      <h2 class="text-xl font-bold mb-4">⚾ 한 타자에게 스트라이크를 벗어나는 공이 네번 왔어요 <br> 무슨 상황일까요?</h2>
       <p class="text-sm text-gray-500">(카드를 클릭해보세요!)</p>
     </div>
-    <div class="card-back absolute w-full h-full flex flex-col items-center justify-center rotate-y-180 hidden">
+    <div style ="padding: 10px;" class="text-center card-back absolute w-full h-full flex flex-col items-center justify-center rotate-y-180 hidden">
       <h2 class="text-xl font-bold text-green-600 mb-2">👉 볼넷 (Base on Balls)</h2>
       <p class="text-gray-600">스트라이크 존을 벗어난 공이 4개면 1루로 걸어나갈 수 있어요.</p>
     </div>
@@ -266,12 +287,12 @@ body {
 
 <!-- 카드 9: 홈런 -->
 <div class="swiper-slide">
-  <div class="card w-full h-64 bg-white rounded-xl shadow-lg p-6 flex flex-col items-center justify-center relative cursor-pointer" onclick="flipCard(this)">
-    <div class="card-front absolute w-full h-full flex flex-col items-center justify-center backface-hidden">
-      <h2 class="text-xl font-bold mb-4">⚾ 공이 외야 담장을 넘었어요! 이건?</h2>
+  <div style ="height:300px; padding: 10px;" class="card w-full h-64 bg-white rounded-xl shadow-lg p-6 flex flex-col items-center justify-center relative cursor-pointer" onclick="flipCard(this)">
+    <div  style ="padding: 10px;"class="text-center card-front absolute w-full h-full flex flex-col items-center justify-center backface-hidden">
+      <h2 class="text-xl font-bold mb-4">⚾ 공이 외야 담장을 넘었어요! <br> 무슨상황일까요?</h2>
       <p class="text-sm text-gray-500">(카드를 클릭해보세요!)</p>
     </div>
-    <div class="card-back absolute w-full h-full flex flex-col items-center justify-center rotate-y-180 hidden">
+    <div style ="padding: 10px;" class="text-center card-back absolute w-full h-full flex flex-col items-center justify-center rotate-y-180 hidden">
       <h2 class="text-xl font-bold text-green-600 mb-2">👉 홈런 (Home Run)</h2>
       <p class="text-gray-600">공이 외야 펜스를 넘기면 홈런! 모든 주자도 함께 점수 획득!</p>
     </div>
@@ -280,12 +301,12 @@ body {
 
 <!-- 카드 10: 도루 -->
 <div class="swiper-slide">
-  <div class="card w-full h-64 bg-white rounded-xl shadow-lg p-6 flex flex-col items-center justify-center relative cursor-pointer" onclick="flipCard(this)">
-    <div class="card-front absolute w-full h-full flex flex-col items-center justify-center backface-hidden">
-      <h2 class="text-xl font-bold mb-4">⚾ 타자가 치기 전 주자가 몰래 뛰었어요!</h2>
+  <div style ="height:300px; padding: 10px;" class="card w-full h-64 bg-white rounded-xl shadow-lg p-6 flex flex-col items-center justify-center relative cursor-pointer" onclick="flipCard(this)">
+    <div  style ="padding: 10px;"class="text-center card-front absolute w-full h-full flex flex-col items-center justify-center backface-hidden">
+      <h2 class="text-xl font-bold mb-4">⚾ 타자가 공을 치기 전 주자가 몰래 뛰었어요!</h2>
       <p class="text-sm text-gray-500">(카드를 클릭해보세요!)</p>
     </div>
-    <div class="card-back absolute w-full h-full flex flex-col items-center justify-center rotate-y-180 hidden">
+    <div style ="padding: 10px;" class="text-center card-back absolute w-full h-full flex flex-col items-center justify-center rotate-y-180 hidden">
       <h2 class="text-xl font-bold text-green-600 mb-2">👉 도루 (Stolen Base)</h2>
       <p class="text-gray-600">주자가 타자 없이 다음 루로 달려 세이프가 되면 도루 성공이에요.</p>
     </div>
@@ -294,12 +315,12 @@ body {
 
     <!-- 카드 1: 주루사 -->
 <div class="swiper-slide">
-  <div class="card w-full h-64 bg-white rounded-xl shadow-lg p-6 flex flex-col items-center justify-center relative cursor-pointer" onclick="flipCard(this)">
-    <div class="card-front absolute w-full h-full flex flex-col items-center justify-center backface-hidden">
-      <h2 class="text-xl font-bold mb-4">⚾ 주자가 도루나 진루하다가 아웃! 이 상황은?</h2>
+  <div style ="height:300px; padding: 10px;" class="card w-full h-64 bg-white rounded-xl shadow-lg p-6 flex flex-col items-center justify-center relative cursor-pointer" onclick="flipCard(this)">
+    <div  style ="padding: 10px;"class="text-center card-front absolute w-full h-full flex flex-col items-center justify-center backface-hidden">
+      <h2 class="text-xl font-bold mb-4">⚾ 주자가 도루나 진루하다가 아웃되는 상황은?</h2>
       <p class="text-sm text-gray-500">(카드를 클릭해보세요!)</p>
     </div>
-    <div class="card-back absolute w-full h-full flex flex-col items-center justify-center rotate-y-180 hidden">
+    <div style ="padding: 10px;" class="text-center card-back absolute w-full h-full flex flex-col items-center justify-center rotate-y-180 hidden">
       <h2 class="text-xl font-bold text-green-600 mb-2">👉 주루사</h2>
       <p class="text-gray-600">주자가 도루나 진루 중에 수비수에게 잡혀서 아웃되는 걸 주루사라고 해요.</p>
     </div>
@@ -308,12 +329,12 @@ body {
 
 <!-- 카드 11: 더블플레이 -->
 <div class="swiper-slide">
-  <div class="card w-full h-64 bg-white rounded-xl shadow-lg p-6 flex flex-col items-center justify-center relative cursor-pointer" onclick="flipCard(this)">
-    <div class="card-front absolute w-full h-full flex flex-col items-center justify-center backface-hidden">
+  <div style ="height:300px; padding: 10px;" class="card w-full h-64 bg-white rounded-xl shadow-lg p-6 flex flex-col items-center justify-center relative cursor-pointer" onclick="flipCard(this)">
+    <div  style ="padding: 10px;"class="text-center card-front absolute w-full h-full flex flex-col items-center justify-center backface-hidden">
       <h2 class="text-xl font-bold mb-4">⚾ 한 선수가 공을 쳤는데 두명의 선수가 아웃된 상황은 무엇일까요?</h2>
       <p class="text-sm text-gray-500">(카드를 클릭해보세요!)</p>
     </div>
-    <div class="card-back absolute w-full h-full flex flex-col items-center justify-center rotate-y-180 hidden">
+    <div style ="padding: 10px;" class="text-center card-back absolute w-full h-full flex flex-col items-center justify-center rotate-y-180 hidden">
       <h2 class="text-xl font-bold text-green-600 mb-2">👉 더블플레이 (Double Play), 병살</h2>
       <p class="text-gray-600">수비수가 두 명의 주자를 연속으로 아웃시키는 플레이예요!<br/>수비하는 팀에게는 더블플레이, 공격팀 입장에서는 병살이라고 불립니다.</p>
     </div>
@@ -322,12 +343,12 @@ body {
 
 <!-- 카드 12: 번트 -->
 <div class="swiper-slide">
-  <div class="card w-full h-64 bg-white rounded-xl shadow-lg p-6 flex flex-col items-center justify-center relative cursor-pointer" onclick="flipCard(this)">
-    <div class="card-front absolute w-full h-full flex flex-col items-center justify-center backface-hidden">
-      <h2 class="text-xl font-bold mb-4">⚾ 타자가 배트를 살짝 대서 공을 굴렸어요!</h2>
+  <div style ="height:300px; padding: 10px;" class="card w-full h-64 bg-white rounded-xl shadow-lg p-6 flex flex-col items-center justify-center relative cursor-pointer" onclick="flipCard(this)">
+    <div  style ="padding: 10px;"class="text-center card-front absolute w-full h-full flex flex-col items-center justify-center backface-hidden">
+      <h2 class="text-xl font-bold mb-4">⚾ 타자가 배트를 살짝 대서 공을 굴렸어요! <br> 무슨상황일까요?</h2>
       <p class="text-sm text-gray-500">(카드를 클릭해보세요!)</p>
     </div>
-    <div class="card-back absolute w-full h-full flex flex-col items-center justify-center rotate-y-180 hidden">
+    <div style ="padding: 10px;" class="text-center card-back absolute w-full h-full flex flex-col items-center justify-center rotate-y-180 hidden">
       <h2 class="text-xl font-bold text-green-600 mb-2">👉 번트 (Bunt)</h2>
       <p class="text-gray-600">스윙하지 않고 배트를 가만히 대서 공을 굴리는 작전이에요. 주자 진루에 효과적이에요!</p>
     </div>
@@ -336,12 +357,12 @@ body {
 
 <!-- 카드 13: 강공전환 -->
 <div class="swiper-slide">
-  <div class="card w-full h-64 bg-white rounded-xl shadow-lg p-6 flex flex-col items-center justify-center relative cursor-pointer" onclick="flipCard(this)">
-    <div class="card-front absolute w-full h-full flex flex-col items-center justify-center backface-hidden">
-      <h2 class="text-xl font-bold mb-4">⚾ 번트할 줄 알았는데 갑자기 크게 스윙했어요!</h2>
+  <div style ="height:300px; padding: 10px;" class="card w-full h-64 bg-white rounded-xl shadow-lg p-6 flex flex-col items-center justify-center relative cursor-pointer" onclick="flipCard(this)">
+    <div  style ="padding: 10px;"class="text-center card-front absolute w-full h-full flex flex-col items-center justify-center backface-hidden">
+      <h2 class="text-xl font-bold mb-4">⚾ 번트할 줄 알았는데 갑자기 크게 스윙했어요! <br> 무슨상황일까요?</h2>
       <p class="text-sm text-gray-500">(카드를 클릭해보세요!)</p>
     </div>
-    <div class="card-back absolute w-full h-full flex flex-col items-center justify-center rotate-y-180 hidden">
+    <div style ="padding: 10px;" class="text-center card-back absolute w-full h-full flex flex-col items-center justify-center rotate-y-180 hidden">
       <h2 class="text-xl font-bold text-green-600 mb-2">👉 강공 전환</h2>
       <p class="text-gray-600">번트하려는 척하다가 갑자기 강하게 스윙하는 전술이에요. 수비를 속이기 위한 작전이죠.</p>
     </div>
@@ -350,21 +371,18 @@ body {
 
 <!-- 카드 14: 사구 -->
 <div class="swiper-slide">
-  <div class="card w-full h-64 bg-white rounded-xl shadow-lg p-6 flex flex-col items-center justify-center relative cursor-pointer" onclick="flipCard(this)">
-    <div class="card-front absolute w-full h-full flex flex-col items-center justify-center backface-hidden">
-      <h2 class="text-xl font-bold mb-4">⚾ 투구가 타자 몸에 맞았어요! 이 상황은?</h2>
+   <div style ="height:300px; padding: 10px;" class="card w-full h-64 bg-white rounded-xl shadow-lg p-6 flex flex-col items-center justify-center relative cursor-pointer" onclick="flipCard(this)">
+    <div  style ="padding: 10px;"class="text-center card-front absolute w-full h-full flex flex-col items-center justify-center backface-hidden">
+      <h2 class="text-xl font-bold mb-4">⚾ 투구가 타자 몸에 맞았어요! <br> 무슨 상황일까요?</h2>
       <p class="text-sm text-gray-500">(카드를 클릭해보세요!)</p>
     </div>
-    <div class="card-back absolute w-full h-full flex flex-col items-center justify-center rotate-y-180 hidden">
+    <div style ="padding: 10px;" class="text-center card-back absolute w-full h-full flex flex-col items-center justify-center rotate-y-180 hidden">
       <h2 class="text-xl font-bold text-green-600 mb-2">👉 사구 (Hit by Pitch)</h2>
       <p class="text-gray-600">투구가 타자의 몸에 맞으면 타자는 1루로 걸어나가요. 주로 피하는 게 중요해요!</p>
     </div>
   </div>
 </div>
 
-    </div>
-    <div class="swiper-pagination quiz-pagination mt-4"></div>
-  </div>
 
 </div>
 

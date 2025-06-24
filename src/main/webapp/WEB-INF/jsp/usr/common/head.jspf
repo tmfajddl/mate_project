@@ -34,7 +34,7 @@ body {
   <div class="flex h-20 mx-auto items-center text-2xl" 
        style="background-color: #f7ecdc; padding: 20px; text-align: center; color: black">
        <img src="${pageContext.request.contextPath}/images/mark.png" alt="" class="h-20 mr-3 z-[1]" />
-    <a style="letter-spacing: -0.1rem;" class="text-4xl" href="${pageContext.request.contextPath}/">BenchClick</a>
+    <a style=" font-size: 2.5rem; font-weight: 700;  letter-spacing: -0.07em;" href="${pageContext.request.contextPath}/">BenchClick</a>
     <div class="flex-grow"></div>
 
     <ul class="flex">

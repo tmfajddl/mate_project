@@ -104,6 +104,36 @@ body {
 background-color: #f2d8b1;
 }
 
+  section {
+  min-height: 100vh;
+  position: relative;
+    z-index: 0;
+}
+.section-overlay {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(255, 255, 255, 0.5); /* 불투명도 조절 가능 */
+  z-index: 1;
+}
+
+
+/* section 안 콘텐츠는 오버레이보다 위에 있도록 */
+section > *:not(.section-overlay) {
+  position: relative;
+  z-index: 1;
+}
+
+.news-item:hover {
+  background-color: #fdf5ec;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+.active-filter {
+  background-color: #f2d8b1;
+  font-weight: bold;
+  box-shadow: 0 0 0 2px #e6be9d inset;
+}
+
 </style>
 <script>
 function filterNews(team) {
@@ -168,24 +198,112 @@ function filterNews(team) {
     </c:when>
 </c:choose>
 
+<div class="section-overlay"></div>
 <div style="width: 80%; margin: 20px auto 0 auto;">
-  <h2 style="font-size: 3em; font-weight: bold; color: #918c84; text-align: left; margin-left: 1%; margin-top: 40px;"> 최신 뉴스</h2>
+  <h2 style="font-size: 3em; font-weight: bold; color: black; text-align: left; margin-left: 1%; margin-top: 40px;"> 최신 뉴스</h2>
 </div>
 
   <div class="content-wrapper">
     <!-- 왼쪽 필터 -->
     <div class="filter-section">
-  <button class="filter-button" onclick="location.href='?team=전체&page=1'">전체</button>
-  <button class="filter-button" onclick="location.href='?team=한화&page=1'">한화 이글스</button>
-  <button class="filter-button" onclick="location.href='?team=두산&page=1'">두산 베어스</button>
-  <button class="filter-button" onclick="location.href='?team=롯데&page=1'">롯데 자이언츠</button>
-  <button class="filter-button" onclick="location.href='?team=LG&page=1'">LG 트윈스</button>
-  <button class="filter-button" onclick="location.href='?team=삼성&page=1'">삼성 라이온즈</button>
-  <button class="filter-button" onclick="location.href='?team=키움&page=1'">키움 히어로즈</button>
-  <button class="filter-button" onclick="location.href='?team=SSG&page=1'">SSG 랜더스</button>
-  <button class="filter-button" onclick="location.href='?team=NC&page=1'">NC 다이노스</button>
-  <button class="filter-button" onclick="location.href='?team=KT&page=1'">KT 위즈</button>
-  <button class="filter-button" onclick="location.href='?team=KIA&page=1'">KIA 타이거즈</button>
+  <c:choose>
+    <c:when test="${selectedTeam eq '전체'}">
+      <button class="filter-button active-filter">전체</button>
+    </c:when>
+    <c:otherwise>
+      <button class="filter-button" onclick="location.href='?team=전체&page=1'">전체</button>
+    </c:otherwise>
+  </c:choose>
+
+  <c:choose>
+    <c:when test="${selectedTeam eq '한화'}">
+      <button class="filter-button active-filter">한화 이글스</button>
+    </c:when>
+    <c:otherwise>
+      <button class="filter-button" onclick="location.href='?team=한화&page=1'">한화 이글스</button>
+    </c:otherwise>
+  </c:choose>
+
+  <c:choose>
+    <c:when test="${selectedTeam eq '두산'}">
+      <button class="filter-button active-filter">두산 베어스</button>
+    </c:when>
+    <c:otherwise>
+      <button class="filter-button" onclick="location.href='?team=두산&page=1'">두산 베어스</button>
+    </c:otherwise>
+  </c:choose>
+
+  <c:choose>
+    <c:when test="${selectedTeam eq '롯데'}">
+      <button class="filter-button active-filter">롯데 자이언츠</button>
+    </c:when>
+    <c:otherwise>
+      <button class="filter-button" onclick="location.href='?team=롯데&page=1'">롯데 자이언츠</button>
+    </c:otherwise>
+  </c:choose>
+
+  <c:choose>
+    <c:when test="${selectedTeam eq 'LG'}">
+      <button class="filter-button active-filter">LG 트윈스</button>
+    </c:when>
+    <c:otherwise>
+      <button class="filter-button" onclick="location.href='?team=LG&page=1'">LG 트윈스</button>
+    </c:otherwise>
+  </c:choose>
+
+  <c:choose>
+    <c:when test="${selectedTeam eq '삼성'}">
+      <button class="filter-button active-filter">삼성 라이온즈</button>
+    </c:when>
+    <c:otherwise>
+      <button class="filter-button" onclick="location.href='?team=삼성&page=1'">삼성 라이온즈</button>
+    </c:otherwise>
+  </c:choose>
+
+  <c:choose>
+    <c:when test="${selectedTeam eq '키움'}">
+      <button class="filter-button active-filter">키움 히어로즈</button>
+    </c:when>
+    <c:otherwise>
+      <button class="filter-button" onclick="location.href='?team=키움&page=1'">키움 히어로즈</button>
+    </c:otherwise>
+  </c:choose>
+
+  <c:choose>
+    <c:when test="${selectedTeam eq 'SSG'}">
+      <button class="filter-button active-filter">SSG 랜더스</button>
+    </c:when>
+    <c:otherwise>
+      <button class="filter-button" onclick="location.href='?team=SSG&page=1'">SSG 랜더스</button>
+    </c:otherwise>
+  </c:choose>
+
+  <c:choose>
+    <c:when test="${selectedTeam eq 'NC'}">
+      <button class="filter-button active-filter">NC 다이노스</button>
+    </c:when>
+    <c:otherwise>
+      <button class="filter-button" onclick="location.href='?team=NC&page=1'">NC 다이노스</button>
+    </c:otherwise>
+  </c:choose>
+
+  <c:choose>
+    <c:when test="${selectedTeam eq 'KT'}">
+      <button class="filter-button active-filter">KT 위즈</button>
+    </c:when>
+    <c:otherwise>
+      <button class="filter-button" onclick="location.href='?team=KT&page=1'">KT 위즈</button>
+    </c:otherwise>
+  </c:choose>
+
+  <c:choose>
+    <c:when test="${selectedTeam eq 'KIA'}">
+      <button class="filter-button active-filter">KIA 타이거즈</button>
+    </c:when>
+    <c:otherwise>
+      <button class="filter-button" onclick="location.href='?team=KIA&page=1'">KIA 타이거즈</button>
+    </c:otherwise>
+  </c:choose>
 </div>
 
     <!-- 뉴스 리스트 -->
@@ -219,7 +337,7 @@ function filterNews(team) {
 <c:forEach var="i" begin="${startPage}" end="${endPage}">
   <c:choose>
     <c:when test="${i == currentPage}">
-      <span style="margin: 0 5px; font-weight: bold; color: #918c84;">${i}</span>
+      <span style="margin: 0 5px; font-weight: bold; color: white; background-color: #f2d8b1; padding: 4px 8px; border-radius: 5px;">${i}</span>
     </c:when>
     <c:otherwise>
       <a href="?team=${selectedTeam}&page=${i}" style="margin: 0 5px; color: #555; text-decoration: none;">${i}</a>
@@ -233,9 +351,6 @@ function filterNews(team) {
 </c:if>
 </div>
 
-  <div class="left-controls flex items-center gap-4 mt-4" style="justify-content:flex-start;">
-    <button class="btn-back btn btn-ghost" type="button" onclick="history.back();">뒤로가기</button>
-  </div>
 </section>
 </body>
 </html>

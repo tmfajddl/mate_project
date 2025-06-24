@@ -14,6 +14,14 @@ body {
   min-height: 100vh;
 }
 
+.table-container {
+  width: 80%;
+  margin: 0 auto;
+  min-height: 600px; /* 적절한 높이로 설정 */
+  padding-bottom: 40px;
+  transition: min-height 0.3s;
+}
+
 /* 입력 필드 스타일 */
 input.input,
 #nameSearch,
@@ -77,6 +85,7 @@ h1 {
 
 /* 테이블 전체 */
 table {
+margin: 0 auto;
    width: 80%;
         border-collapse: collapse;
         background-color: white;
@@ -87,6 +96,7 @@ table {
 /* 테이블 헤더 및 셀 */
 th, td {
   text-align: center;
+   vertical-align: top;
         padding: 10px;
 }
  thead {
@@ -94,7 +104,7 @@ th, td {
       }
 /* 마우스 hover 시 행 */
 tr:hover:not(#chartRow):not(#noDataRow) {
-  background-color: #f2d8b1;
+  background-color: #fdf5ec;
   cursor: pointer;
 }
 
@@ -167,8 +177,23 @@ form.inline {
 .filter-bar button {
   font-size: 14px;
 }
-section {
+  section {
   min-height: 100vh;
+  position: relative;
+    z-index: 0;
+}
+.section-overlay {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(255, 255, 255, 0.5); /* 불투명도 조절 가능 */
+  z-index: 1;
+}
+
+
+/* section 안 콘텐츠는 오버레이보다 위에 있도록 */
+section > *:not(.section-overlay) {
+  position: relative;
+  z-index: 1;
 }
 
 tr.selected {
@@ -177,11 +202,13 @@ tr.selected {
 
 /* 3. 페이지 번호 강조 */
 .pagination strong {
-  font-weight: bold;
-  color: #cfa96f;
-  font-size: 18px;
-  padding: 0 8px;
-  bord
+margin: 0 5px; 
+font-weight: bold; 
+color: white; 
+background-color: #f2d8b1; 
+padding: 4px 8px; 
+border-radius: 5px;
+}
 </style>
 
 
@@ -235,7 +262,11 @@ tr.selected {
     </c:when>
 </c:choose>
 
-    <h1>KBO 선수 목록</h1>
+<div class="section-overlay"></div>
+
+<div style="width: 80%; margin: 20px auto 0 auto;">
+  <h2 style="font-size: 3em; font-weight: bold; color: black; text-align: center; margin-left: 1%; margin-top: 40px;"> 전력 분석</h2>
+</div>
 
     <!-- 검색 및 필터 영역 감싸기 -->
 <div class="filter-bar">
@@ -244,7 +275,7 @@ tr.selected {
   <input type="text" id="nameSearch" name="keyword" placeholder="이름을 입력하세요" value="${param.keyword}" />
 
   <!-- 팀 선택 -->
-  <form method="get" action="/usr/home/test" class="inline">
+  <form method="get" action="/usr/project/player" class="inline">
     <input type="hidden" name="type" value="${type}" />
     <input type="hidden" name="page" value="1" />
     <label for="teamSelect">팀 선택:</label>
@@ -273,7 +304,7 @@ tr.selected {
     <button type="submit" class="btn ${type == '투수' ? 'active' : ''}">투수</button>
   </form>
 </div>
-
+<div class="table-container">
     <!-- 선수 표 -->
     <table>
         <thead>
@@ -330,7 +361,7 @@ tr.selected {
             <a href="/usr/project/player?teamIndex=${teamIndex}&type=${type}&page=${endPage + 1}">다음</a>
         </c:if>
     </div>
-      
+      </div>
     </section>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
@@ -404,6 +435,18 @@ function loadPlayerStats(playerId, type, rowElement) {
           { label: '삼진(SO)', data: data.map(d => parseInt(d.so)), borderColor: 'green', backgroundColor: 'rgba(0,255,0,0.1)', yAxisID: 'y', fill: false, hidden: true }
         ];
       }
+      
+      datasets = datasets.map((ds, i) => {
+    	  ds.originalBorderColor = ds.borderColor;
+    	  ds.originalBackgroundColor = ds.backgroundColor;
+
+    	  if (ds.hidden) {
+    	    ds.borderColor = 'rgba(128,128,128,0.5)';
+    	    ds.backgroundColor = 'rgba(200,200,200,0.2)';
+    	  }
+
+    	  return ds;
+    	});
 
       if (chartInstance) chartInstance.destroy();
 
