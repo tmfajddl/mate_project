@@ -5,9 +5,10 @@
 
 <!DOCTYPE html>
 <html lang="en">
-<head>
   <style>
+  
     .btn-back {
+    margin-top: 30px;
       background: none;
       border: none;
       cursor: pointer;
@@ -62,7 +63,7 @@
     }
 
     .news-title {
-      font-size: 1.25rem;
+      font-size: 2rem;
       font-weight: bold;
       text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
     }
@@ -106,7 +107,7 @@ section {
     border-radius: 15px;
     padding: 20px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    width: 50%; /* 부모 컨테이너 너비의 절반 */
+    width: 40%; /* 부모 컨테이너 너비의 절반 */
     overflow-x: auto; /* 테이블 가로 스크롤 방지용 */
   }
 
@@ -139,7 +140,7 @@ section {
 
 body {
   font-family: 'Ownglyph_ParkDaHyun', sans-serif;
-  
+  font-size: 1.25rem;
 }
   
   

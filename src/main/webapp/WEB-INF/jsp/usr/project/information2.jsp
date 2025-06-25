@@ -33,7 +33,7 @@ body {
 }
 .content-wrapper {
   display: flex;
-  width: 90%;
+  width: 70%;
   height: 90%;
   background-color: rgb(255, 255, 255);
   border-radius: 20px;
@@ -200,7 +200,7 @@ function filterNews(team) {
 
 <div class="section-overlay"></div>
 <div style="width: 80%; margin: 20px auto 0 auto;">
-  <h2 style="font-size: 3em; font-weight: bold; color: black; text-align: left; margin-left: 1%; margin-top: 40px;"> 최신 뉴스</h2>
+  <h2 style="font-size: 3em; font-weight: bold; color: black; text-align: left; margin-left: 6%; margin-top: 40px;"> 최신 뉴스</h2>
 </div>
 
   <div class="content-wrapper">

@@ -7,6 +7,7 @@
 <html lang="en">
 <head>
     <style>
+    
     body {
       font-family: 'Segoe UI', sans-serif;
       margin: 0;
@@ -126,24 +127,50 @@
     <div class="relative" style="width: 40vw; min-width: 320px;">
       <img src="/images/base.jpg" alt="야구장" class="w-full h-auto rounded-lg shadow" />
 
-      <button id="pos-p" class="absolute bg-blue-500 w-8 h-8 rounded-full border-2 border-white"
-        style="top: 63%; left: 50%; transform: translate(-50%, -50%)" title="투수"></button>
-      <button id="pos-c" class="absolute bg-blue-500 w-8 h-8 rounded-full border-2 border-white"
-        style="top: 78%; left: 50%; transform: translate(-50%, -50%)" title="포수"></button>
-      <button id="pos-1b" class="absolute bg-blue-500 w-8 h-8 rounded-full border-2 border-white"
-        style="top: 64%; left: 65%; transform: translate(-50%, -50%)" title="1루수"></button>
-      <button id="pos-2b" class="absolute bg-blue-500 w-8 h-8 rounded-full border-2 border-white"
-        style="top: 50%; left: 60%; transform: translate(-50%, -50%)" title="2루수"></button>
-      <button id="pos-3b" class="absolute bg-blue-500 w-8 h-8 rounded-full border-2 border-white"
-        style="top: 64%; left: 35%; transform: translate(-50%, -50%)" title="3루수"></button>
-      <button id="pos-ss" class="absolute bg-blue-500 w-8 h-8 rounded-full border-2 border-white"
-        style="top: 50%; left: 40%; transform: translate(-50%, -50%)" title="유격수"></button>
-      <button id="pos-lf" class="absolute bg-blue-500 w-8 h-8 rounded-full border-2 border-white"
-        style="top: 35%; left: 25%; transform: translate(-50%, -50%)" title="좌익수"></button>
-      <button id="pos-cf" class="absolute bg-blue-500 w-8 h-8 rounded-full border-2 border-white"
-        style="top: 25%; left: 50%; transform: translate(-50%, -50%)" title="중견수"></button>
-      <button id="pos-rf" class="absolute bg-blue-500 w-8 h-8 rounded-full border-2 border-white"
-        style="top: 35%; left: 80%; transform: translate(-50%, -50%)" title="우익수"></button>
+     <button id="pos-p" class="absolute w-12 h-12 rounded-full p-0" 
+        style="top: 61%; left: 50%; transform: translate(-50%, -50%);" title="투수">
+  <img src="/images/p.png" alt="투수" style="width:100%; height:100%;">
+</button>
+
+      <<button id="pos-c" class="absolute w-12 h-12 rounded-full p-0"
+        style="top: 76%; left: 50%; transform: translate(-50%, -50%)" title="포수">
+  <img src="/images/c.png" alt="포수" style="width: 100%; height: 100%;">
+</button>
+
+<button id="pos-1b" class="absolute w-12 h-12 rounded-full p-0"
+        style="top: 62%; left: 65%; transform: translate(-50%, -50%)" title="1루수">
+  <img src="/images/1s.png" alt="1루수" style="width: 100%; height: 100%;">
+</button>
+
+<button id="pos-2b" class="absolute w-12 h-12 rounded-full p-0"
+        style="top: 48%; left: 60%; transform: translate(-50%, -50%)" title="2루수">
+  <img src="/images/2s.png" alt="2루수" style="width: 100%; height: 100%;">
+</button>
+
+<button id="pos-3b" class="absolute w-12 h-12 rounded-full p-0"
+        style="top: 62%; left: 35%; transform: translate(-50%, -50%)" title="3루수">
+  <img src="/images/3s.png" alt="3루수" style="width: 100%; height: 100%;">
+</button>
+
+<button id="pos-ss" class="absolute w-12 h-12 rounded-full p-0"
+        style="top: 48%; left: 40%; transform: translate(-50%, -50%)" title="유격수">
+  <img src="/images/ss.png" alt="유격수" style="width: 100%; height: 100%;">
+</button>
+
+<button id="pos-lf" class="absolute w-12 h-12 rounded-full p-0"
+        style="top: 33%; left: 25%; transform: translate(-50%, -50%)" title="좌익수">
+  <img src="/images/lf.png" alt="좌익수" style="width: 100%; height: 100%;">
+</button>
+
+<button id="pos-cf" class="absolute w-12 h-12 rounded-full p-0"
+        style="top: 23%; left: 50%; transform: translate(-50%, -50%)" title="중견수">
+  <img src="/images/f.png" alt="중견수" style="width: 100%; height: 100%;">
+</button>
+
+<button id="pos-rf" class="absolute w-12 h-12 rounded-full p-0"
+        style="top: 33%; left: 80%; transform: translate(-50%, -50%)" title="우익수">
+  <img src="/images/rf.png" alt="우익수" style="width: 100%; height: 100%;">
+</button>
      </div>
 
     <!-- 설명 영역 -->

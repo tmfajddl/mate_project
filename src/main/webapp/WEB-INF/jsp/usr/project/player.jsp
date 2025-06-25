@@ -6,7 +6,6 @@
 <style>
 /* 기본 폰트 및 배경 색상 */
 body {
-  font-family: 'Ownglyph_ParkDaHyun', sans-serif;
   background-color: #f7f0e9;
   margin: 0;
   padding: 0;
@@ -465,7 +464,7 @@ function loadPlayerStats(playerId, type, rowElement) {
     	            return ci.isDatasetVisible(index) ? context.dataset.borderColor : 'gray';
     	          },
     	          font: {
-    	            size: 14,
+    	            size: 10,
     	            weight: 'bold'
     	          },
     	          padding: 20,// 범례 항목 간 간격

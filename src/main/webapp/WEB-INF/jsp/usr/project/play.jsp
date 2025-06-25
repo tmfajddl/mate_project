@@ -250,7 +250,7 @@
       </c:otherwise>
     </c:choose>
   </div>
-
+<c:if test="${rq.isLogined()}">
   <!-- 선수 일상 -->
   <div style="background-color: #f7f0e9;" class="video-slider-wrapper">
     <h2>${rq.loginedTeam} 선수 일상</h2>
@@ -281,7 +281,7 @@
       </c:otherwise>
     </c:choose>
   </div>
-
+</c:if>
   <script>
     function slideVideosById(sliderId, direction) {
       const slider = document.getElementById(sliderId);

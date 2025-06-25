@@ -21,101 +21,141 @@
 <!-- 데이지 UI -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/daisyui/4.12.23/full.css" />
 
-<link href="https://cdn.jsdelivr.net/gh/projectnoonnu/2411-3@1.0/index.css" rel="stylesheet">
 <style>
 body {
-  font-family: 'Ownglyph_ParkDaHyun', sans-serif;
+  font-family: 'LeeSeoyun', sans-serif !important;
 }
+
+/*노말라이징*/
+ul,
+li {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+a {
+  color: inherit;
+  text-decoration: inherit;
+  }
+
+
+.header > a {
+  font-size: 7rem;
+  letter-spacing: -0.2rem;
+  font-weight: bold;
+}
+
+.menu {
+  display: flex;
+}
+
+.menu > ul {
+  width: 100vw;
+  display: flex;
+  justify-content:space-around;
+  
+}
+
+.menu > ul > li {
+  display: inline-block;
+  box-sizing: border-box;
+   width: calc(100% / 7);
+}
+
+
+
+.menu > ul > li > a {
+  font-size: 1.5rem;
+  font-weight: bold;
+  display: none;
+  text-align: center;
+  background-color: #f7f0e9;
+}
+
+.menu > ul > li > a:nth-child(1) {
+  display: block;
+}
+
+.menu > ul > li:hover > a:nth-child(1) {
+  color: #782d0b;
+  border-bottom: 3px solid #782d0b;
+}
+
+.menu > ul > li:hover > a {
+  display: block;
+  position: relative;
+  bottom: 10px;
+}
+
+.menu > ul > li > a:hover {
+  color: #782d0b;
+  background-color: #f7f0e9;
+}
+
+.menu > ul > li:hover {
+  vertical-align: top;
+  margin-bottom: -100%;
+}
+
+@font-face {
+    font-family: 'LeeSeoyun';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2202-2@1.0/LeeSeoyun.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+
 </style>
 </head>
 <body data-theme="light">
 
 <header>
-  <div class="flex h-20 mx-auto items-center text-2xl" 
-       style="background-color: #f7ecdc; padding: 20px; text-align: center; color: black">
-       <img src="${pageContext.request.contextPath}/images/mark.png" alt="" class="h-20 mr-3 z-[1]" />
-    <a style=" font-size: 2.5rem; font-weight: 700;  letter-spacing: -0.07em;" href="${pageContext.request.contextPath}/">BenchClick</a>
-    <div class="flex-grow"></div>
-
-    <ul class="flex">
-    <c:if test="${rq.isLogined()}">
-              <li>
-        <div class="dropdown dropdown-hover">
-          <div tabindex="0" role="button">응원</div>
-          <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow" 
-              style="background-color: #f7ecdc;">
-            <li><a href="${pageContext.request.contextPath}/usr/project/friend">추천 메이트</a></li>
-            <li><a href="${pageContext.request.contextPath}/usr/project/chat/room">채팅목록</a></li>
-            <li><a href="${pageContext.request.contextPath}/usr/project/goods">추천 굿즈</a></li>
-          </ul>
-        </div>
+  <div class="menu items-center justify-center" >
+  <div style="padding-top: 30px; padding-bottom: 30px;">
+  <a style="font-size: 2.5rem; font-weight: 700;  letter-spacing: -0.07em;" href="${pageContext.request.contextPath}/">BenchClick</a>
+  </div>
+    <ul>
+      
+      <c:if test="${rq.isLogined()}">
+<li><a href="#">응원</a>
+        <a href="${pageContext.request.contextPath}/usr/project/friend">추천 메이트</a>
+            <a href="${pageContext.request.contextPath}/usr/project/chat/room">채팅목록</a>
+           <a href="${pageContext.request.contextPath}/usr/project/goods">추천 굿즈</a>
       </li>
-            </c:if>
-      <c:if test="${!rq.isLogined()}">
-              <li>
-        <div class="dropdown dropdown-hover">
-          <div tabindex="0" role="button">입문</div>
-          <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow" 
-              style="background-color: #f7ecdc;">
-            <li><a href="${pageContext.request.contextPath}/usr/project/test">팀 정하기</a></li>
-            <li><a href="${pageContext.request.contextPath}/usr/project/position">포지션/룰</a></li>
-          </ul>
-        </div>
-      </li>
-            </c:if>
-            <li>
-        <div class="dropdown dropdown-hover">
-          <div tabindex="0" role="button">분석</div>
-          <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow" 
-              style="background-color: #f7ecdc;">
-            <li><a href="${pageContext.request.contextPath}/usr/project/ranking">순위</a></li>
-            <li><a href="${pageContext.request.contextPath}/usr/project/play">영상</a></li>
-            <li><a href="${pageContext.request.contextPath}/usr/project/player">선수 분석</a></li>
-          </ul>
-        </div>
-      </li>
-             
-
-      <li>
-        <div class="dropdown dropdown-hover">
-          <div tabindex="0" role="button">정보</div>
-          <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow" 
-              style="background-color: #f7ecdc;">
-            <li><a href="${pageContext.request.contextPath}/usr/project/information">구장 별 날씨</a></li>
-            <li><a href="${pageContext.request.contextPath}/usr/project/information2">최신 뉴스</a></li>
-            <li><a href="${pageContext.request.contextPath}/usr/project/information3">선수들이 자주 찾는 맛집</a></li>
-          </ul>
-        </div>
-      </li>
-
-      <li>
-        <div class="dropdown dropdown-hover">
-          <div tabindex="0" role="button">게시판</div>
-          <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow" 
-              style="background-color: #f7ecdc;">
-            <li><a href="${pageContext.request.contextPath}/usr/article/list?boardId=1">자유게시판</a></li>
-            <li><a href="${pageContext.request.contextPath}/usr/article/list?boardId=2">분실물</a></li>
-          </ul>
-        </div>
-      </li>
-
-      <li>
-        <div class="dropdown dropdown-hover">
-          <div tabindex="0" role="button">회원</div>
-          <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow" 
-              style="background-color: #f7ecdc;">
-            <li><a href="${pageContext.request.contextPath}/usr/member/myPage">마이 페이지</a></li>
-            <li><a href="${pageContext.request.contextPath}/usr/member/modifyStyle">스타일 등록</a></li>
-
-            <c:if test="${rq.isLogined()}">
-              <li><a onclick="if(confirm('로그아웃 하시겠습니까?') == false) return false;" href="${pageContext.request.contextPath}/usr/member/doLogout">로그아웃</a></li>
             </c:if>
             <c:if test="${!rq.isLogined()}">
-              <li><a href="${pageContext.request.contextPath}/usr/member/login">로그인</a></li>
-              <li><a href="${pageContext.request.contextPath}/usr/member/join">회원가입</a></li>
+      <li>
+      <a href="#">입문</a>
+       <a href="${pageContext.request.contextPath}/usr/project/test">팀 정하기</a>
+<a href="${pageContext.request.contextPath}/usr/project/position">포지션/룰</a>
+      </li>
+       </c:if>
+      <li><a href="#">분석</a>
+       <a href="${pageContext.request.contextPath}/usr/project/ranking">순위</a>
+        <a href="${pageContext.request.contextPath}/usr/project/play">영상</a>
+        <a href="${pageContext.request.contextPath}/usr/project/player">선수 분석</a>
+      </li>
+      <li><a href="#">정보</a>
+        <a href="${pageContext.request.contextPath}/usr/project/information">구장 별 날씨</a>
+            <a href="${pageContext.request.contextPath}/usr/project/information2">최신 뉴스</a>
+           <a href="${pageContext.request.contextPath}/usr/project/information3">선수들이 자주 찾는 맛집</a>
+      </li>
+      <li><a href="#">게시판</a>
+        <a href="${pageContext.request.contextPath}/usr/article/list?boardId=1">자유게시판</a>
+        <a href="${pageContext.request.contextPath}/usr/article/list?boardId=2">분실물</a>
+      </li>
+      <li><a href="#">회원</a>
+       <a href="${pageContext.request.contextPath}/usr/member/myPage">마이 페이지</a>
+            <a href="${pageContext.request.contextPath}/usr/member/modifyStyle">스타일 등록</a>
+
+            <c:if test="${rq.isLogined()}">
+              <a onclick="if(confirm('로그아웃 하시겠습니까?') == false) return false;" href="${pageContext.request.contextPath}/usr/member/doLogout">로그아웃</a>
             </c:if>
-          </ul>
-        </div>
+            <c:if test="${!rq.isLogined()}">
+              <a href="${pageContext.request.contextPath}/usr/member/login">로그인</a>
+              <a href="${pageContext.request.contextPath}/usr/member/join">회원가입</a>
+            </c:if>
       </li>
     </ul>
   </div>

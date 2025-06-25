@@ -98,8 +98,21 @@ section > *:not(.section-overlay) {
   z-index: 1;
 }
 
+.stadium-img {
+  position: absolute;
+  width: 50px; /* 이미지 크기 조정 */
+  height: 50px;
+  cursor: pointer;
+  z-index: 5;
+  transition: transform 0.2s ease;
+}
+
+.stadium-img:hover {
+  transform: scale(1.2); /* 마우스 오버 시 확대 효과 */
+}
+
   </style>
-</head>
+</head> 
 <body class="m-0" style="background-color: #f7f0e9;">
 
   <!-- Hero Section -->
@@ -180,18 +193,38 @@ section > *:not(.section-overlay) {
     <img src="/images/flag.png" id="flag" alt="깃발">
 
     <!-- 지도 위에 위치한 동그라미 버튼 -->
-    <button class="stadium-btn" style="left: 230px; top: 110px;" onclick="onStadiumClick('jamshil')" title="잠실야구장">잠</button>
-    <button class="stadium-btn" style="left: 220px; top: 160px;" onclick="onStadiumClick('suwon')" title="수원KT위즈파크">수</button>
-    <button class="stadium-btn" style="left: 215px; top: 410px;" onclick="onStadiumClick('gwangju')" title="광주기아챔피언스필드">광</button>
-    <button class="stadium-btn" style="left: 220px; top: 130px;" onclick="onStadiumClick('gochug')" title="고척스카이돔">고</button>
-    <button class="stadium-btn" style="left: 260px; top: 270px;" onclick="onStadiumClick('daejeon')" title="대전한화생명">대</button>
-    <button class="stadium-btn" style="left: 380px; top: 330px;" onclick="onStadiumClick('daegu')" title="대구삼성라이온즈파크">대</button>
-    <button class="stadium-btn" style="left: 380px; top: 380px;" onclick="onStadiumClick('changwon')" title="창원NC파크">창</button>
-    <button class="stadium-btn" style="left: 440px; top: 370px;" onclick="onStadiumClick('busan')" title="사직야구장">사</button>
-    <button class="stadium-btn" style="left: 200px; top: 130px;" onclick="onStadiumClick('inchun')" title="인천SSG랜더스필드">인</button>
+    <img src="/images/jam.png" 
+     class="stadium-img" 
+     style="left: 180px; top: 140px;" 
+     onclick="onStadiumClick('jamshil')" 
+     title="잠실야구장" 
+     alt="잠실">
+   <!-- 수원 -->
+<img src="/images/su.png" class="stadium-img" style="left: 180px; top: 200px;" onclick="onStadiumClick('suwon')" title="수원KT위즈파크" alt="수원">
+
+<!-- 광주 -->
+<img src="/images/moon.png" class="stadium-img" style="left: 130px; top: 560px;" onclick="onStadiumClick('gwangju')" title="광주기아챔피언스필드" alt="광주">
+
+<!-- 고척 -->
+<img src="/images/go.png" class="stadium-img" style="left: 150px; top: 170px;" onclick="onStadiumClick('gochug')" title="고척스카이돔" alt="고척">
+
+<!-- 대전 -->
+<img src="/images/dae.png" class="stadium-img" style="left: 215px; top: 390px;" onclick="onStadiumClick('daejeon')" title="대전한화생명" alt="대전">
+
+<!-- 대구 -->
+<img src="/images/la.png" class="stadium-img" style="left: 360px; top: 440px;" onclick="onStadiumClick('daegu')" title="대구삼성라이온즈파크" alt="대구">
+
+<!-- 창원 -->
+<img src="/images/chang.png" class="stadium-img" style="left: 380px; top: 500px;" onclick="onStadiumClick('changwon')" title="창원NC파크" alt="창원">
+
+<!-- 부산 -->
+<img src="/images/sa.png" class="stadium-img" style="left: 440px; top: 570px;" onclick="onStadiumClick('busan')" title="사직야구장" alt="부산">
+
+<!-- 인천 -->
+<img src="/images/in.png" class="stadium-img" style="left: 100px; top: 160px;" onclick="onStadiumClick('inchun')" title="인천SSG랜더스필드" alt="인천">
   </div>
   
-  <div id="checklist" class="ps flex flex-col justify-center p-6 text-sm leading-relaxed overflow-y-auto" style="display:none; position:absolute; top:200px; right: 300px; width: 300px; background: rgb(255,255,255); border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+  <div id="checklist" class="ps flex flex-col justify-center p-6 text-sm leading-relaxed overflow-y-auto" style="display:none; position:absolute; top:300px; right: 300px; width: 300px; background: rgb(255,255,255); border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
   <div>
     🎒 준비물 체크리스트<br />
     1. 우비 or 우산<br />
@@ -212,7 +245,7 @@ section > *:not(.section-overlay) {
   </div>
 </div>
 
-<div id="checklist2" class="ps flex flex-col justify-center p-6 text-sm leading-relaxed overflow-y-auto" style="display:none; position:absolute; top:200px; right: 300px; width: 300px; background: rgb(255,255,255); border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+<div id="checklist2" class="ps flex flex-col justify-center p-6 text-sm leading-relaxed overflow-y-auto" style="display:none; position:absolute; top:300px; right: 300px; width: 300px; background: rgb(255,255,255); border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
   <div>
     🎒 준비물 체크리스트<br />
           1. 얇은 겉옷 (바람막이/가디건)<br />
@@ -230,7 +263,7 @@ section > *:not(.section-overlay) {
   </div>
 </div>
 
-<div id="checklist3" class="ps flex flex-col justify-center p-6 text-sm leading-relaxed overflow-y-auto" style="display:none; position:absolute; top:200px; right: 300px; width: 300px; background: rgb(255,255,255); border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+<div id="checklist3" class="ps flex flex-col justify-center p-6 text-sm leading-relaxed overflow-y-auto" style="display:none; position:absolute; top:300px; right: 300px; width: 300px; background: rgb(255,255,255); border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
   <div>
     🎒 준비물 체크리스트<br />
           1. 모자 or 캡모자<br />
@@ -259,15 +292,15 @@ document.addEventListener("DOMContentLoaded", function () {
   const API_KEY = "a742b907a44edf2cb751b547e466583e";
 
   const stadiumPositions = {
-    jamshil: { x: 232, y: 103 },
-    suwon: { x: 222, y: 153 },
-    gwangju: { x: 217, y: 403 },
-    gochug: { x: 222, y: 123 },
-    daejeon: { x: 262, y: 263 },
-    daegu: { x: 382, y: 323 },
-    changwon: { x: 382, y: 373 },
-    busan: { x: 442, y: 363 },
-    inchun: { x: 202, y: 123 }
+    jamshil: { x: 205, y: 165 },
+    suwon: { x: 205, y: 225 },
+    gwangju: { x: 155, y: 585 },
+    gochug: { x: 175, y: 195 },
+    daejeon: { x: 240, y: 415 },
+    daegu: { x: 385, y: 465 },
+    changwon: { x: 405, y: 525 },
+    busan: { x: 465, y: 595 },
+    inchun: { x: 125, y: 185 }
   };
 
   const stadiums = {
@@ -328,7 +361,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       weatherSpan.textContent = '온도🌡 '+temp+'°C 날씨: ' +desc+' 강수량: '+rain+'mm';
       
-      if (desc.includes("비") || desc.includes("눈") || desc.includes("우박")) {
+      if (desc.includes("비") || desc.includes("눈") || desc.includes("우박") || desc.includes("박무")) {
     	    checklist.style.display = "block";
     	    checklist2.style.display = "none";
     	    checklist3.style.display = "none";

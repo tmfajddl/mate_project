@@ -53,6 +53,7 @@ body {
       box-shadow: 0 10px 20px rgba(0,0,0,0.15);
       transition: transform 0.8s;
       transform-style: preserve-3d;
+      
     }
     .card-inner.flipped {
       transform: rotateY(180deg);
@@ -301,9 +302,6 @@ body {
     </div>
 
     <!-- 네비게이션 -->
-    <div class="swiper-pagination mt-6"></div>
-    <div class="swiper-button-prev"></div>
-    <div class="swiper-button-next"></div>
   </div>
   
   <div id="quiz-container" class="w-full max-w-xl bg-white rounded-lg shadow p-6 mt-12 mx-auto transition-all duration-500">
