@@ -1,437 +1,433 @@
-<%@ page contentType="text/html;charset=UTF-8" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-
-<html>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ include file="../common/head.jspf"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<!DOCTYPE html>
+<html lang="ko">
 <head>
-    <title>KBO 선수 목록</title>
-    <style>
+  <meta charset="UTF-8">
+  <title>야구 팬 메인 페이지</title>
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+  <style>
+     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-        font-family: 'Segoe UI', sans-serif;
-        padding: 20px;
+      font-family: 'Ownglyph_ParkDaHyun', sans-serif;
+      background-color: #f7f0e9;
+      overflow-x: hidden;
     }
+    section {
+      width: 100vw;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      padding: 60px 20px;
+    }
+     .hero {
+  position: relative;
+  z-index: 0; /* 명확하게 설정 */
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+ .video-background {
+  position: absolute;
+  top: 50%;
+  left: 2.5%;
+  width: 177.77vh;
+  height: 100vh;
+  max-width: 100vw;
+  transform: translate(-50%, -50%);
+  overflow: hidden;
+  z-index: -1;
+}
 
-    h1 {
-        color: #333;
-        margin-bottom: 20px;
-    }
+.content {
+  position: relative;
+  z-index: 10; /* 더 크게 */
+  color: white;
+  text-align: center;
+  padding: 2rem;
+}
 
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 10px;
-        background-color: #fff;
-        border-radius: 8px;
-        overflow: hidden;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+.video-background iframe {
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  display: block;
+}
+    .section-title {
+      font-size: 2rem;
+      margin-bottom: 20px;
     }
+    .swiper-section {
+      width: 90%;
+      max-width: 1000px;
+    }
+.swiper-card {
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  padding: 16px;
+  height: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  transition: box-shadow 0.2s ease;
+  text-align: center;
+}
 
-    th, td {
-        border-bottom: 1px solid #ddd;
-        padding: 10px 12px;
-        text-align: center;
-    }
+.swiper-card:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+}
 
-    tr:hover:not(#chartRow):not(#noDataRow) {
-        background-color: #f5f5f5;
-        cursor: pointer;
-    }
+.swiper-card-title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
 
-    form.inline {
-        display: inline;
-        margin-right: 10px;
-    }
+.swiper-card div {
+  font-size: 0.9rem;
+}
 
-    .btn {
-        padding: 8px 14px;
-        margin-right: 6px;
-        background-color: #f0f0f0;
-        border: 1px solid #aaa;
-        border-radius: 6px;
-        cursor: pointer;
-        transition: all 0.2s;
+.highlight {
+  border: 2px solid #ffa500;
+  background-color: #fffdf4;
+}
+    .news-card {
+      background-size: cover;
+      background-position: center;
+      height: 200px;
+      display: flex;
+      align-items: end;
+      padding: 16px;
+      color: white;
+      border-radius: 12px;
+      text-shadow: 1px 1px 4px rgba(0,0,0,0.7);
     }
+.btn-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #fff;
+  padding: 12px 20px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  transition: filter 0.2s, transform 0.2s;
+}
 
-    .btn:hover {
-        background-color: #ddd;
-    }
+.btn-action:hover {
+  filter: brightness(85%);
+  transform: translateY(-2px);
+}
 
-    .btn.active {
-        background-color: #007BFF;
-        color: white;
-        border-color: #0056b3;
-        font-weight: bold;
-    }
-
-    .pagination {
-        margin-top: 20px;
-        text-align: center;
-    }
-
-    .pagination a, .pagination strong {
-        margin: 0 5px;
-        font-size: 16px;
-    }
-
-    #nameSearch {
-        margin: 15px 0;
-        padding: 8px 12px;
-        border-radius: 4px;
-        border: 1px solid #ccc;
-        width: 200px;
-    }
-
-    #chartRow {
-        background-color: #fafafa;
-        transition: all 0.3s;
-    }
-
-    #noDataRow {
-        color: red;
-        font-weight: bold;
-    }
-</style>
+  .btn-group {
+    display: flex;
+    gap: 16px;
+    margin-top: 30px;
+  }
+  </style>
 </head>
-<body>
+<body class="m-0" style="background-color: #f7f0e9;">
 
-    <h1>KBO 선수 목록</h1>
+<c:choose>
+    <c:when test="${rq.loginedTeam == null}">
+        <section class="bg-cover bg-repeat"
+                 style="background-image: url('/images/bg12.png'); cursor: url('/images/cursor0.png') 25 25, auto; background-repeat: repeat; background-size: auto;">
+    </c:when>
+    <c:when test="${rq.loginedTeam eq '한화 이글스'}">
+        <section class="bg-cover bg-repeat"
+                 style="background-image: url('/images/bg21.png'); cursor: url('/images/cursor2.png') 25 25, auto; background-repeat: repeat; background-size: auto;">
+    </c:when>
+    <c:when test="${rq.loginedTeam eq '두산 베어스'}">
+        <section class="bg-cover bg-repeat"
+                 style="background-image: url('/images/bg22.png') cursor: url('/images/cursor3.png') 25 25, auto; background-repeat: repeat; background-size: auto;">
+    </c:when>
+        <c:when test="${rq.loginedTeam eq '롯데 자이언츠'}">
+        <section class="bg-cover bg-repeat"
+                 style="background-image: url('/images/bg23.png') cursor: url('/images/cursor4.png') 25 25, auto; background-repeat: repeat; background-size: auto;">
+    </c:when>
+        <c:when test="${rq.loginedTeam eq 'LG 트윈스'}">
+        <section class="bg-cover bg-repeat"
+                 style="background-image: url('/images/bg24.png'); cursor: url('/images/cursor5.png') 25 25, auto; background-repeat: repeat; background-size: auto;">
+    </c:when>
+        <c:when test="${rq.loginedTeam eq '삼성 라이온즈'}">
+        <section class="bg-cover bg-repeat"
+                 style="background-image: url('/images/bg25.png'); cursor: url('/images/cursor6.png') 25 25, auto; background-repeat: repeat; background-size: auto;">
+    </c:when>
+        <c:when test="${rq.loginedTeam eq '키움 히어로즈'}">
+        <section class="bg-cover bg-repeat"
+                 style="background-image: url('/images/bg26.png'); cursor: url('/images/cursor7.png') , auto; background-repeat: repeat; background-size: auto;">
+    </c:when>
+        <c:when test="${rq.loginedTeam eq 'SSG 랜더스'}">
+        <section class="bg-cover bg-repeat"
+                 style="background-image: url('/images/bg27.png'); cursor: url('/images/cursor1.png') 25 25, auto; background-repeat: repeat; background-size: auto;">
+    </c:when>
+        <c:when test="${rq.loginedTeam eq 'NC 다이노스'}">
+        <section class="bg-cover bg-repeat"
+         style="background-image: url('/images/bg28.png'); cursor: url('/images/cursor8.png') 25 25, auto; background-repeat: repeat; background-size: auto;">
+    </c:when>
+        <c:when test="${rq.loginedTeam eq 'KT 위즈'}">
+        <section class="bg-cover bg-repeat"
+                 style="background-image: url('/images/bg29.png'); cursor: url('/images/cursor9.png') 25 25, auto; background-repeat: repeat; background-size: auto;">
+    </c:when>
+        <c:when test="${rq.loginedTeam eq 'KIA 타이거즈'}">
+        <section class="bg-cover bg-repeat"
+                 style="background-image: url('/images/bg30.png'); cursor: url('/images/cursor10.png') 25 25, auto; background-repeat: repeat; background-size: auto;">
+    </c:when>
+</c:choose>
 
-    <label for="nameSearch">이름 검색:</label>
-<input type="text" id="nameSearch" name="keyword" placeholder="이름을 입력하세요" value="${param.keyword}" />
+<c:set var="team" value="${rq.loginedTeam}" />
+<c:set var="shortTeam" value="${fn:substring(team, 0, 2)}" />
 
-    <!-- 팀 선택 -->
-    <form method="get" action="/usr/home/test" class="inline">
-        <input type="hidden" name="type" value="${type}" />
-        <input type="hidden" name="page" value="1" />
-        <label for="teamSelect">팀 선택:</label>
-        <select name="teamIndex" id="teamSelect" onchange="this.form.submit()">
-    <c:forEach var="entry" items="${teamNames}">
-        <option value="${entry.value}" ${entry.value == teamIndex ? 'selected' : ''}>${entry.key}</option>
-    </c:forEach>
-</select>
-    </form>
+<%-- 기본 영상 ID 설정 --%>
+<c:set var="videoId" value="OQpSpCIM5GE" />
 
-   <!-- 타자 버튼 -->
-<form method="get" action="/usr/home/test" class="inline">
-    <input type="hidden" name="teamIndex" value="${teamIndex}" />
-    <input type="hidden" name="type" value="타자" />
-    <input type="hidden" name="page" value="1" />
-    <input type="hidden" name="keyword" id="hiddenKeyword1" />
-    <button type="submit" class="btn ${type == '타자' ? 'active' : ''}">타자</button>
-</form>
+<%-- 팀별 영상 ID 분기 설정 --%>
+<c:choose>
+  <c:when test="${shortTeam == '한화'}">
+    <c:set var="videoId" value="8TswlwWIV9c" />
+  </c:when>
+  <c:when test="${shortTeam == 'LG'}">
+    <c:set var="videoId" value="ZP_p9sPPPjY" />
+  </c:when>
+  <c:when test="${shortTeam == '롯데'}">
+    <c:set var="videoId" value="Pl_8gPuQLlc" />
+  </c:when>
+  <c:when test="${shortTeam == 'KI'}"> <%-- KIA --%>
+    <c:set var="videoId" value="1tdthdeILno" />
+  </c:when>
+  <c:when test="${shortTeam == 'KT'}">
+    <c:set var="videoId" value="0U-oOIdapss" />
+  </c:when>
+  <c:when test="${shortTeam == '삼성'}">
+    <c:set var="videoId" value="TYjA8kguSts" />
+  </c:when>
+  <c:when test="${shortTeam == 'SS'}"> <%-- SSG --%>
+    <c:set var="videoId" value="a2Er8gPMNzI" />
+  </c:when>
+  <c:when test="${shortTeam == '두산'}">
+    <c:set var="videoId" value="gs9wCs3lCRQ" />
+  </c:when>
+  <c:when test="${shortTeam == '키움'}">
+    <c:set var="videoId" value="kPivCYyNWx8" />
+  </c:when>
+  <c:when test="${shortTeam == 'NC'}">
+    <c:set var="videoId" value="E-zSRbhAWhY" />
+  </c:when>
+</c:choose>
+<%-- Hero Section --%>
+<section class="hero">
+  <div class="video-background">
+    <iframe 
+      src="https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=0&showinfo=0&rel=0"
+      frameborder="0" allow="autoplay" allowfullscreen>
+    </iframe>
+  </div>
+  <div class="content">
+    <!-- 여기에 페이지 내용 추가 -->
+  </div>
+</section>
+<%-- 로그인한 팀 앞 두 글자 추출 --%>
+<c:set var="shortTeam" value="${fn:substring(rq.loginedTeam, 0, 2)}" />
 
-<!-- 투수 버튼 -->
-<form method="get" action="/usr/home/test" class="inline">
-    <input type="hidden" name="teamIndex" value="${teamIndex}" />
-    <input type="hidden" name="type" value="투수" />
-    <input type="hidden" name="page" value="1" />
-    <input type="hidden" name="keyword" id="hiddenKeyword2" />
-    <button type="submit" class="btn ${type == '투수' ? 'active' : ''}">투수</button>
-</form>
-
-    <!-- 선수 표 -->
-    <table>
-        <thead>
-            <tr>
-                <th>등번호</th>
-                <th>이름</th>
-                <th>팀</th>
-                <th>포지션</th>
-
-            </tr>
-        </thead>
-        <tbody id="playerTableBody">
-            <c:forEach var="p" items="${players}">
-                <tr onclick="loadPlayerStats('${p.playerId}', '${type}', this)">
-                    <td>${p.backNumber}</td>
-                    <td>${p.name}</td>
-                    <td>${p.team}</td>
-                    <td>${p.position}</td>
-                </tr>
-            </c:forEach>
-
-            <!-- 차트 표시용 행 -->
-            <tr id="chartRow" style="display:none;">
-                <td colspan="5">
-                    <canvas id="playerChart" height="100"></canvas>
-                </td>
-            </tr>
-
-            <!-- 데이터 없을 경우 표시 -->
-            <tr id="noDataRow" style="display:none;">
-                <td colspan="5" style="text-align:center; color:red;">KBO 공식 기록이 없습니다</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <!-- 페이징 -->
-    <div class="pagination">
-        <c:if test="${startPage > 1}">
-            <a href="/usr/home/test?teamIndex=${teamIndex}&type=${type}&page=${startPage - 1}">이전</a>
+<section data-aos="fade-up">
+  <!-- 뉴스 슬라이더 -->
+  <div class="section-title">📰 ${rq.loginedTeam != null ? rq.loginedTeam : ""} 관련 뉴스</div>
+  <div class="swiper swiper-section">
+    <div class="swiper-wrapper">
+      <c:forEach var="news" items="${breakingNews}">
+        <c:if test="${fn:contains(news.title, team) || fn:contains(news.body, team)}">
+          <div class="swiper-slide">
+            <a href="${news.linkUrl}" target="_blank">
+              <div class="news-card" style="background-image:url('${news.imgUrl != null ? news.imgUrl : "/images/default-news.png"}')">
+                <div>${news.title}</div>
+              </div>
+            </a>
+          </div>
         </c:if>
-
-        <c:forEach var="i" begin="${startPage}" end="${endPage}">
-            <c:choose>
-                <c:when test="${i == page}">
-                    <strong>${i}</strong>
-                </c:when>
-                <c:otherwise>
-                    <a href="/usr/home/test?teamIndex=${teamIndex}&type=${type}&page=${i}">${i}</a>
-                </c:otherwise>
-            </c:choose>
-        </c:forEach>
-
-        <c:if test="${endPage < totalPages}">
-            <a href="/usr/home/test?teamIndex=${teamIndex}&type=${type}&page=${endPage + 1}">다음</a>
-        </c:if>
+      </c:forEach>
     </div>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </div>
+
+  <!-- 최근 경기 영상 -->
+  <div class="section-title" style="margin-top: 40px;">🎬 ${rq.loginedTeam != null ? rq.loginedTeam : ""} 최근 경기 영상</div>
+  <div class="swiper swiper-section">
+    <div class="swiper-wrapper">
+      <c:forEach var="video" items="${videoIds3}">
+        <div class="swiper-slide" style="width: 300px;">
+          <div class="swiper-card" style="height: 250px; position: relative; border-radius: 8px; overflow: hidden;">
+            <iframe src="https://www.youtube.com/embed/${video.id}" 
+                    frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                    allowfullscreen 
+                    style="width: 100%; height: 100%; display: block;">
+            </iframe>
+            <div style="
+              position: absolute;
+              bottom: 0;
+              left: 0;
+              width: 100%;
+              padding: 10px;
+              background: rgba(0, 0, 0, 0.6);
+              color: white;
+              font-weight: 600;
+              font-size: 1rem;
+              box-sizing: border-box;
+            ">
+              ${video.title}
+            </div>
+          </div>
+        </div>
+      </c:forEach>
+    </div>
+  </div>
+</section>
+
+
+
+<section data-aos="fade-up" >
+  <div class="section-title">📅 오늘의 ${rq.loginedTeam} 일정 및 선수 현황</div>
+
+  <%-- 경기 일정: 로그인 팀 위주 --%>
+  <div class="section-title" style="font-size: 1.2rem;">경기 일정</div>
+  <div class="swiper swiper-section" style="margin-bottom: 30px">
+    <div class="swiper-wrapper">
+      <c:forEach var="row" items="${naverBaseballSchedule}">
+        <c:if test="${fn:contains(row['왼쪽팀명'], shortTeam) || fn:contains(row['오른쪽팀명'], shortTeam)}">
+          <div class="swiper-slide">
+            <div class="swiper-card" style="background-color: white; color: black;">
+              <div class="swiper-card-title">${row['왼쪽팀명']} (${row['왼쪽상태및투수']}) VS ${row['오른쪽팀명']} (${row['오른쪽상태및투수']})</div>
+              <div>시간: ${row['시간']}</div>
+              <div>구장: ${row['구장']}</div>
+            </div>
+          </div>
+        </c:if>
+      </c:forEach>
+      <c:forEach var="row" items="${naverBaseballSchedule}">
+        <c:if test="${!(fn:contains(row['왼쪽팀명'], shortTeam) || fn:contains(row['오른쪽팀명'], shortTeam))}">
+          <div class="swiper-slide">
+            <div class="swiper-card">
+              <div class="swiper-card-title">${row['왼쪽팀명']} (${row['왼쪽상태및투수']}) VS ${row['오른쪽팀명']} (${row['오른쪽상태및투수']})</div>
+              <div>시간: ${row['시간']}</div>
+              <div>구장: ${row['구장']}</div>
+            </div>
+          </div>
+        </c:if>
+      </c:forEach>
+    </div>
+  </div>
+
+  <%-- 등록 선수 --%>
+  <div class="section-title" style="font-size: 1.2rem;">📌 등록 선수</div>
+  <div class="swiper swiper-section">
+    <div class="swiper-wrapper">
+      <c:forEach var="p" items="${registeredPlayers}">
+        <%-- 선수별 팀 컬러 설정 --%>
+        <c:set var="playerTeamColor" value="#f2d8b1" />
+        <c:choose>
+          <c:when test="${fn:contains(p.team, 'LG')}"><c:set var="playerTeamColor" value="#C30452" /></c:when>
+          <c:when test="${fn:contains(p.team, '두산')}"><c:set var="playerTeamColor" value="#1A1748" /></c:when>
+          <c:when test="${fn:contains(p.team, 'SSG')}"><c:set var="playerTeamColor" value="#CE0E2D" /></c:when>
+          <c:when test="${fn:contains(p.team, '삼성')}"><c:set var="playerTeamColor" value="#074CA1" /></c:when>
+          <c:when test="${fn:contains(p.team, '롯데')}"><c:set var="playerTeamColor" value="#041E42" /></c:when>
+          <c:when test="${fn:contains(p.team, '한화')}"><c:set var="playerTeamColor" value="#FC4E00" /></c:when>
+          <c:when test="${fn:contains(p.team, 'KIA')}"><c:set var="playerTeamColor" value="#EA0029" /></c:when>
+          <c:when test="${fn:contains(p.team, 'NC')}"><c:set var="playerTeamColor" value="#315288" /></c:when>
+          <c:when test="${fn:contains(p.team, '키움')}"><c:set var="playerTeamColor" value="#570514" /></c:when>
+          <c:when test="${fn:contains(p.team, 'KT')}"><c:set var="playerTeamColor" value="#000000" /></c:when>
+        </c:choose>
+
+        <div class="swiper-slide">
+          <div class="swiper-card" style="background-color: ${playerTeamColor}; color: white;">
+            <div class="swiper-card-title">${p.name}</div>
+            <div>포지션: ${p.position}</div>
+            <div>팀: ${p.team}</div>
+          </div>
+        </div>
+      </c:forEach>
+    </div>
+  </div>
+
+  <%-- 말소 선수 --%>
+  <div class="section-title" style="font-size: 1.2rem; margin-top: 30px;">❌ 말소 선수</div>
+  <div class="swiper swiper-section">
+    <div class="swiper-wrapper">
+      <c:forEach var="p" items="${canceledPlayers}">
+        <%-- 선수별 팀 컬러 설정 --%>
+        <c:set var="playerTeamColor" value="#f2d8b1" />
+        <c:choose>
+          <c:when test="${fn:contains(p.team, 'LG')}"><c:set var="playerTeamColor" value="#C30452" /></c:when>
+          <c:when test="${fn:contains(p.team, '두산')}"><c:set var="playerTeamColor" value="#1A1748" /></c:when>
+          <c:when test="${fn:contains(p.team, 'SSG')}"><c:set var="playerTeamColor" value="#CE0E2D" /></c:when>
+          <c:when test="${fn:contains(p.team, '삼성')}"><c:set var="playerTeamColor" value="#074CA1" /></c:when>
+          <c:when test="${fn:contains(p.team, '롯데')}"><c:set var="playerTeamColor" value="#041E42" /></c:when>
+          <c:when test="${fn:contains(p.team, '한화')}"><c:set var="playerTeamColor" value="#FC4E00" /></c:when>
+          <c:when test="${fn:contains(p.team, 'KIA')}"><c:set var="playerTeamColor" value="#EA0029" /></c:when>
+          <c:when test="${fn:contains(p.team, 'NC')}"><c:set var="playerTeamColor" value="#315288" /></c:when>
+          <c:when test="${fn:contains(p.team, '키움')}"><c:set var="playerTeamColor" value="#570514" /></c:when>
+          <c:when test="${fn:contains(p.team, 'KT')}"><c:set var="playerTeamColor" value="#000000" /></c:when>
+        </c:choose>
+
+        <div class="swiper-slide">
+          <div class="swiper-card" style="background-color: ${playerTeamColor}; color: white;">
+            <div class="swiper-card-title">${p.name}</div>
+            <div>포지션: ${p.position}</div>
+            <div>팀: ${p.team}</div>
+          </div>
+        </div>
+      </c:forEach>
+    </div>
+  </div>
+</section>
+
+<c:set var="teamColor" value="#f2d8b1" />
+<c:choose>
+  <c:when test="${shortTeam == 'LG'}"><c:set var="teamColor" value="#C30452" /></c:when>
+  <c:when test="${shortTeam == '두산'}"><c:set var="teamColor" value="#1A1748" /></c:when>
+  <c:when test="${shortTeam == 'SS'}"><c:set var="teamColor" value="#CE0E2D" /></c:when>
+  <c:when test="${shortTeam == '삼성'}"><c:set var="teamColor" value="#074CA1" /></c:when>
+  <c:when test="${shortTeam == '롯데'}"><c:set var="teamColor" value="#041E42" /></c:when>
+  <c:when test="${shortTeam == '한화'}"><c:set var="teamColor" value="#FC4E00" /></c:when>
+  <c:when test="${shortTeam == 'KI'}"><c:set var="teamColor" value="#EA0029" /></c:when>
+  <c:when test="${shortTeam == 'NC'}"><c:set var="teamColor" value="#315288" /></c:when>
+  <c:when test="${shortTeam == '키움'}"><c:set var="teamColor" value="#570514" /></c:when>
+  <c:when test="${shortTeam == 'KT'}"><c:set var="teamColor" value="#000000" /></c:when>
+</c:choose>
+<%-- 로그인/로그아웃 --%>
+<section data-aos="fade-up">
+  <div class="btn-group">
+    <c:if test="${!rq.isLogined()}">
+      <button class="btn-action" style="background-color: ${teamColor};" onclick="location.href='../member/login'">🔐 로그인</button>
+      <button class="btn-action" style="background-color: ${teamColor};" onclick="location.href='../member/join'">📝 회원가입</button>
+    </c:if>
+    <c:if test="${rq.isLogined()}">
+      <button class="btn-action" style="background-color: ${teamColor};" onclick="if(confirm('로그아웃 하시겠습니까?')) location.href='../member/doLogout'">🚪 로그아웃</button>
+    </c:if>
+  </div>
+</section>
+</section>
 <script>
-  const allPlayers = ${allPlayersJson};
-</script>
-
-<script>
-let chartInstance = null;
-let currentOpenPlayerId = null;
-let filteredPlayers = [];
-let currentSearchPage = 1;
-const ITEMS_PER_PAGE = 20;
-
-const tableBody = document.getElementById('playerTableBody');
-const pagination = document.querySelector('.pagination');
-const chartRow = document.getElementById('chartRow');
-const noDataRow = document.getElementById('noDataRow');
-
-function loadPlayerStats(playerId, type, rowElement) {
-  if (currentOpenPlayerId === playerId) {
-    chartRow.style.display = 'none';
-    noDataRow.style.display = 'none';
-    currentOpenPlayerId = null;
-    return;
-  }
-
-  fetch('/usr/player/stats?playerId=' + playerId + '&type=' + type)
-    .then(res => res.json())
-    .then(data => {
-      if (!data || data.length === 0) {
-        chartRow.style.display = 'none';
-        noDataRow.style.display = '';
-        rowElement.parentNode.insertBefore(noDataRow, rowElement.nextSibling);
-        currentOpenPlayerId = playerId;
-        return;
-      }
-
-      noDataRow.style.display = 'none';
-      chartRow.style.display = '';
-      rowElement.parentNode.insertBefore(chartRow, rowElement.nextSibling);
-      currentOpenPlayerId = playerId;
-
-      const years = data.map(d => d.year);
-      let datasets = [];
-
-      if (type === '타자') {
-        datasets = [
-          { label: '타율', data: data.map(d => parseFloat(d.avg)), borderColor: 'blue', backgroundColor: 'rgba(0,0,255,0.1)', yAxisID: 'y', fill: false, hidden: false },
-          { label: '안타(H)', data: data.map(d => parseInt(d.h)), borderColor: 'green', backgroundColor: 'rgba(0,255,0,0.1)', yAxisID: 'y1', fill: false, hidden: true },
-          { label: '장타율(SLG)', data: data.map(d => parseFloat(d.slg)), borderColor: 'orange', backgroundColor: 'rgba(255,165,0,0.1)', yAxisID: 'y', fill: false, hidden: true },
-          { label: '출루율(OBP)', data: data.map(d => parseFloat(d.obp)), borderColor: 'purple', backgroundColor: 'rgba(128,0,128,0.1)', yAxisID: 'y', fill: false, hidden: true }
-        ];
-      } else {
-        datasets = [
-          { label: '평균자책점(ERA)', data: data.map(d => parseFloat(d.era)), borderColor: 'red', backgroundColor: 'rgba(255,0,0,0.1)', yAxisID: 'y', fill: false, hidden: false },
-          { label: '승률(WPCT)', data: data.map(d => parseFloat(d.wpct)), borderColor: 'blue', backgroundColor: 'rgba(0,0,255,0.1)', yAxisID: 'y1', fill: false, hidden: true },
-          { label: '피안타(H)', data: data.map(d => parseInt(d.h)), borderColor: 'gray', backgroundColor: 'rgba(128,128,128,0.1)', yAxisID: 'y', fill: false, hidden: true },
-          { label: '삼진(SO)', data: data.map(d => parseInt(d.so)), borderColor: 'green', backgroundColor: 'rgba(0,255,0,0.1)', yAxisID: 'y', fill: false, hidden: true }
-        ];
-      }
-
-      if (chartInstance) chartInstance.destroy();
-
-      const ctx = document.getElementById('playerChart').getContext('2d');
-      chartInstance = new Chart(ctx, {
-        type: 'line',
-        data: { labels: years, datasets: datasets },
-        options: {
-          responsive: true,
-          plugins: {
-        	  legend: {
-        		  display: true,
-        		  onClick: (e, legendItem, legend) => {
-        		    const ci = legend.chart;
-        		    const index = legendItem.datasetIndex;
-        		    
-        		    // 기존 hidden 토글 대신 안정적인 메서드 사용
-        		    const isVisible = ci.isDatasetVisible(index);
-        		    ci.setDatasetVisibility(index, !isVisible);
-        		    
-        		    // 스케일 재계산 함수
-        		    function recalcScale(axisId) {
-        		      const visibleData = [];
-        		      ci.data.datasets.forEach((ds, i) => {
-        		        if (ci.isDatasetVisible(i) && ds.yAxisID === axisId) {
-        		          ds.data.forEach(val => {
-        		            const parsed = parseFloat(val);
-        		            if (!isNaN(parsed)) visibleData.push(parsed);
-        		          });
-        		        }
-        		      });
-        		      if (visibleData.length > 0) {
-        		        const min = Math.min(...visibleData);
-        		        const max = Math.max(...visibleData);
-        		        ci.options.scales[axisId].min = min * 0.9;
-        		        ci.options.scales[axisId].max = max * 1.1;
-        		      } else {
-        		        ci.options.scales[axisId].min = undefined;
-        		        ci.options.scales[axisId].max = undefined;
-        		      }
-        		    }
-
-        		    recalcScale('y');
-        		    recalcScale('y1');
-        		    ci.update();
-        		  }
-        		}
-          },
-          scales: {
-            y: {
-              position: 'left',
-              title: { display: true },
-              beginAtZero: false
-            },
-            y1: {
-              position: 'right',
-              grid: { drawOnChartArea: false },
-              title: { display: true},
-              beginAtZero: false
-            }
-          }
-        }
-      });
-    });
-}
-
-function renderSearchPage(page) {
-  [...tableBody.querySelectorAll('tr')].forEach(tr => {
-    if (!tr.id || (tr.id !== 'chartRow' && tr.id !== 'noDataRow')) {
-      tr.remove();
+  AOS.init();
+  new Swiper('.swiper-section', {
+    slidesPerView: 1.2,
+    spaceBetween: 20,
+    loop: false,
+    autoplay: {
+      delay: 4000,
+    },
+    breakpoints: {
+      768: { slidesPerView: 2 },
+      1024: { slidesPerView: 3 }
     }
   });
-
-  const start = (page - 1) * ITEMS_PER_PAGE;
-  const end = start + ITEMS_PER_PAGE;
-  const pageItems = filteredPlayers.slice(start, end);
-
-  pageItems.forEach(p => {
-    const tr = document.createElement('tr');
-    tr.onclick = function () {
-      loadPlayerStats(p.playerId, '${type}', tr);
-    };
-    tr.innerHTML =
-      '<td>' + p.backNumber + '</td>' +
-      '<td>' + p.name + '</td>' +
-      '<td>' + p.team + '</td>' +
-      '<td>' + p.position + '</td>';
-    tableBody.insertBefore(tr, chartRow);
-  });
-
-  tableBody.appendChild(chartRow);
-  tableBody.appendChild(noDataRow);
-  chartRow.style.display = 'none';
-  noDataRow.style.display = 'none';
-  currentOpenPlayerId = null;
-
-  renderSearchPagination(filteredPlayers.length, page);
-}
-
-function renderSearchPagination(totalItems, currentPage) {
-  pagination.innerHTML = '';
-  const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
-  if (totalPages <= 1) return;
-
-  if (currentPage > 1) {
-    const prev = document.createElement('a');
-    prev.href = '#';
-    prev.textContent = '이전';
-    prev.addEventListener('click', e => {
-      e.preventDefault();
-      currentSearchPage--;
-      renderSearchPage(currentSearchPage);
-    });
-    pagination.appendChild(prev);
-  }
-
-  for (let i = 1; i <= totalPages; i++) {
-    if (i === currentPage) {
-      const strong = document.createElement('strong');
-      strong.textContent = i;
-      pagination.appendChild(strong);
-    } else {
-      const a = document.createElement('a');
-      a.href = '#';
-      a.textContent = i;
-      a.addEventListener('click', e => {
-        e.preventDefault();
-        currentSearchPage = i;
-        renderSearchPage(currentSearchPage);
-      });
-      pagination.appendChild(a);
-    }
-  }
-
-  if (currentPage < totalPages) {
-    const next = document.createElement('a');
-    next.href = '#';
-    next.textContent = '다음';
-    next.addEventListener('click', e => {
-      e.preventDefault();
-      currentSearchPage++;
-      renderSearchPage(currentSearchPage);
-    });
-    pagination.appendChild(next);
-  }
-
-  pagination.style.display = 'block';
-}
-
-document.getElementById('nameSearch').addEventListener('keyup', function () {
-	  const searchValue = this.value.trim().toLowerCase();
-
-	  filteredPlayers = allPlayers.filter(function(p) {
-	    return p.name.toLowerCase().includes(searchValue);
-	  });
-
-	  if (filteredPlayers.length === 0) {
-	    [...tableBody.querySelectorAll('tr')].forEach(tr => {
-	      if (!tr.id || (tr.id !== 'chartRow' && tr.id !== 'noDataRow')) {
-	        tr.remove();
-	      }
-	    });
-	    noDataRow.style.display = '';
-	    chartRow.style.display = 'none';
-	    pagination.style.display = 'none';
-	    tableBody.appendChild(noDataRow);
-	    tableBody.appendChild(chartRow);
-	    return;
-	  }
-
-	  currentSearchPage = 1;
-	  renderSearchPage(currentSearchPage);
-	});
-
-function applyKeywordToForms() {
-  const keyword = document.getElementById('nameSearch').value;
-  document.getElementById('hiddenKeyword1').value = keyword;
-  document.getElementById('hiddenKeyword2').value = keyword;
-}
-
-document.querySelectorAll("form.inline").forEach(form => {
-  form.addEventListener("submit", applyKeywordToForms);
-});
-
-window.addEventListener('DOMContentLoaded', function () {
-  const keyword = document.getElementById('nameSearch').value.trim();
-  if (keyword !== '') {
-    document.getElementById('nameSearch').dispatchEvent(new Event('keyup'));
-  }
-});
 </script>
-
+</body>
+</html>
