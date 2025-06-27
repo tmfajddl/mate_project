@@ -50,8 +50,11 @@ a {
   display: flex;
 }
 
+header{
+  width: 100%;
+}
 .menu > ul {
-  width: 100vw;
+  width: 100%;
   display: flex;
   justify-content:space-around;
   
@@ -143,7 +146,7 @@ a {
       </li>
       <li><a href="#">게시판</a>
         <a href="${pageContext.request.contextPath}/usr/article/list?boardId=1">자유게시판</a>
-        <a href="${pageContext.request.contextPath}/usr/article/list?boardId=2">분실물</a>
+        <a href="${pageContext.request.contextPath}/usr/article/list?boardId=2">공지사항</a>
       </li>
       <li><a href="#">회원</a>
        <a href="${pageContext.request.contextPath}/usr/member/myPage">마이 페이지</a>

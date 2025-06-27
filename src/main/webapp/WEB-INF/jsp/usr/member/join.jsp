@@ -52,7 +52,7 @@ background-color: #f2d8b1;
   </style>
 </head>
 
- <body class="m-0" style="background-color: #f7f0e9;">
+ <body class="m-0 h-full" style="background-color: #f7f0e9;">
 
   <!-- Hero Section (100% 화면 채움 + 배경 이미지) -->
 <c:choose>
@@ -114,7 +114,7 @@ background-color: #f2d8b1;
 </c:choose>
 
 <div style="width: 80%; margin: 20px auto 0 auto;">
-  <h2 style="font-size: 3em; font-weight: bold; color: #918c84; text-align: left; margin-left: 32%;">회원가입</h2>
+  <h2 style="font-size: 3em; font-weight: bold; color: black; text-align: left; margin-left: 32%;">회원가입</h2>
 </div>
     <div style="width: 30%; border-radius: 10px; background-color: rgb(242, 247, 247); padding: 15px; border: 3px dashed red;">
       <form action="../member/doJoin" method="POST">
@@ -174,7 +174,9 @@ background-color: #f2d8b1;
             <tr>
               <th>닉네임</th>
               <td>
-                <input class="input input-sm" name="nickname" autocomplete="off" type="text" placeholder="닉네임 입력" />
+                <input id="nicknameInput" class="input input-sm" name="nickname" autocomplete="off" type="text" placeholder="닉네임 입력" />
+                <br>
+                <span id="nicknameCheckMsg" style="font-size: 0.9rem;"></span>
               </td>
             </tr>
             <tr>
@@ -202,51 +204,93 @@ background-color: #f2d8b1;
   </section>
 
   <script>
-    $(document).ready(function() {
-      $('#loginIdInput').on('keyup', function() {
-        var loginId = $(this).val().trim();
+  $(document).ready(function() {
+    // 아이디 입력 검사
+    $('#loginIdInput').on('keyup', function() {
+      var loginId = $(this).val().trim();
 
-        if (loginId === '') {
-          $('#idCheckMsg').text('');
-          return;
-        }
+      if (loginId.length < 6) {
+        $('#idCheckMsg').text('아이디는 6자 이상이어야 합니다.').css('color', 'red');
+        return;
+      }
 
-        $.ajax({
-          url: '../member/checkLoginId',
-          type: 'GET',
-          data: { loginId: loginId },
-          success: function(response) {
-            if (response === 'duplicated') {
-              $('#idCheckMsg').text('이미 사용 중인 아이디입니다.').css('color', 'red');
-            } else if (response === 'available') {
-              $('#idCheckMsg').text('사용 가능한 아이디입니다.').css('color', 'green');
-            } else {
-              $('#idCheckMsg').text('오류 발생').css('color', 'orange');
-            }
-          },
-          error: function() {
-            $('#idCheckMsg').text('서버 오류').css('color', 'orange');
+      $.ajax({
+        url: '../member/checkLoginId',
+        type: 'GET',
+        data: { loginId: loginId },
+        success: function(response) {
+          if (response === 'duplicated') {
+            $('#idCheckMsg').text('이미 사용 중인 아이디입니다.').css('color', 'red');
+          } else if (response === 'available') {
+            $('#idCheckMsg').text('사용 가능한 아이디입니다.').css('color', 'green');
+          } else {
+            $('#idCheckMsg').text('오류 발생').css('color', 'orange');
           }
-        });
+        },
+        error: function() {
+          $('#idCheckMsg').text('서버 오류').css('color', 'orange');
+        }
       });
-      function checkPasswordMatch() {
-    	    var pw = $('input[name="loginPw"]').val();
-    	    var pw2 = $('input[name="loginPw2"]').val();
+    });
 
-    	    if (pw === '' && pw2 === '') {
-    	      $('#pwCheckMsg').text('');
-    	      return;
-    	    }
+    // 닉네임 입력 검사
+    $('#nicknameInput').on('keyup', function() {
+      var nickname = $(this).val().trim();
 
-    	    if (pw === pw2) {
-    	      $('#pwCheckMsg').text('비밀번호가 일치합니다.').css('color', 'green');
-    	    } else {
-    	      $('#pwCheckMsg').text('비밀번호가 일치하지 않습니다.').css('color', 'red');
-    	    }
-    	  }
+      if (nickname.length < 2) {
+        $('#nicknameCheckMsg').text('닉네임은 2자 이상이어야 합니다.').css('color', 'red');
+        return;
+      }
 
-    	  $('input[name="loginPw"], input[name="loginPw2"]').on('keyup', checkPasswordMatch);
-    	});
-  </script>
+      $.ajax({
+        url: '../member/checkNickname',
+        type: 'GET',
+        data: { nickname: nickname },
+        success: function(response) {
+          if (response === 'duplicated') {
+            $('#nicknameCheckMsg').text('이미 사용 중인 닉네임입니다.').css('color', 'red');
+          } else if (response === 'available') {
+            $('#nicknameCheckMsg').text('사용 가능한 닉네임입니다.').css('color', 'green');
+          } else {
+            $('#nicknameCheckMsg').text('오류 발생').css('color', 'orange');
+          }
+        },
+        error: function() {
+          $('#nicknameCheckMsg').text('서버 오류').css('color', 'orange');
+        }
+      });
+    });
+
+    // 비밀번호 검사
+    function checkPasswordMatch() {
+      var pw = $('input[name="loginPw"]').val();
+      var pw2 = $('input[name="loginPw2"]').val();
+      var specialCharPattern = /[!@#$%^&*(),.?":{}|<>]/;
+
+      if (pw === '' && pw2 === '') {
+        $('#pwCheckMsg').text('');
+        return;
+      }
+
+      if (pw.length < 8) {
+        $('#pwCheckMsg').text('비밀번호는 8자 이상이어야 합니다.').css('color', 'red');
+        return;
+      }
+
+      if (!specialCharPattern.test(pw)) {
+        $('#pwCheckMsg').text('비밀번호에 특수문자를 포함해야 합니다.').css('color', 'red');
+        return;
+      }
+
+      if (pw !== pw2) {
+        $('#pwCheckMsg').text('비밀번호가 일치하지 않습니다.').css('color', 'red');
+      } else {
+        $('#pwCheckMsg').text('비밀번호가 일치합니다.').css('color', 'green');
+      }
+    }
+
+    $('input[name="loginPw"], input[name="loginPw2"]').on('keyup', checkPasswordMatch);
+  });
+</script>
 </body>
 </html>

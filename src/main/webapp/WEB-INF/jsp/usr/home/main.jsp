@@ -29,7 +29,7 @@
     }
      .hero {
   position: relative;
-  z-index: 0; /* 명확하게 설정 */
+  z-index: 0;
   min-width: 90vw;
   min-height: 100vh;
   overflow: hidden;
@@ -37,12 +37,12 @@
 }
  .video-background {
   position: absolute;
-  top: 0; /* ✅ 맨 위에서 시작 */
+  top: 0; 
   left: 0;
   width: 100vw;
   height: 100vh;
   max-width: 100%;
-  transform: none; /* ✅ 잘리는 원인 제거 */
+  transform: none; 
   overflow: hidden;
   z-index: -1;
 }
@@ -318,33 +318,34 @@ section > *:not(.section-overlay) {
   <div class="section-title" style="font-weight: 700;">📅 오늘의 ${rq.loginedTeam} 일정 및 선수 현황</div>
 
   <%-- 경기 일정: 로그인 팀 위주 --%>
-  <div class="section-title" style="font-weight: 700; font-size: 1.2rem;">경기 일정</div>
-  <div class="swiper swiper-section" style="margin-bottom: 30px">
-    <div class="swiper-wrapper">
-      <c:forEach var="row" items="${naverBaseballSchedule}">
-        <c:if test="${fn:contains(row['왼쪽팀명'], shortTeam) || fn:contains(row['오른쪽팀명'], shortTeam)}">
-          <div class="swiper-slide">
-            <div class="swiper-card" style="background-color: white; color: black;">
-              <div class="swiper-card-title">${row['왼쪽팀명']} (${row['왼쪽상태및투수']}) VS ${row['오른쪽팀명']} (${row['오른쪽상태및투수']})</div>
-              <div>시간: ${row['시간']}</div>
-              <div>구장: ${row['구장']}</div>
+ <c:choose>
+    <c:when test="${empty naverBaseballSchedule}">
+      <div style="text-align: center; color: gray; font-weight: bold; margin: 20px;">📭 오늘 예정된 경기가 없습니다.</div>
+    </c:when>
+    <c:otherwise>
+      <div class="swiper swiper-section" style="margin-bottom: 30px;">
+        <div class="swiper-wrapper">
+          <c:forEach var="row" items="${naverBaseballSchedule}">
+            <%-- 로그인된 팀 하이라이트 표시용 --%>
+            <c:set var="highlightClass" value="" />
+            <c:if test="${not empty rq.loginedTeam && (fn:contains(row['왼쪽팀명'], fn:substring(rq.loginedTeam, 0, 2)) || fn:contains(row['오른쪽팀명'], fn:substring(rq.loginedTeam, 0, 2)))}">
+              <c:set var="highlightClass" value="highlight" />
+            </c:if>
+
+            <div class="swiper-slide">
+              <div class="swiper-card ${highlightClass}" style="background-color: white; color: black;">
+                <div class="swiper-card-title">
+                  ${row['왼쪽팀명']} (${row['왼쪽상태및투수']}) VS ${row['오른쪽팀명']} (${row['오른쪽상태및투수']})
+                </div>
+                <div>시간: ${row['시간']}</div>
+                <div>구장: ${row['구장']}</div>
+              </div>
             </div>
-          </div>
-        </c:if>
-      </c:forEach>
-      <c:forEach var="row" items="${naverBaseballSchedule}">
-        <c:if test="${!(fn:contains(row['왼쪽팀명'], shortTeam) || fn:contains(row['오른쪽팀명'], shortTeam))}">
-          <div class="swiper-slide">
-            <div class="swiper-card">
-              <div class="swiper-card-title">${row['왼쪽팀명']} (${row['왼쪽상태및투수']}) VS ${row['오른쪽팀명']} (${row['오른쪽상태및투수']})</div>
-              <div>시간: ${row['시간']}</div>
-              <div>구장: ${row['구장']}</div>
-            </div>
-          </div>
-        </c:if>
-      </c:forEach>
-    </div>
-  </div>
+          </c:forEach>
+        </div>
+      </div>
+    </c:otherwise>
+  </c:choose>
 
   <%-- 등록 선수 --%>
   <div class="section-title" style="font-weight: 700; font-size: 1.2rem;">📌 등록 선수</div>

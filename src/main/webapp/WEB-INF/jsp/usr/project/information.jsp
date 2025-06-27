@@ -195,33 +195,33 @@ section > *:not(.section-overlay) {
     <!-- 지도 위에 위치한 동그라미 버튼 -->
     <img src="/images/jam.png" 
      class="stadium-img" 
-     style="left: 180px; top: 140px;" 
+     style="left: 180px; top: 120px;" 
      onclick="onStadiumClick('jamshil')" 
      title="잠실야구장" 
      alt="잠실">
    <!-- 수원 -->
-<img src="/images/su.png" class="stadium-img" style="left: 180px; top: 200px;" onclick="onStadiumClick('suwon')" title="수원KT위즈파크" alt="수원">
+<img src="/images/su.png" class="stadium-img" style="left: 180px; top: 180px;" onclick="onStadiumClick('suwon')" title="수원KT위즈파크" alt="수원">
 
 <!-- 광주 -->
-<img src="/images/moon.png" class="stadium-img" style="left: 130px; top: 560px;" onclick="onStadiumClick('gwangju')" title="광주기아챔피언스필드" alt="광주">
+<img src="/images/moon.png" class="stadium-img" style="left: 130px; top: 540px;" onclick="onStadiumClick('gwangju')" title="광주기아챔피언스필드" alt="광주">
 
 <!-- 고척 -->
-<img src="/images/go.png" class="stadium-img" style="left: 150px; top: 170px;" onclick="onStadiumClick('gochug')" title="고척스카이돔" alt="고척">
+<img src="/images/go.png" class="stadium-img" style="left: 150px; top: 150px;" onclick="onStadiumClick('gochug')" title="고척스카이돔" alt="고척">
 
 <!-- 대전 -->
-<img src="/images/dae.png" class="stadium-img" style="left: 215px; top: 390px;" onclick="onStadiumClick('daejeon')" title="대전한화생명" alt="대전">
+<img src="/images/dae.png" class="stadium-img" style="left: 215px; top: 370px;" onclick="onStadiumClick('daejeon')" title="대전한화생명" alt="대전">
 
 <!-- 대구 -->
-<img src="/images/la.png" class="stadium-img" style="left: 360px; top: 440px;" onclick="onStadiumClick('daegu')" title="대구삼성라이온즈파크" alt="대구">
+<img src="/images/la.png" class="stadium-img" style="left: 360px; top: 420px;" onclick="onStadiumClick('daegu')" title="대구삼성라이온즈파크" alt="대구">
 
 <!-- 창원 -->
-<img src="/images/chang.png" class="stadium-img" style="left: 380px; top: 500px;" onclick="onStadiumClick('changwon')" title="창원NC파크" alt="창원">
+<img src="/images/chang.png" class="stadium-img" style="left: 380px; top: 480px;" onclick="onStadiumClick('changwon')" title="창원NC파크" alt="창원">
 
 <!-- 부산 -->
-<img src="/images/sa.png" class="stadium-img" style="left: 440px; top: 570px;" onclick="onStadiumClick('busan')" title="사직야구장" alt="부산">
+<img src="/images/sa.png" class="stadium-img" style="left: 440px; top: 550px;" onclick="onStadiumClick('busan')" title="사직야구장" alt="부산">
 
 <!-- 인천 -->
-<img src="/images/in.png" class="stadium-img" style="left: 100px; top: 160px;" onclick="onStadiumClick('inchun')" title="인천SSG랜더스필드" alt="인천">
+<img src="/images/in.png" class="stadium-img" style="left: 100px; top: 140px;" onclick="onStadiumClick('inchun')" title="인천SSG랜더스필드" alt="인천">
   </div>
   
   <div id="checklist" class="ps flex flex-col justify-center p-6 text-sm leading-relaxed overflow-y-auto" style="display:none; position:absolute; top:300px; right: 300px; width: 300px; background: rgb(255,255,255); border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
@@ -292,15 +292,15 @@ document.addEventListener("DOMContentLoaded", function () {
   const API_KEY = "a742b907a44edf2cb751b547e466583e";
 
   const stadiumPositions = {
-    jamshil: { x: 205, y: 165 },
-    suwon: { x: 205, y: 225 },
-    gwangju: { x: 155, y: 585 },
-    gochug: { x: 175, y: 195 },
-    daejeon: { x: 240, y: 415 },
-    daegu: { x: 385, y: 465 },
-    changwon: { x: 405, y: 525 },
-    busan: { x: 465, y: 595 },
-    inchun: { x: 125, y: 185 }
+    jamshil: { x: 205, y: 145 },
+    suwon: { x: 205, y: 205 },
+    gwangju: { x: 155, y: 565 },
+    gochug: { x: 175, y: 175 },
+    daejeon: { x: 240, y: 395 },
+    daegu: { x: 385, y: 445 },
+    changwon: { x: 405, y: 505 },
+    busan: { x: 465, y: 575 },
+    inchun: { x: 125, y: 165 }
   };
 
   const stadiums = {

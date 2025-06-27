@@ -40,7 +40,7 @@ background-color: #f2d8b1;
 
 </style>
 
- <body class="m-0 h-full" style="background-color: #f7f0e9;">
+ <body class="m-0" style="background-color: #f7f0e9;">
 
   <!-- Hero Section (100% 화면 채움 + 배경 이미지) -->
  <c:choose>

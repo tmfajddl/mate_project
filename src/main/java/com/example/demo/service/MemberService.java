@@ -127,5 +127,9 @@ public class MemberService {
 		return ResultData.from("S-1", "회원정보 수정 완료");
 	}
 
+	public Member getMemberByNickname(String nickname) {
+		 return memberRepository.getMemberByNickname(nickname);
+	}
+
 
 }

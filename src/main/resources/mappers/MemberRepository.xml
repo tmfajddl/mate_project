@@ -109,5 +109,11 @@
 		</set>
 		WHERE id = #{loginedMemberId}
 	</update>
+	
+	 <select id="getMemberByNickname" resultType="com.example.demo.vo.Member">
+    SELECT *
+    FROM `member`
+    WHERE nickname = #{nickname}
+  </select>
 
 </mapper>
