@@ -116,7 +116,7 @@ body {
   <h2 style="font-size: 1em; font-weight: bold; color: black; text-align: left; margin-left: 28%;">응원 스타일을 등록하고 마음이 통하는 친구를 찾아보는건 어떠신가요?</h2>
 </div>
 
-    <div style="width: 35%; border-radius: 10px; background-color: rgb(242, 247, 247); padding: 15px; border: 3px dashed red;">
+    <div style="width: 35%; border-radius: 10px; background-color: rgb(255, 255, 255); padding: 15px;">
       <form action="/usr/member/insertStyle" method="post">
 
         <!-- ✅ 옵션이 5개인 체크박스 -->

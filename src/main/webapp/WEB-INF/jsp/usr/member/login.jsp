@@ -104,7 +104,7 @@ background-color: #f2d8b1;
       <div class="mx-auto">
 		<form action="../member/doLogin" method="POST">
 		
-		<div style="border-radius: 10px; background-color: rgb(242, 247, 247); padding: 15px; border: 3px; border-color: red; border-style: dashed;">
+		<div style="border-radius: 10px; background-color: rgb(255, 255, 255); padding: 15px;">
 		<input type="hidden" name="afterLoginUri" value="${param.afterLoginUri}" />
 			<table class="table" border="1" cellspacing="0" cellpadding="5" style="width: 100%; border-collapse: collapse;">
 				<tbody>

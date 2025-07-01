@@ -62,7 +62,7 @@ input.input:focus {
   }
 </script>
 
-<body class="m-0 h-full" style="background-color: #f7f0e9;">
+<body class="m-0 " style="background-color: #f7f0e9;">
  <c:choose>
     <c:when test="${rq.loginedTeam == null}">
         <section class="bg-cover bg-repeat flex flex-col justify-center items-center"
@@ -123,7 +123,7 @@ input.input:focus {
 
   <div class="mx-auto">
     <form action="../member/doFindLoginId" method="POST" onsubmit="return MemberFindLoginId__submit(this);">
-      <div style="border-radius: 10px; background-color: rgb(242, 247, 247); padding: 15px; border: 3px dashed red;">
+      <div style="border-radius: 10px; background-color: rgb(255, 255, 255); padding: 15px;">
         <input type="hidden" name="afterFindLoginIdUri" value="${param.afterFindLoginIdUri}" />
         <table class="table" border="1" cellspacing="0" cellpadding="5"
           style="width: 100%; border-collapse: collapse;">

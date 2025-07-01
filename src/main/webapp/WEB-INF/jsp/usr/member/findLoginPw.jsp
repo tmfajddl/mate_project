@@ -126,7 +126,7 @@ input.input:focus {
 
     <div class="mx-auto">
       <form action="../member/doFindLoginPw" method="POST" onsubmit="MemberFindLoginPw__submit(this);">
-        <div style="border-radius: 10px; background-color: rgb(242, 247, 247); padding: 15px; border: 3px dashed red;">
+        <div style="border-radius: 10px; background-color: rgb(255, 255, 255); padding: 15px;">
           <input type="hidden" name="afterFindLoginPwUri" value="${param.afterFindLoginPwUri}" />
           <table class="table" border="1" cellspacing="0" cellpadding="5" style="width: 100%; border-collapse: collapse;">
             <tbody>

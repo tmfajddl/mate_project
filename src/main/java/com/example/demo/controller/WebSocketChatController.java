@@ -18,7 +18,7 @@ public class WebSocketChatController {
         this.chatService = chatService;
     }
 
-    @MessageMapping("/chat.sendMessage") // /app/chat.sendMessage
+    @MessageMapping("/chat.sendMessage") 
     public void sendMessage(ChatMessage chatMessage) {
         // 메시지 저장
         ChatMessage saved = chatService.sendMessage(

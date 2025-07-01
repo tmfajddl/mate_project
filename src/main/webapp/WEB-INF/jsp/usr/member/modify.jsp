@@ -153,7 +153,7 @@ body {
 <div style="width: 80%; margin: 20px auto 0 auto;">
   <h2 style="font-size: 3em; font-weight: bold; color: black; text-align: left; margin-left: 20%;">회원 정보 수정</h2>
 </div>
-    <div style="width: 50%; border-radius: 10px; background-color: rgb(242, 247, 247); padding: 15px; border: 3px dashed red;">
+    <div style="width: 50%; border-radius: 10px; background-color: rgb(255, 255, 255); padding: 15px;">
       
       <!-- 수정: enctype="multipart/form-data" 추가 -->
       <form action="../member/doModify" method="POST" enctype="multipart/form-data" style="display: flex; gap: 20px; align-items: flex-start;">

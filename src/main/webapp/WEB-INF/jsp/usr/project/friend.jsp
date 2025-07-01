@@ -182,9 +182,9 @@ section > *:not(.section-overlay) {
 
 <div class="section-overlay"></div> 
 
-<div style="width: 80%; margin: 20px auto 0 auto;">
-  <h2 style="font-size: 3em; font-weight: bold; color: black; text-align: left;">추천 친구 목록</h2>
-  <h2 style="font-size: 1em; font-weight: bold; color: black; text-align: left;">취향이 비슷한 친구들을 추천 드려요!</h2>
+<div style="background-color: #faf5f0;">
+  <h2 style="font-size: 3em; font-weight: bold; color: black; text-align: center;">추천 친구 목록</h2>
+  <h2 style="font-size: 1em; font-weight: bold; color: black; text-align: center;">취향이 비슷한 친구들을 추천 드려요!</h2>
 </div>
     <div class="main">
       <c:choose>

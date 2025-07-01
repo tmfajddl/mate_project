@@ -24,8 +24,6 @@ public class NaverSearchService {
             // headless 옵션 추가
             ChromeOptions options = new ChromeOptions();
             options.addArguments("--headless");  // 브라우저 UI 없이 실행
-            options.addArguments("--disable-gpu"); // GPU 사용 안함 (일부 환경에서 필요)
-            options.addArguments("--no-sandbox"); // 보안 옵션 비활성화 (리눅스 등에서 필요)
             options.addArguments("--disable-dev-shm-usage"); // 메모리 제한 해결
 
             driver = new ChromeDriver(options);

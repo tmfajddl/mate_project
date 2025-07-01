@@ -514,16 +514,20 @@ if (answers.q3) {
 if (answers.q4) {
   switch (answers.q4) {
     case "빨강, 검정 등 강렬한 색상":
-      score["KIA"] += 2;
+      score["KIA"] += 1;
       score["SSG"] += 1;
+      score["KT"] += 1;
+      score["LG"] += 1;
+      score["키움"] += 1;
       break;
-    case "파랑, 흰색 등 차분한 색상":
-      score["두산"] += 2;
+    case "파랑색처럼 청량한 색상":
+      score["두산"] += 1;
       score["삼성"] += 1;
+      score["롯데"] += 1;
+      score["NC"] += 1;
       break;
     case "노랑, 주황 등 밝고 따뜻한 색상":
-      score["한화"] += 2;
-      score["롯데"] += 1;
+      score["한화"] += 1;
       break;
   }
 }
@@ -565,16 +569,20 @@ if (answers.q6) {
 if (answers.q7) {
   switch (answers.q7) {
     case "팀을 이끄는 스타 플레이어":
+      score["두산"] += 1;
+      score["KIA"] += 3;
       score["LG"] += 2;
-      score["KIA"] += 1;
+      score["키움"] += 1;
       break;
     case "협력하는 팀 플레이어":
-      score["두산"] += 2;
-      score["NC"] += 1;
+      score["KT"] += 2;
+      score["롯데"] += 2;
+      score["NC"] += 3;
+      score["SSG"] += 1;
       break;
     case "젊고 패기 넘치는 선수":
-      score["키움"] += 2;
-      score["SSG"] += 1;
+      score["한화"] += 2;
+      score["삼성"] += 1;
       break;
   }
 }
@@ -584,31 +592,39 @@ if (answers.q8) {
     case "전통과 역사":
       score["삼성"] += 2;
       score["LG"] += 1;
+      score["KIA"] += 3;
+      score["SSG"] += 1;
       break;
     case "새로운 전략과 혁신":
-      score["키움"] += 2;
-      score["NC"] += 1;
+      score["KT"] += 2;
+      score["NC"] += 3;
+      score["키움"] += 1;
       break;
     case "팬과의 소통과 사랑":
       score["롯데"] += 2;
-      score["한화"] += 1;
+      score["한화"] += 3;
+      score["두산"] += 1;
       break;
   }
 }
 
 if (answers.q9) {
   switch (answers.q9) {
-    case "응원 막대 흔들기":
-      score["롯데"] += 2;
-      score["두산"] += 1;
+    case "응원봉 흔들기":
+      score["한화"] += 2;
+      score["KIA"] += 2;
+      score["롯데"] += 3;
+      score["NC"] += 1;
       break;
     case "박수와 함성":
-      score["KT"] += 2;
-      score["삼성"] += 1;
+      score["SSG"] += 1;
+      score["삼성"] += 3;
+      score["키움"] += 2;
       break;
     case "응원가 부르기":
-      score["SSG"] += 2;
-      score["NC"] += 1;
+      score["LG"] += 3;
+      score["KT"] += 1;
+      score["두산"] += 2;
       break;
   }
 }
@@ -616,16 +632,19 @@ if (answers.q9) {
 if (answers.q10) {
   switch (answers.q10) {
     case "팀의 승리":
-      score["KIA"] += 2;
-      score["LG"] += 1;
+      score["KIA"] += 3;
+      score["LG"] += 2;
+      score["삼성"] += 1;
       break;
     case "즐거운 관람 경험":
       score["SSG"] += 2;
-      score["한화"] += 1;
+      score["한화"] += 3;
+      score["NC"] += 1;
       break;
     case "팬들과의 친목":
-      score["롯데"] += 2;
+      score["롯데"] += 3;
       score["KT"] += 1;
+      score["두산"] += 2;
       break;
   }
 }

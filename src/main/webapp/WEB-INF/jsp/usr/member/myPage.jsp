@@ -114,7 +114,7 @@ background-color: #f2d8b1;
   <h2 style="font-size: 3em; font-weight: bold; color: black; text-align: left; margin-left: 30%;">마이페이지</h2>
 </div>
     <!-- 내용 박스 -->
-<div style="width: 30%; border-radius: 10px; background-color: rgb(242, 247, 247); padding: 15px; border: 3px dashed red;">
+<div style="width: 30%; border-radius: 10px; background-color: rgb(255, 255, 255); padding: 15px;">
 
   <div style="display: flex; gap: 20px;">
 

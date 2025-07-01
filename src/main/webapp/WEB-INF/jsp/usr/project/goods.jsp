@@ -178,9 +178,9 @@ background-color: #f2d8b1;
 
 <div class="section-overlay"></div>
 
-  <div style="width: 80%; margin: 20px auto 0 auto;">
-  <h2 style="font-size: 3em; font-weight: bold; color: black; text-align: left; margin-left: 7%;">추천굿즈</h2>
-  <h2 style="font-size: 1em; font-weight: bold; color: black; text-align: left; margin-left: 7%;">우리팀을 응원하는 굿즈들을 추천해 드릴게요!</h2>
+  <div style="background-color: #faf5f0;">
+  <h2 style="font-size: 3em; font-weight: bold; color: black; text-align: center;">추천굿즈</h2>
+  <h2 style="font-size: 1em; font-weight: bold; color: black; text-align: center;">우리팀을 응원하는 굿즈들을 추천해 드릴게요!</h2>
 </div>
     <div class="main">
     

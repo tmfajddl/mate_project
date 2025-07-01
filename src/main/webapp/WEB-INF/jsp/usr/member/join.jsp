@@ -116,13 +116,13 @@ background-color: #f2d8b1;
 <div style="width: 80%; margin: 20px auto 0 auto;">
   <h2 style="font-size: 3em; font-weight: bold; color: black; text-align: left; margin-left: 32%;">회원가입</h2>
 </div>
-    <div style="width: 30%; border-radius: 10px; background-color: rgb(242, 247, 247); padding: 15px; border: 3px dashed red;">
+    <div style="width: 30%; border-radius: 10px; background-color: rgb(255, 255, 255); padding: 15px;">
       <form action="../member/doJoin" method="POST">
         <table class="table" cellpadding="3" style="width: 90%; color: black; margin: 0 auto;">
           <tbody style="text-align: center;">
             <tr>
               <th colspan="2">
-                <select style="font-weight: 700; width: 50%; color: black; border: 3px dashed red; border-radius: 10px;" name="team" id="team">
+                <select style="font-weight: 700; width: 50%; color: black; border-radius: 10px;" name="team" id="team">
                   <option value="한화 이글스">한화 이글스</option>
                   <option value="LG 트윈스">LG 트윈스</option>
                   <option value="롯데 자이언츠">롯데 자이언츠</option>

@@ -262,7 +262,7 @@ section > *:not(.section-overlay) {
 
 <section data-aos="fade-up">
   <!-- 뉴스 슬라이더 -->
-  <div class="section-title" style="font-weight: 700; font-weight: 700;">📰 ${loginedTeam != null ? loginedTeam : ""} 관련 뉴스</div>
+  <div class="section-title" style="background-color: #f7f0e9; font-weight: 700; font-weight: 700;">📰 ${loginedTeam != null ? loginedTeam : ""} 관련 뉴스</div>
   <div class="swiper swiper-section">
     <div class="swiper-wrapper">
       <c:forEach var="news" items="${breakingNews}">
@@ -280,7 +280,7 @@ section > *:not(.section-overlay) {
   </div>
 
   <!-- 최근 경기 영상 -->
-  <div class="section-title" style="margin-top: 40px; font-weight: 700;">🎬 ${loginedTeam != null ? loginedTeam : ""} 최근 경기 영상</div>
+  <div class="section-title" style="background-color: #f7f0e9; margin-top: 40px; font-weight: 700;">🎬 ${loginedTeam != null ? loginedTeam : ""} 최근 경기 영상</div>
   <div class="swiper swiper-section">
     <div class="swiper-wrapper">
       <c:forEach var="video" items="${videoIds3}">
@@ -315,12 +315,12 @@ section > *:not(.section-overlay) {
 
 
 <section data-aos="fade-up" >
-  <div class="section-title" style="font-weight: 700;">📅 오늘의 ${rq.loginedTeam} 일정 및 선수 현황</div>
+  <div class="section-title" style="background-color: #f7f0e9; font-weight: 700;">📅 오늘의 ${rq.loginedTeam} 일정 및 선수 현황</div>
 
   <%-- 경기 일정: 로그인 팀 위주 --%>
  <c:choose>
     <c:when test="${empty naverBaseballSchedule}">
-      <div style="text-align: center; color: gray; font-weight: bold; margin: 20px;">📭 오늘 예정된 경기가 없습니다.</div>
+      <div style="background-color: #f7f0e9; text-align: center; color: gray; font-weight: bold; margin: 20px;">📭 오늘 예정된 경기가 없습니다.</div>
     </c:when>
     <c:otherwise>
       <div class="swiper swiper-section" style="margin-bottom: 30px;">
@@ -348,66 +348,80 @@ section > *:not(.section-overlay) {
   </c:choose>
 
   <%-- 등록 선수 --%>
-  <div class="section-title" style="font-weight: 700; font-size: 1.2rem;">📌 등록 선수</div>
-  <div class="swiper swiper-section">
-    <div class="swiper-wrapper">
-      <c:forEach var="p" items="${registeredPlayers}">
-        <%-- 선수별 팀 컬러 설정 --%>
-        <c:set var="playerTeamColor" value="#f2d8b1" />
-        <c:choose>
-          <c:when test="${fn:contains(p.team, 'LG')}"><c:set var="playerTeamColor" value="#C30452" /></c:when>
-          <c:when test="${fn:contains(p.team, '두산')}"><c:set var="playerTeamColor" value="#1A1748" /></c:when>
-          <c:when test="${fn:contains(p.team, 'SSG')}"><c:set var="playerTeamColor" value="#CE0E2D" /></c:when>
-          <c:when test="${fn:contains(p.team, '삼성')}"><c:set var="playerTeamColor" value="#074CA1" /></c:when>
-          <c:when test="${fn:contains(p.team, '롯데')}"><c:set var="playerTeamColor" value="#041E42" /></c:when>
-          <c:when test="${fn:contains(p.team, '한화')}"><c:set var="playerTeamColor" value="#FC4E00" /></c:when>
-          <c:when test="${fn:contains(p.team, 'KIA')}"><c:set var="playerTeamColor" value="#EA0029" /></c:when>
-          <c:when test="${fn:contains(p.team, 'NC')}"><c:set var="playerTeamColor" value="#315288" /></c:when>
-          <c:when test="${fn:contains(p.team, '키움')}"><c:set var="playerTeamColor" value="#570514" /></c:when>
-          <c:when test="${fn:contains(p.team, 'KT')}"><c:set var="playerTeamColor" value="#000000" /></c:when>
-        </c:choose>
+<div class="section-title" style="background-color: #f7f0e9; font-weight: 700; font-size: 1.2rem;">📌 등록 선수</div>
 
-        <div class="swiper-slide">
-          <div class="swiper-card" style="font-weight: 700; background-color: ${playerTeamColor}; color: white;">
-            <div class="swiper-card-title">${p.name}</div>
-            <div>포지션: ${p.position}</div>
-            <div>팀: ${p.team}</div>
+<c:choose>
+  <c:when test="${empty registeredPlayers}">
+    <div style="background-color: #f7f0e9;  text-align: center; color: gray; font-weight: bold; margin: 20px;">📭 오늘 등록된 선수가 없습니다.</div>
+  </c:when>
+  <c:otherwise>
+    <div class="swiper swiper-section">
+      <div class="swiper-wrapper">
+        <c:forEach var="p" items="${registeredPlayers}">
+          <c:set var="playerTeamColor" value="#f2d8b1" />
+          <c:choose>
+            <c:when test="${fn:contains(p.team, 'LG')}"><c:set var="playerTeamColor" value="#C30452" /></c:when>
+            <c:when test="${fn:contains(p.team, '두산')}"><c:set var="playerTeamColor" value="#1A1748" /></c:when>
+            <c:when test="${fn:contains(p.team, 'SSG')}"><c:set var="playerTeamColor" value="#CE0E2D" /></c:when>
+            <c:when test="${fn:contains(p.team, '삼성')}"><c:set var="playerTeamColor" value="#074CA1" /></c:when>
+            <c:when test="${fn:contains(p.team, '롯데')}"><c:set var="playerTeamColor" value="#041E42" /></c:when>
+            <c:when test="${fn:contains(p.team, '한화')}"><c:set var="playerTeamColor" value="#FC4E00" /></c:when>
+            <c:when test="${fn:contains(p.team, 'KIA')}"><c:set var="playerTeamColor" value="#EA0029" /></c:when>
+            <c:when test="${fn:contains(p.team, 'NC')}"><c:set var="playerTeamColor" value="#315288" /></c:when>
+            <c:when test="${fn:contains(p.team, '키움')}"><c:set var="playerTeamColor" value="#570514" /></c:when>
+            <c:when test="${fn:contains(p.team, 'KT')}"><c:set var="playerTeamColor" value="#000000" /></c:when>
+          </c:choose>
+
+          <div class="swiper-slide">
+            <div class="swiper-card" style="font-weight: 700; background-color: ${playerTeamColor}; color: white;">
+              <div class="swiper-card-title">${p.name}</div>
+              <div>포지션: ${p.position}</div>
+              <div>팀: ${p.team}</div>
+            </div>
           </div>
-        </div>
-      </c:forEach>
+        </c:forEach>
+      </div>
     </div>
-  </div>
+  </c:otherwise>
+</c:choose>
 
-  <%-- 말소 선수 --%>
-  <div class="section-title" style="font-weight: 700; font-size: 1.2rem; margin-top: 30px;">❌ 말소 선수</div>
-  <div class="swiper swiper-section">
-    <div class="swiper-wrapper">
-      <c:forEach var="p" items="${canceledPlayers}">
-        <%-- 선수별 팀 컬러 설정 --%>
-        <c:set var="playerTeamColor" value="#f2d8b1" />
-        <c:choose>
-          <c:when test="${fn:contains(p.team, 'LG')}"><c:set var="playerTeamColor" value="#C30452" /></c:when>
-          <c:when test="${fn:contains(p.team, '두산')}"><c:set var="playerTeamColor" value="#1A1748" /></c:when>
-          <c:when test="${fn:contains(p.team, 'SSG')}"><c:set var="playerTeamColor" value="#CE0E2D" /></c:when>
-          <c:when test="${fn:contains(p.team, '삼성')}"><c:set var="playerTeamColor" value="#074CA1" /></c:when>
-          <c:when test="${fn:contains(p.team, '롯데')}"><c:set var="playerTeamColor" value="#041E42" /></c:when>
-          <c:when test="${fn:contains(p.team, '한화')}"><c:set var="playerTeamColor" value="#FC4E00" /></c:when>
-          <c:when test="${fn:contains(p.team, 'KIA')}"><c:set var="playerTeamColor" value="#EA0029" /></c:when>
-          <c:when test="${fn:contains(p.team, 'NC')}"><c:set var="playerTeamColor" value="#315288" /></c:when>
-          <c:when test="${fn:contains(p.team, '키움')}"><c:set var="playerTeamColor" value="#570514" /></c:when>
-          <c:when test="${fn:contains(p.team, 'KT')}"><c:set var="playerTeamColor" value="#000000" /></c:when>
-        </c:choose>
+<!-- 말소 선수 -->
+<div class="section-title" style="background-color: #f7f0e9; font-weight: 700; font-size: 1.2rem; margin-top: 30px;">❌ 말소 선수</div>
 
-        <div class="swiper-slide">
-          <div class="swiper-card" style="background-color: ${playerTeamColor}; color: white;">
-            <div class="swiper-card-title">${p.name}</div>
-            <div>포지션: ${p.position}</div>
-            <div>팀: ${p.team}</div>
+<c:choose>
+  <c:when test="${empty canceledPlayers}">
+    <div style="background-color: #f7f0e9; text-align: center; color: gray; font-weight: bold; margin: 20px;">📭 오늘 말소된 선수가 없습니다.</div>
+  </c:when>
+  <c:otherwise>
+    <div class="swiper swiper-section">
+      <div class="swiper-wrapper">
+        <c:forEach var="p" items="${canceledPlayers}">
+          <c:set var="playerTeamColor" value="#f2d8b1" />
+          <c:choose>
+            <c:when test="${fn:contains(p.team, 'LG')}"><c:set var="playerTeamColor" value="#C30452" /></c:when>
+            <c:when test="${fn:contains(p.team, '두산')}"><c:set var="playerTeamColor" value="#1A1748" /></c:when>
+            <c:when test="${fn:contains(p.team, 'SSG')}"><c:set var="playerTeamColor" value="#CE0E2D" /></c:when>
+            <c:when test="${fn:contains(p.team, '삼성')}"><c:set var="playerTeamColor" value="#074CA1" /></c:when>
+            <c:when test="${fn:contains(p.team, '롯데')}"><c:set var="playerTeamColor" value="#041E42" /></c:when>
+            <c:when test="${fn:contains(p.team, '한화')}"><c:set var="playerTeamColor" value="#FC4E00" /></c:when>
+            <c:when test="${fn:contains(p.team, 'KIA')}"><c:set var="playerTeamColor" value="#EA0029" /></c:when>
+            <c:when test="${fn:contains(p.team, 'NC')}"><c:set var="playerTeamColor" value="#315288" /></c:when>
+            <c:when test="${fn:contains(p.team, '키움')}"><c:set var="playerTeamColor" value="#570514" /></c:when>
+            <c:when test="${fn:contains(p.team, 'KT')}"><c:set var="playerTeamColor" value="#000000" /></c:when>
+          </c:choose>
+
+          <div class="swiper-slide">
+            <div class="swiper-card" style="background-color: ${playerTeamColor}; color: white;">
+              <div class="swiper-card-title">${p.name}</div>
+              <div>포지션: ${p.position}</div>
+              <div>팀: ${p.team}</div>
+            </div>
           </div>
-        </div>
-      </c:forEach>
+        </c:forEach>
+      </div>
     </div>
-  </div>
+  </c:otherwise>
+</c:choose>
 </section>
 
 <c:set var="teamColor" value="#f2d8b1" />
@@ -424,17 +438,14 @@ section > *:not(.section-overlay) {
   <c:when test="${shortTeam == 'KT'}"><c:set var="teamColor" value="#000000" /></c:when>
 </c:choose>
 <%-- 로그인/로그아웃 --%>
+    <c:if test="${!rq.isLogined()}">
 <section data-aos="fade-up">
   <div class="btn-group">
-    <c:if test="${!rq.isLogined()}">
       <button class="btn-action" style="background-color: ${teamColor};" onclick="location.href='../member/login'">🔐 로그인</button>
       <button class="btn-action" style="background-color: ${teamColor};" onclick="location.href='../member/join'">📝 회원가입</button>
-    </c:if>
-    <c:if test="${rq.isLogined()}">
-      <button class="btn-action" style="background-color: ${teamColor};" onclick="if(confirm('로그아웃 하시겠습니까?')) location.href='../member/doLogout'">🚪 로그아웃</button>
-    </c:if>
   </div>
 </section>
+</c:if>
 </section>
 <script>
   AOS.init();

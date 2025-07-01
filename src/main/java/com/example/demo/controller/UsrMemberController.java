@@ -3,6 +3,8 @@ package com.example.demo.controller;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -232,7 +234,7 @@ public class UsrMemberController {
 	    // 회원 정보 수정 시 반드시 encodedPw 사용 (null이나 빈값 방지)
 	    memberService.modifyMember(loginedId, encodedPw, nickname, cellphoneNum, email, introduce, profileImg);
 
-	    return Ut.jsReplaceNoAlert(userCanModifyRd.getResultCode(), userCanModifyRd.getMsg(), "../home/main");
+	    return Ut.jsReplaceNoAlert(userCanModifyRd.getResultCode(), userCanModifyRd.getMsg(), "../member/myPage");
 	}
 	
 	@RequestMapping("/usr/member/doDelete")
@@ -304,16 +306,20 @@ public class UsrMemberController {
 	
 	@RequestMapping("/usr/member/doFindLoginId")
 	@ResponseBody
-	public String doFindLoginId(@RequestParam(defaultValue = "/") String afterFindLoginIdUri, String name,
-			String email) {
+	public Map<String, Object> doFindLoginId(@RequestParam String name, @RequestParam String email) {
+	    Member member = memberService.getMemberByNameAndEmail(name, email);
 
-		Member member = memberService.getMemberByNameAndEmail(name, email);
+	    Map<String, Object> result = new HashMap<>();
 
-		if (member == null) {
-			return Ut.jsHistoryBack("F-1", "너는 없는 사람이야");
-		}
+	    if (member == null) {
+	        result.put("resultCode", "F-1");
+	        result.put("msg", "등록된 정보가 없습니다.");
+	    } else {
+	        result.put("resultCode", "S-1");
+	        result.put("msg", String.format("아이디는 [%s] 입니다.", member.getLoginId()));
+	    }
 
-		return Ut.jsReplace("S-1", Ut.f("너의 아이디는 [ %s ] 야", member.getLoginId()), afterFindLoginIdUri);
+	    return result;
 	}
 
 	@RequestMapping("/usr/member/findLoginPw")

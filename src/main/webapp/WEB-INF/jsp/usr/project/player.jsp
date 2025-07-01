@@ -263,7 +263,7 @@ border-radius: 5px;
 
 <div class="section-overlay"></div>
 
-<div style="width: 80%; margin: 20px auto 0 auto;">
+<div style="width: 10%; margin: 20px auto 0 auto;">
   <h2 style="font-size: 3em; font-weight: bold; color: black; text-align: center; margin-left: 1%; margin-top: 40px;"> 전력 분석</h2>
 </div>
 

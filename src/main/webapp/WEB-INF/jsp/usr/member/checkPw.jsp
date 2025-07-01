@@ -109,7 +109,7 @@ background-color: #f2d8b1;
 </c:choose>
 
     <!-- 내용 박스 -->
-    <div style="width: 30%; border-radius: 10px; background-color: rgb(242, 247, 247); padding: 15px; border: 3px dashed red;">
+    <div style="width: 30%; border-radius: 10px; background-color: rgb(255, 255, 255); padding: 15px;">
       <form action="../member/doCheckPw" method="POST">
         <table class="table" cellpadding="5" style="width: 90%; color: black; margin: 0 auto;">
           <tbody style="text-align: center;">
